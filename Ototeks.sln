@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36603.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ototeks (UI)", "Ototeks\Ototeks (UI).csproj", "{1BADD011-4218-44AC-A81D-F4E038459C72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ototeks.Entities", "Ototeks.Entities\Ototeks.Entities.csproj", "{D519D46C-59F6-48CF-8EA9-3969E41E77B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ototeks.DataAccess", "Ototeks.DataAccess\Ototeks.DataAccess.csproj", "{9B19C9DE-89B4-4439-BB6D-7A2ADEB8D478}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ototeks.Business", "Ototeks.Business\Ototeks.Business.csproj", "{4DE9175A-5A84-43B5-BD3E-9EBF3D479D00}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1BADD011-4218-44AC-A81D-F4E038459C72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BADD011-4218-44AC-A81D-F4E038459C72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BADD011-4218-44AC-A81D-F4E038459C72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BADD011-4218-44AC-A81D-F4E038459C72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D519D46C-59F6-48CF-8EA9-3969E41E77B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D519D46C-59F6-48CF-8EA9-3969E41E77B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D519D46C-59F6-48CF-8EA9-3969E41E77B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D519D46C-59F6-48CF-8EA9-3969E41E77B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B19C9DE-89B4-4439-BB6D-7A2ADEB8D478}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B19C9DE-89B4-4439-BB6D-7A2ADEB8D478}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B19C9DE-89B4-4439-BB6D-7A2ADEB8D478}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B19C9DE-89B4-4439-BB6D-7A2ADEB8D478}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DE9175A-5A84-43B5-BD3E-9EBF3D479D00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DE9175A-5A84-43B5-BD3E-9EBF3D479D00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DE9175A-5A84-43B5-BD3E-9EBF3D479D00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DE9175A-5A84-43B5-BD3E-9EBF3D479D00}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F51CBBDA-8809-40F0-8680-66026F45B252}
+	EndGlobalSection
+EndGlobal

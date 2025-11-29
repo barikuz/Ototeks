@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ototeks.DataAccess\Ototeks.DataAccess.csproj" />
+    <ProjectReference Include="..\Ototeks.Entities\Ototeks.Entities.csproj" />
+  </ItemGroup>
+
+</Project>

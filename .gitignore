@@ -1,0 +1,9 @@
+# Visual Studio dosyalarý
+.vs/
+
+# Derleme çýktýlarý
+bin/
+obj/
+
+# Kullanýcýya özel ayarlar
+*.user
