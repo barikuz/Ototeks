@@ -17,6 +17,7 @@ namespace Ototeks
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            DevExpress.LookAndFeel.UserLookAndFeel.Default.SetSkinStyle("WXI");
             Application.Run(new Form1());
         }
     }
