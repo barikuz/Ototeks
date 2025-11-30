@@ -7,9 +7,9 @@ using System.Windows.Forms;
 
 namespace Ototeks.UI
 {
-    public partial class FrmKumas : DevExpress.XtraEditors.XtraForm
+    public partial class FrmAddFabric : DevExpress.XtraEditors.XtraForm
     {
-        public FrmKumas()
+        public FrmAddFabric()
         {
             InitializeComponent();
         }

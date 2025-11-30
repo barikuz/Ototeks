@@ -1,8 +1,11 @@
 ﻿using DevExpress.Skins;
 using DevExpress.UserSkins;
+using Ototeks.UI;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Ototeks
@@ -17,6 +20,10 @@ namespace Ototeks
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            
+            // 1. Grid Tercümanı
+            DevExpress.XtraGrid.Localization.GridLocalizer.Active = new TurkishGridLocalizer();
+
             DevExpress.LookAndFeel.UserLookAndFeel.Default.SetSkinStyle("WXI");
             Application.Run(new Form1());
         }

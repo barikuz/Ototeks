@@ -1,6 +1,6 @@
 ﻿namespace Ototeks.UI
 {
-	partial class FrmKumas
+	partial class FrmAddFabric
 {
     /// <summary>
     /// Required designer variable.
@@ -68,11 +68,11 @@
             stackPanel1.Controls.Add(btnKaydet);
             stackPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             stackPanel1.LayoutDirection = DevExpress.Utils.Layout.StackPanelLayoutDirection.TopDown;
-            stackPanel1.Location = new System.Drawing.Point(126, 26);
+            stackPanel1.Location = new System.Drawing.Point(126, 22);
             stackPanel1.Name = "stackPanel1";
             stackPanel1.Padding = new System.Windows.Forms.Padding(16);
             tablePanel1.SetRow(stackPanel1, 1);
-            stackPanel1.Size = new System.Drawing.Size(340, 370);
+            stackPanel1.Size = new System.Drawing.Size(340, 378);
             stackPanel1.TabIndex = 1;
             stackPanel1.UseSkinIndents = true;
             // 
@@ -139,7 +139,7 @@
             // 
             txtKumasAdi.Anchor = System.Windows.Forms.AnchorStyles.None;
             txtKumasAdi.Location = new System.Drawing.Point(20, 236);
-            txtKumasAdi.Margin = new System.Windows.Forms.Padding(3, 3, 3, 24);
+            txtKumasAdi.Margin = new System.Windows.Forms.Padding(3, 3, 3, 32);
             txtKumasAdi.Name = "txtKumasAdi";
             txtKumasAdi.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 10.8F);
             txtKumasAdi.Properties.Appearance.Options.UseFont = true;
@@ -153,14 +153,14 @@
             btnKaydet.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
             btnKaydet.Appearance.Options.UseFont = true;
             btnKaydet.Appearance.Options.UseForeColor = true;
-            btnKaydet.Location = new System.Drawing.Point(111, 308);
+            btnKaydet.Location = new System.Drawing.Point(111, 316);
             btnKaydet.Name = "btnKaydet";
             btnKaydet.Size = new System.Drawing.Size(118, 42);
             btnKaydet.TabIndex = 5;
             btnKaydet.Text = "Kaydet";
             btnKaydet.Click += btnKaydet_Click;
             // 
-            // FrmKumas
+            // FrmKumasEkle
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -168,9 +168,9 @@
             Controls.Add(tablePanel1);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             MaximizeBox = false;
-            Name = "FrmKumas";
+            Name = "FrmKumasEkle";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            Text = "FrmKumas";
+            Text = "Yeni Kumaş";
             ((System.ComponentModel.ISupportInitialize)tablePanel1).EndInit();
             tablePanel1.ResumeLayout(false);
             tablePanel1.PerformLayout();
