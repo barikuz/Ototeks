@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="8.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Ototeks.DataAccess\Ototeks.DataAccess.csproj" />
     <ProjectReference Include="..\Ototeks.Entities\Ototeks.Entities.csproj" />
   </ItemGroup>

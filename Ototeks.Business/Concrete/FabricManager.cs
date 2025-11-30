@@ -1,8 +1,11 @@
-﻿using Ototeks.Business.Abstract;
+﻿using FluentValidation.Results;
+using Ototeks.Business.Abstract;
+using Ototeks.Business.ValidationRules;
 using Ototeks.DataAccess.Abstract;
 using Ototeks.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Ototeks.Business.Concrete
 {
@@ -18,10 +21,17 @@ namespace Ototeks.Business.Concrete
 
         public void Add(Fabric fabric)
         {
-            // Kumaş kodu boşsa ekleme yapma.
-            if (string.IsNullOrEmpty(fabric.FabricCode))
+            // 1. Veriyi Standartlaştır
+            FormatData(fabric);
+
+            // 2. MODERN VALİDASYON
+            var validator = new FabricValidator(_fabricRepo);
+            ValidationResult result = validator.Validate(fabric);
+
+            if (!result.IsValid)
             {
-                throw new Exception("Kumaş kodu boş olamaz!");
+                // İlk hatayı fırlat
+                throw new Exception(result.Errors[0].ErrorMessage);
             }
 
             // Kuralları geçtiyse Repository'e gönder
@@ -51,7 +61,16 @@ namespace Ototeks.Business.Concrete
                 throw new Exception("Stok miktarı 0'dan küçük olamaz!");
             }
 
+            FormatData(fabric);
             _fabricRepo.Update(fabric);
+        }
+
+        // Yardımcı Metot 1: Veriyi Temizle
+        private static void FormatData(Fabric fabric)
+        {
+            fabric.FabricCode = fabric.FabricCode?.Trim().ToUpper();
+
+            fabric.FabricName = fabric.FabricName?.Trim();
         }
     }
 }
