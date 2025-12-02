@@ -22,6 +22,19 @@ namespace Ototeks
             // Formun bir örneğini oluştur
             FrmAddFabric frm = new FrmAddFabric();
 
+            frm.IslemYapildi += (s, args) =>
+            {
+                // Form1 (Anne), çocuğunu (Listeyi) bulmaya çalışıyor...
+                // Application.OpenForms: Açık olan tüm pencereleri tarar.
+                var acikListeFormu = Application.OpenForms["FrmListFabrics"] as FrmListFabrics;
+
+                // Eğer liste formu açıksa (kullanıcı kapatmadıysa)
+                if (acikListeFormu != null)
+                {
+                    acikListeFormu.ListeyiYenile(); // Ve Bingo! Yenile komutunu gönder.
+                }
+            };
+
             // Formu "Dialog" olarak aç (Arkadaki pencereye tıklanmasını engeller)
             frm.ShowDialog();
         }

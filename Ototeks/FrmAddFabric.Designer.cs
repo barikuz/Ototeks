@@ -52,7 +52,7 @@
             tablePanel1.Location = new System.Drawing.Point(0, 0);
             tablePanel1.Name = "tablePanel1";
             tablePanel1.Rows.AddRange(new DevExpress.Utils.Layout.TablePanelRow[] { new DevExpress.Utils.Layout.TablePanelRow(DevExpress.Utils.Layout.TablePanelEntityStyle.Relative, 50F), new DevExpress.Utils.Layout.TablePanelRow(DevExpress.Utils.Layout.TablePanelEntityStyle.AutoSize, 500F), new DevExpress.Utils.Layout.TablePanelRow(DevExpress.Utils.Layout.TablePanelEntityStyle.Relative, 50F) });
-            tablePanel1.Size = new System.Drawing.Size(599, 422);
+            tablePanel1.Size = new System.Drawing.Size(599, 420);
             tablePanel1.TabIndex = 0;
             tablePanel1.UseSkinIndents = true;
             // 
@@ -68,7 +68,7 @@
             stackPanel1.Controls.Add(btnKaydet);
             stackPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             stackPanel1.LayoutDirection = DevExpress.Utils.Layout.StackPanelLayoutDirection.TopDown;
-            stackPanel1.Location = new System.Drawing.Point(126, 22);
+            stackPanel1.Location = new System.Drawing.Point(126, 21);
             stackPanel1.Name = "stackPanel1";
             stackPanel1.Padding = new System.Windows.Forms.Padding(16);
             tablePanel1.SetRow(stackPanel1, 1);
@@ -160,15 +160,16 @@
             btnKaydet.Text = "Kaydet";
             btnKaydet.Click += btnKaydet_Click;
             // 
-            // FrmKumasEkle
+            // FrmAddFabric
             // 
+            AcceptButton = btnKaydet;
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(599, 422);
+            ClientSize = new System.Drawing.Size(599, 420);
             Controls.Add(tablePanel1);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             MaximizeBox = false;
-            Name = "FrmKumasEkle";
+            Name = "FrmAddFabric";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             Text = "Yeni Kumaş";
             ((System.ComponentModel.ISupportInitialize)tablePanel1).EndInit();
