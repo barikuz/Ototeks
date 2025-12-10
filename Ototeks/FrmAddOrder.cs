@@ -18,11 +18,17 @@ namespace Ototeks.UI
     public partial class FrmAddOrder : DevExpress.XtraEditors.XtraForm
     {
         private BindingList<OrderItem> _orderItems;
+
         public FrmAddOrder()
         {
             InitializeComponent();
 
             _orderItems = new BindingList<OrderItem>();
+        }
+
+        private void FrmAddOrder_Load(object sender, EventArgs e)
+        {
+            LoadData();
         }
 
         private void LoadData()
@@ -57,11 +63,6 @@ namespace Ototeks.UI
 
             // Designer'da oluşturduğun repository
             repoFabric.DataSource = fabricManager.GetAll();
-        }
-
-        private void FrmAddOrder_Load(object sender, EventArgs e)
-        {
-            LoadData();
         }
 
         private void btnKaydet_Click(object sender, EventArgs e)
@@ -99,31 +100,9 @@ namespace Ototeks.UI
             order.CustomerId = lkpMusteri.EditValue != null ? (int)lkpMusteri.EditValue : 0;
 
             // 3. İlişkili Veri (Sepet)
-            order.OrderItems = GetCleanOrderItems();
+            order.OrderItems = _orderItems;
 
             return order;
-        }
-
-        private List<OrderItem> GetCleanOrderItems()
-        {
-            var cleanList = new List<OrderItem>();
-
-            // Listeyi dönüştür
-            foreach (var uiItem in _orderItems)
-            {
-                // Sadece ihtiyacımız olan ID ve Adet bilgisini alıyoruz.
-                // EF Core'un kafasını karıştıracak diğer her şeyi (Navigation Properties) dışarıda bırakıyoruz.
-                var cleanItem = new OrderItem
-                {
-                    TypeId = uiItem.TypeId,     // Ürün Tipi ID
-                    FabricId = uiItem.FabricId, // Kumaş ID
-                    Quantity = uiItem.Quantity  // Adet
-                };
-
-                cleanList.Add(cleanItem);
-            }
-
-            return cleanList;
         }
 
         private void ShowSuccessMessage()
