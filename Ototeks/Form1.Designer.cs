@@ -38,6 +38,8 @@
             ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             documentManager1 = new DevExpress.XtraBars.Docking2010.DocumentManager(components);
             tabbedView1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(components);
+            ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            btnNewOrder = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)ribbonControl1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)documentManager1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)tabbedView1).BeginInit();
@@ -47,10 +49,10 @@
             // 
             ribbonControl1.EmptyAreaImageOptions.ImagePadding = new System.Windows.Forms.Padding(35, 37, 35, 37);
             ribbonControl1.ExpandCollapseItem.Id = 0;
-            ribbonControl1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl1.ExpandCollapseItem, skinRibbonGalleryBarItem1, btnYeniKumas, btnKumasListesi });
+            ribbonControl1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl1.ExpandCollapseItem, skinRibbonGalleryBarItem1, btnYeniKumas, btnKumasListesi, btnNewOrder });
             ribbonControl1.Location = new System.Drawing.Point(0, 0);
             ribbonControl1.Margin = new System.Windows.Forms.Padding(4);
-            ribbonControl1.MaxItemId = 4;
+            ribbonControl1.MaxItemId = 5;
             ribbonControl1.Name = "ribbonControl1";
             ribbonControl1.OptionsMenuMinWidth = 385;
             ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] { ribbonPage1 });
@@ -82,7 +84,7 @@
             // 
             // ribbonPage1
             // 
-            ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] { ribbonPageGroup1 });
+            ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] { ribbonPageGroup1, ribbonPageGroup2 });
             ribbonPage1.Name = "ribbonPage1";
             ribbonPage1.Text = "Stok Yönetimi";
             // 
@@ -99,6 +101,21 @@
             documentManager1.MenuManager = ribbonControl1;
             documentManager1.View = tabbedView1;
             documentManager1.ViewCollection.AddRange(new DevExpress.XtraBars.Docking2010.Views.BaseView[] { tabbedView1 });
+            // 
+            // ribbonPageGroup2
+            // 
+            ribbonPageGroup2.ItemLinks.Add(btnNewOrder);
+            ribbonPageGroup2.Name = "ribbonPageGroup2";
+            ribbonPageGroup2.Text = "Sipariş İşlemleri";
+            // 
+            // btnNewOrder
+            // 
+            btnNewOrder.Caption = "Yeni Sipariş";
+            btnNewOrder.Id = 4;
+            btnNewOrder.ImageOptions.Image = (System.Drawing.Image)resources.GetObject("btnNewOrder.ImageOptions.Image");
+            btnNewOrder.ImageOptions.LargeImage = (System.Drawing.Image)resources.GetObject("btnNewOrder.ImageOptions.LargeImage");
+            btnNewOrder.Name = "btnNewOrder";
+            btnNewOrder.ItemClick += btnNewOrder_ItemClick;
             // 
             // Form1
             // 
@@ -131,6 +148,8 @@
         private DevExpress.XtraBars.BarButtonItem btnKumasListesi;
         private DevExpress.XtraBars.Docking2010.DocumentManager documentManager1;
         private DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView tabbedView1;
+        private DevExpress.XtraBars.BarButtonItem btnNewOrder;
+        private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup2;
     }
 }
 

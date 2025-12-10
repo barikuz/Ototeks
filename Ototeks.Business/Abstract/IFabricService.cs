@@ -9,6 +9,8 @@ namespace Ototeks.Business.Abstract
         void Add(Fabric fabric);
         void Update(Fabric fabric);
         void Delete(Fabric fabric);
+
+        // Listeleme
         List<Fabric> GetAll();
         Fabric GetById(int id);
     }

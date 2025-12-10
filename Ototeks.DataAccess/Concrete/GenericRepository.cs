@@ -21,25 +21,22 @@ namespace Ototeks.DataAccess.Concrete
         // EKLEME İŞLEMİ
         public void Add(T entity)
         {
-            
-            var addedEntity = _context.Entry(entity); // Takibe al
-            addedEntity.State = EntityState.Added; // Durumunu "Eklendi" yap
+
+            _context.Set<T>().Add(entity);
             _context.SaveChanges(); // Veritabanına kaydet
         }
 
         // GÜNCELLEME İŞLEMİ
         public void Update(T entity)
         {
-            var updatedEntity = _context.Entry(entity);
-            updatedEntity.State = EntityState.Modified;
+            _context.Set<T>().Update(entity);
             _context.SaveChanges();
         }
 
         // SİLME İŞLEMİ
         public void Delete(T entity)
         {
-            var deletedEntity = _context.Entry(entity);
-            deletedEntity.State = EntityState.Deleted;
+            _context.Set<T>().Remove(entity);
             _context.SaveChanges();
         }
 

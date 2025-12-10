@@ -45,5 +45,14 @@ namespace Ototeks
             frm.MdiParent = this; // Bu formu ana ekranın içinde (sekme gibi) aç
             frm.Show();
         }
+
+        private void btnNewOrder_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            // Formu oluştur
+            FrmAddOrder frm = new FrmAddOrder();
+
+            // Aç (ShowDialog: Kapanmadan arkadaki forma tıklatmaz, odaklanmayı sağlar)
+            frm.ShowDialog();
+        }
     }
 }
