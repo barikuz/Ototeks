@@ -3,6 +3,7 @@ using DevExpress.XtraEditors.Repository;
 using Ototeks.Business.Concrete;
 using Ototeks.DataAccess.Concrete;
 using Ototeks.Entities;
+using Ototeks.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,20 +16,77 @@ using System.Windows.Forms;
 
 namespace Ototeks.UI
 {
-    public partial class FrmAddOrder : DevExpress.XtraEditors.XtraForm
+    public partial class FrmAddOrder : DevExpress.XtraEditors.XtraForm, IOperationForm
     {
+        // Bu, formun dışarıya göndereceği sinyaldir
+        public event EventHandler OperationCompleted;
+
         private BindingList<OrderItem> _orderItems;
+        private int _guncellenecekId = 0; // 0 ise Ekleme Modu, >0 ise Güncelleme Modu
 
         public FrmAddOrder()
         {
             InitializeComponent();
-
             _orderItems = new BindingList<OrderItem>();
+        }
+
+        public FrmAddOrder(int id)
+        {
+            InitializeComponent();
+            _orderItems = new BindingList<OrderItem>();
+            _guncellenecekId = id; // Hangi kaydı düzenleyeceğimizi not ettik.
+
+            // Formun başlığını değiştir ki kullanıcı anlasın
+            this.Text = "Sipariş Güncelle";
+            btnKaydet.Text = "Güncelle";
         }
 
         private void FrmAddOrder_Load(object sender, EventArgs e)
         {
+            // Önce dropdown'ları ve temel ayarları yükle
             LoadData();
+            
+            // Sonra güncelleme modundaysa sipariş verilerini yükle
+            if (_guncellenecekId > 0)
+            {
+                LoadOrderData();
+            }
+        }
+
+        private void LoadOrderData()
+        {
+            try
+            {
+                // Veritabanından o id'li siparişi bul
+                var repo = new GenericRepository<Order>();
+                var manager = new OrderManager(repo);
+                var order = manager.GetById(_guncellenecekId);
+
+                if (order != null)
+                {
+                    // Form kutularını doldur
+                    txtSiparisNo.Text = order.OrderNumber;
+                    dateTarih.DateTime = order.OrderDate ?? DateTime.Now;
+                    lkpMusteri.EditValue = order.CustomerId;
+
+                    // OrderItems'ları temizle ve yeniden yükle
+                    _orderItems.Clear();
+                    
+                    // OrderItems'ları da yükle
+                    if (order.OrderItems != null && order.OrderItems.Any())
+                    {
+                        foreach (var item in order.OrderItems)
+                        {
+                            _orderItems.Add(item);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                XtraMessageBox.Show($"Sipariş verileri yüklenirken hata oluştu: {ex.Message}", 
+                    "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void LoadData()
@@ -41,14 +99,15 @@ namespace Ototeks.UI
             lkpMusteri.Properties.DataSource = customerManager.GetAll();
 
             // --- 2. Tarihi (Date) Bugüne Ayarla ---
-            dateTarih.DateTime = DateTime.Now;
-
+            if (_guncellenecekId == 0) // Sadece yeni sipariş için
+            {
+                dateTarih.DateTime = DateTime.Now;
+            }
 
             // --- 3. Grid (Sepet) Ayarları ---
             // Grid'i oluşturduğumuz BindingList'e bağlıyoruz.
             // Artık _orderItems'a ne eklersek ekranda görünecek.
             gridSiparisKalemleri.DataSource = _orderItems;
-
 
             // --- C. ÜRÜN TİPİ DROPDOWN ---
             var productTypeRepo = new GenericRepository<ProductType>();
@@ -69,16 +128,51 @@ namespace Ototeks.UI
         {
             try
             {
-                // 1. ADIM: Nesneyi Hazırla
-                Order newOrder = CreateOrderFromUI();
+                // SENARYO 1: YENİ KAYIT (ID = 0)
+                if (_guncellenecekId == 0)
+                {
+                    // 1. ADIM: Nesneyi Hazırla
+                    Order newOrder = CreateOrderFromUI();
 
-                // 2. ADIM: İşi Bitir
-                var orderManager = new OrderManager(new GenericRepository<Order>());
-                orderManager.Add(newOrder);
+                    // 2. ADIM: İşi Bitir
+                    var orderManager = new OrderManager(new GenericRepository<Order>());
+                    orderManager.Add(newOrder);
 
-                // 3. ADIM: Kullanıcıya Haber Ver
-                ShowSuccessMessage();
-                this.Close();
+                    // 3. ADIM: Kullanıcıya Haber Ver
+                    XtraMessageBox.Show("Sipariş başarıyla sisteme eklendi!", "Tebrikler", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Form kutularını temizle
+                    ClearForm();
+                }
+                // SENARYO 2: GÜNCELLEME (ID > 0)
+                else
+                {
+                    // Önce veritabanındaki orijinal kaydı çek
+                    var orderManager = new OrderManager(new GenericRepository<Order>());
+                    var guncellenecekOrder = orderManager.GetById(_guncellenecekId);
+
+                    if (guncellenecekOrder != null)
+                    {
+                        // Ekrandaki yeni bilgileri üzerine yaz
+                        guncellenecekOrder.OrderNumber = txtSiparisNo.Text;
+                        guncellenecekOrder.OrderDate = dateTarih.DateTime;
+                        guncellenecekOrder.CustomerId = lkpMusteri.EditValue != null ? (int)lkpMusteri.EditValue : 0;
+
+                        // OrderItems'ları da güncelle
+                        guncellenecekOrder.OrderItems = _orderItems;
+
+                        // Manager'a "Bunu güncelle" de
+                        orderManager.Update(guncellenecekOrder);
+
+                        XtraMessageBox.Show("Sipariş güncellendi!", "Başarılı", 
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        this.Close(); // Güncelleme bitince formu kapatmak daha mantıklıdır.
+                    }
+                }
+
+                // Anne Forma Sinyal Gönder (Yenilesin)
+                OperationCompleted?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
@@ -94,7 +188,7 @@ namespace Ototeks.UI
             // 1. Basit Atamalar
             order.OrderNumber = txtSiparisNo.Text;
             order.OrderDate = dateTarih.DateTime;
-            order.OrderStatus = "New";
+            order.OrderStatus = "Yeni";
 
             // "Müşteri seçili değilse 0 ata, seçiliyse ID'yi al"
             order.CustomerId = lkpMusteri.EditValue != null ? (int)lkpMusteri.EditValue : 0;
@@ -105,16 +199,17 @@ namespace Ototeks.UI
             return order;
         }
 
-        private void ShowSuccessMessage()
+        private void ClearForm()
         {
-            XtraMessageBox.Show("Sipariş Başarıyla Oluşturuldu!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            txtSiparisNo.Text = "";
+            dateTarih.DateTime = DateTime.Now;
+            lkpMusteri.EditValue = null;
+            _orderItems.Clear();
         }
 
         private void ShowErrorMessage(Exception ex)
         {
             XtraMessageBox.Show(ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
-
-        
     }
 }

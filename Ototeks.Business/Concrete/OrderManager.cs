@@ -19,14 +19,8 @@ namespace Ototeks.Business.Concrete
 
         public void Add(Order order)
         {
-            // 1. Validasyon (FluentValidation)
-            var validator = new OrderValidator();
-            ValidationResult result = validator.Validate(order);
-
-            if (!result.IsValid)
-            {
-                throw new Exception(result.Errors[0].ErrorMessage);
-            }
+            // 1. Validasyon
+            CheckValidation(order);
 
             // 2. Veritabanına Kayıt
             _orderRepo.Add(order);
@@ -34,30 +28,54 @@ namespace Ototeks.Business.Concrete
 
         public void Update(Order order)
         {
-            // Güncelleme validasyonu
-            var validator = new OrderValidator();
-            ValidationResult result = validator.Validate(order);
+            // 1. Validasyon (Repository'yi geç ki duplikasyon kontrol edebilsin)
+            CheckValidation(order);
 
-            if (!result.IsValid) throw new Exception(result.Errors[0].ErrorMessage);
-
+            // 2. Veritabanına Kayıt
             _orderRepo.Update(order);
         }
 
         public void Delete(Order order)
         {
-            // Siparişi silerken, veritabanı ayarlarında "Cascade Delete" varsa
-            // kalemler de silinir. Yoksa hata alabilirsin.
             _orderRepo.Delete(order);
         }
 
         public List<Order> GetAll()
         {
-            return _orderRepo.GetAll();
+            return _orderRepo.GetAll(null,
+                "Customer",               // 1. Müşteriyi getir
+                "OrderItems",             // 2. Kalemleri getir
+                "OrderItems.Fabric",      // 3. Kalemlerin içindeki Kumaşı da getir (İşte aradığımız bu!)
+                "OrderItems.Type"         // 4. Kalemlerin içindeki Ürün Tipini de getir
+            );
         }
 
         public Order GetById(int id)
         {
-            return _orderRepo.GetById(id);
+            // Include'larla birlikte siparişi getir (OrderItems ve ilişkili verilerle)
+            return _orderRepo.GetById(
+                filter: o => o.OrderId == id,
+                includeProperties: new string[]
+                {
+                    "Customer",               // Müşteriyi getir
+                    "OrderItems",             // Kalemleri getir
+                    "OrderItems.Fabric",      // Kalemlerin içindeki Kumaşı getir
+                    "OrderItems.Type"         // Kalemlerin içindeki Ürün Tipini getir
+                }
+            );
+        }
+
+        // --- YARDIMCI METOT ---
+        private void CheckValidation(Order order)
+        {
+            var validator = new OrderValidator(_orderRepo);
+            var result = validator.Validate(order);
+
+            if (!result.IsValid)
+            {
+                // İlk hatayı yakala ve fırlat
+                throw new Exception(result.Errors[0].ErrorMessage);
+            }
         }
     }
 }

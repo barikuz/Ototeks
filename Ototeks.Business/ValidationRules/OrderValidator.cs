@@ -1,32 +1,82 @@
 ﻿using FluentValidation;
+using Ototeks.DataAccess.Abstract;
+using Ototeks.DataAccess.Concrete;
 using Ototeks.Entities;
+using System;
+using System.Linq;
 
 namespace Ototeks.Business.ValidationRules
 {
     public class OrderValidator : AbstractValidator<Order>
     {
-        public OrderValidator()
+        private readonly IGenericRepository<Order> _orderRepository;
+
+        public OrderValidator(IGenericRepository<Order> orderRepository)
         {
+            _orderRepository = orderRepository;
+
             // 1. Sipariş Numarası Kontrolü
             RuleFor(x => x.OrderNumber)
-                .NotEmpty().WithMessage("Sipariş numarası boş olamaz!");
+                .NotEmpty().WithMessage("Sipariş numarası boş olamaz!")
+                .Must(BeUniqueOrderNumber).WithMessage("Bu sipariş numarası zaten kullanılmaktadır!");
 
-            // 2. Müşteri Seçimi Kontrolü
+            // 2. Sipariş Tarihi 
+            RuleFor(x => x.OrderDate)
+                .NotNull().WithMessage("Lütfen bir sipariş tarihi seçiniz!")
+                .Must(date => date.Value != default(DateTime))
+                .WithMessage("Lütfen geçerli bir sipariş tarihi seçiniz!");
+
+            // 3. Müşteri Seçimi Kontrolü
             // (CustomerID int olduğu için 0'dan büyük olmalı)
             RuleFor(x => x.CustomerId)
                 .GreaterThan(0).WithMessage("Lütfen bir müşteri seçiniz!");
 
-            // 3. Liste Boş Olamaz Kontrolü
-            // (Sepet boşsa hata fırlatacak)
+            // 4. Liste Boş Olamaz Kontrolü (Ana Liste Kontrolü)
             RuleFor(x => x.OrderItems)
-                .Must(items => items != null && items.Count > 0)
-                .WithMessage("Lütfen listeye en az bir ürün ekleyin!");
+                .NotNull().WithMessage("Liste boş olamaz!")
+                .Must(items => items.Count > 0)
+                .WithMessage("Siparişe en az bir ürün eklemelisiniz!");
 
-            // 4. Detay Kontrolü 
-            // "Siparişin içindeki ürün listesi boş olamaz"
-            RuleFor(x => x.OrderItems)
-                .Must(items => items != null && items.Count > 0)
-                .WithMessage("Siparişin içinde en az bir ürün olmalıdır!");
+            // 5. DETAYLI LİSTE KONTROLÜ
+            // Listenin içindeki HER BİR elemanı tek tek gezer ve kontrol eder.
+            RuleForEach(x => x.OrderItems).ChildRules(items =>
+            {
+                // Ürün Tipi Kontrolü (nullable int için doğru kontrol)
+                items.RuleFor(x => x.TypeId)
+                     .NotNull().WithMessage("Listede 'Ürün Tipi' seçilmemiş satırlar var!");
+
+                // Kumaş Kontrolü (nullable int için doğru kontrol)
+                items.RuleFor(x => x.FabricId)
+                     .NotNull().WithMessage(item => $"'{GetProductTypeName(item)}' için 'Kumaş Türü' seçilmemiş!");
+
+                // Adet Kontrolü
+                items.RuleFor(x => x.Quantity)
+                     .GreaterThan(0)
+                     .WithMessage(item => $"'{GetProductTypeName(item)}' için ADET girmelisiniz!");
+            });
+        }
+
+        // Ürün tipi adını getiren yardımcı metot
+        private string GetProductTypeName(OrderItem item)
+        {
+            // TypeId'den ProductType'ı çek
+            if (item.TypeId.HasValue)
+            {
+                var productTypeRepo = new GenericRepository<ProductType>();
+                var productType = productTypeRepo.GetById(item.TypeId.Value);
+                return productType?.TypeName ?? "Bilinmeyen Ürün";
+            }
+
+            return "Seçilmemiş";
+        }
+
+        // Sipariş numarası benzersizlik kontrolü
+        private bool BeUniqueOrderNumber(Order order, string orderNumber)
+        {
+            // Veritabanından aynı numaraya sahip sipariş var mı kontrol et
+            var existingOrders = _orderRepository.GetAll();
+            return !existingOrders.Any(x => 
+                x.OrderNumber.Equals(orderNumber, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

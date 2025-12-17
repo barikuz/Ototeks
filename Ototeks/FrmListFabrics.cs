@@ -3,7 +3,9 @@ using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using Ototeks.Business.Concrete;
 using Ototeks.DataAccess.Concrete;
 using Ototeks.Entities;
+using Ototeks.Helpers;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Ototeks.UI
@@ -12,107 +14,83 @@ namespace Ototeks.UI
     {
         private FabricManager _manager;
         private GenericRepository<Fabric> _repo;
+        private ListFormHelper<Fabric> _uiHelper;
 
         public FrmListFabrics()
         {
             InitializeComponent();
+            InitializeHelper();
+        }
+
+        private void InitializeHelper()
+        {
+            _uiHelper = new ListFormHelper<Fabric>(
+                gridView1,
+                sagTikMenu,
+                btnAdd,
+                btnUpdate,
+                btnDelete);
+
+            // Data provider'ı set et
+            _uiHelper.SetDataProvider(GetFabricData);
+        }
+
+        private List<Fabric> GetFabricData()
+        {
+            _repo = new GenericRepository<Fabric>();
+            _manager = new FabricManager(_repo);
+            return _manager.GetAll();
         }
 
         private void FrmListFabrics_Load(object sender, EventArgs e)
         {
-            ListeyiYenile();
+            RefreshData();
         }
-        public void ListeyiYenile()
+
+        public void RefreshData()
         {
-            _repo = new GenericRepository<Fabric>();
-            _manager = new FabricManager(_repo);
-            bindingSource1.DataSource = _manager.GetAll();
+            _uiHelper.RefreshData();
         }
 
         private void gridView1_PopupMenuShowing(object sender, DevExpress.XtraGrid.Views.Grid.PopupMenuShowingEventArgs e)
         {
-            // Tıklanan yerin bilgisini al (Row mu? Boşluk mu?)
-            var hitInfo = e.HitInfo;
-
-            // 1. SENARYO: SATIRA TIKLANDI (Dolu)
-            if (hitInfo.InRow)
-            {
-                // Sil butonu GÖRÜNSÜN
-                btnDelete.Visibility = BarItemVisibility.Always;
-            }
-            // 2. SENARYO: BOŞLUĞA TIKLANDI (Empty Space)
-            else if (hitInfo.HitTest == GridHitTest.EmptyRow)
-            {
-                // Sil butonu GİZLENSİN (Çünkü silinecek bir şey yok)
-                btnDelete.Visibility = BarItemVisibility.Never;
-            }
-
-            // Menüyü aç
-            sagTikMenu.ShowPopup(Control.MousePosition);
+            _uiHelper.HandlePopupMenuShowing(e);
         }
 
         // --- SİL BUTONU KODU ---
         private void btnDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            // 1. Seçili satırdaki Kumaş nesnesini al
-            var secilenKumas = gridView1.GetFocusedRow() as Fabric;
-
-            if (secilenKumas == null) return;
-
-            // 2. Kullanıcıya sor (Yanlışlıkla basmış olabilir)
-            var cevap = MessageBox.Show(
-                $"'{secilenKumas.FabricCode}' kodlu kumaşı silmek istediğinize emin misiniz?",
-                "Silme Onayı",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Warning);
-
-            if (cevap == DialogResult.Yes)
-            {
-                // 3. Veritabanından sil
-                _manager.Delete(secilenKumas);
-
-                // 4. Listeyi yenile (ki silinen ekrandan gitsin)
-                ListeyiYenile();
-            }
+            _uiHelper.Delete(
+                deleteAction: (fabric) => _manager.Delete(fabric),
+                confirmMessageFunc: (fabric) => MessageBox.Show(
+                    $"'{fabric.FabricCode}' kodlu kumaşı silmek istediğinize emin misiniz?",
+                    "Silme Onayı",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning)
+            );
         }
 
         private void btnAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            FrmAddFabric frm = new FrmAddFabric();
-
-            frm.IslemYapildi += (s, args) => ListeyiYenile();
-
-            // Formu "Dialog" olarak aç 
-            frm.ShowDialog();
+            _uiHelper.ShowForm(() => new FrmAddFabric());
         }
 
         // Helper method to open the edit form
         private void OpenEditForm()
         {
-            // 1. Get the selected row data
-            var pickedFabric = gridView1.GetFocusedRow() as Fabric;
-
-            // Safety check: If nothing is selected or clicked on a group row
-            if (pickedFabric == null) return;
-
-            // 2. Open form with ID (Update Mode)
-            FrmAddFabric frm = new FrmAddFabric(pickedFabric.FabricId);
-
-            // 3. Subscribe to event to refresh the list after update
-            frm.IslemYapildi += (s, args) => ListeyiYenile();
-
-            frm.ShowDialog();
+            _uiHelper.Update(selectedFabric =>
+            {
+                _uiHelper.ShowForm(() => new FrmAddFabric(selectedFabric.FabricId));
+            });
         }
 
         private void gridView1_DoubleClick(object sender, EventArgs e)
         {
-            // Call the common method
             OpenEditForm();
         }
 
         private void btnUpdate_ItemClick(object sender, ItemClickEventArgs e)
         {
-            // Call the common method
             OpenEditForm();
         }
     }

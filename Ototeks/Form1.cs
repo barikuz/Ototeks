@@ -17,26 +17,38 @@ namespace Ototeks
             InitializeComponent();
         }
 
-        private void btnYeniKumas_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        // Generic helper metod - form ekleme ve liste yenileme işlemlerini tek yerde toplar
+        private void ShowAddFormWithRefresh<TAddForm, TListForm>(Func<TAddForm> createAddForm, string listFormName, Action<TListForm> refreshAction)
+            where TAddForm : Form, Ototeks.Interfaces.IOperationForm
+            where TListForm : class
         {
-            // Formun bir örneğini oluştur
-            FrmAddFabric frm = new FrmAddFabric();
+            // 1. Ekleme formunu oluştur
+            var addForm = createAddForm();
 
-            frm.IslemYapildi += (s, args) =>
+            // 2. Form kapatıldığında liste formunu yenileme event'i ekle
+            addForm.OperationCompleted += (s, args) =>
             {
-                // Form1 (Anne), çocuğunu (Listeyi) bulmaya çalışıyor...
-                // Application.OpenForms: Açık olan tüm pencereleri tarar.
-                var acikListeFormu = Application.OpenForms["FrmListFabrics"] as FrmListFabrics;
+                // Açık olan liste formunu bul
+                var openListForm = Application.OpenForms[listFormName] as TListForm;
 
-                // Eğer liste formu açıksa (kullanıcı kapatmadıysa)
-                if (acikListeFormu != null)
+                // Eğer liste formu açıksa yenile
+                if (openListForm != null)
                 {
-                    acikListeFormu.ListeyiYenile(); // Ve Bingo! Yenile komutunu gönder.
+                    refreshAction(openListForm);
                 }
             };
 
-            // Formu "Dialog" olarak aç (Arkadaki pencereye tıklanmasını engeller)
-            frm.ShowDialog();
+            // 3. Formu dialog olarak aç
+            addForm.ShowDialog();
+        }
+
+        private void btnYeniKumas_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            ShowAddFormWithRefresh(
+                createAddForm: () => new FrmAddFabric(),
+                listFormName: "FrmListFabrics",
+                refreshAction: (FrmListFabrics listForm) => listForm.RefreshData()
+            );
         }
 
         private void btnKumasListesi_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -48,11 +60,22 @@ namespace Ototeks
 
         private void btnNewOrder_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            // Formu oluştur
-            FrmAddOrder frm = new FrmAddOrder();
+            ShowAddFormWithRefresh(
+                createAddForm: () => new FrmAddOrder(),
+                listFormName: "FrmOrderList",
+                refreshAction: (FrmOrderList listForm) => listForm.RefreshData()
+            );
+        }
 
-            // Aç (ShowDialog: Kapanmadan arkadaki forma tıklatmaz, odaklanmayı sağlar)
-            frm.ShowDialog();
+        private void btnSiparisListesi_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            FrmOrderList frm = new FrmOrderList();
+
+            // SİHİRLİ KOD BURASI:
+            // "Bu form, şu an içinde bulunduğumuz (this) formun çocuğudur" diyoruz.
+            frm.MdiParent = this;
+
+            frm.Show();
         }
     }
 }

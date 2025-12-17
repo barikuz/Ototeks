@@ -76,7 +76,7 @@
             tablePanel1.Location = new System.Drawing.Point(0, 0);
             tablePanel1.Name = "tablePanel1";
             tablePanel1.Rows.AddRange(new DevExpress.Utils.Layout.TablePanelRow[] { new DevExpress.Utils.Layout.TablePanelRow(DevExpress.Utils.Layout.TablePanelEntityStyle.Absolute, 50F), new DevExpress.Utils.Layout.TablePanelRow(DevExpress.Utils.Layout.TablePanelEntityStyle.Absolute, 40F), new DevExpress.Utils.Layout.TablePanelRow(DevExpress.Utils.Layout.TablePanelEntityStyle.Absolute, 40F), new DevExpress.Utils.Layout.TablePanelRow(DevExpress.Utils.Layout.TablePanelEntityStyle.Absolute, 40F), new DevExpress.Utils.Layout.TablePanelRow(DevExpress.Utils.Layout.TablePanelEntityStyle.Relative, 100F), new DevExpress.Utils.Layout.TablePanelRow(DevExpress.Utils.Layout.TablePanelEntityStyle.Absolute, 60F) });
-            tablePanel1.Size = new System.Drawing.Size(640, 559);
+            tablePanel1.Size = new System.Drawing.Size(640, 551);
             tablePanel1.TabIndex = 0;
             tablePanel1.UseSkinIndents = true;
             // 
@@ -104,7 +104,7 @@
             btnKaydet.ImageOptions.Image = (System.Drawing.Image)resources.GetObject("btnKaydet.ImageOptions.Image");
             btnKaydet.ImageOptions.ImageToTextAlignment = DevExpress.XtraEditors.ImageAlignToText.LeftCenter;
             btnKaydet.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.MiddleLeft;
-            btnKaydet.Location = new System.Drawing.Point(21, 486);
+            btnKaydet.Location = new System.Drawing.Point(21, 478);
             btnKaydet.Name = "btnKaydet";
             tablePanel1.SetRow(btnKaydet, 5);
             btnKaydet.Size = new System.Drawing.Size(598, 52);
@@ -121,7 +121,7 @@
             groupControl1.Location = new System.Drawing.Point(21, 190);
             groupControl1.Name = "groupControl1";
             tablePanel1.SetRow(groupControl1, 4);
-            groupControl1.Size = new System.Drawing.Size(598, 288);
+            groupControl1.Size = new System.Drawing.Size(598, 280);
             groupControl1.TabIndex = 6;
             groupControl1.Text = "Sipariş Kalemleri";
             // 
@@ -132,7 +132,7 @@
             gridSiparisKalemleri.MainView = gridView1;
             gridSiparisKalemleri.Name = "gridSiparisKalemleri";
             gridSiparisKalemleri.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] { repoProductType, repoFabric });
-            gridSiparisKalemleri.Size = new System.Drawing.Size(594, 250);
+            gridSiparisKalemleri.Size = new System.Drawing.Size(594, 242);
             gridSiparisKalemleri.TabIndex = 0;
             gridSiparisKalemleri.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gridView1 });
             // 
@@ -141,6 +141,7 @@
             gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { gridTypeIdColumn, gridFabricIdColumn, gridQuantityColumn });
             gridView1.GridControl = gridSiparisKalemleri;
             gridView1.Name = "gridView1";
+            gridView1.NewItemRowText = "Yeni ürün eklemek için tıklayın";
             gridView1.OptionsView.NewItemRowPosition = DevExpress.XtraGrid.Views.Grid.NewItemRowPosition.Top;
             // 
             // gridTypeIdColumn
@@ -284,7 +285,7 @@
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(640, 559);
+            ClientSize = new System.Drawing.Size(640, 551);
             Controls.Add(tablePanel1);
             Name = "FrmAddOrder";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

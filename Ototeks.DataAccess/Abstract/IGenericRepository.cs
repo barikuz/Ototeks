@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace Ototeks.DataAccess.Abstract
 {
@@ -18,7 +19,11 @@ namespace Ototeks.DataAccess.Abstract
         // Tek bir kayıt getir (ID'ye göre)
         T GetById(int id);
 
+        T GetById(Expression<Func<T, bool>> filter, params string[] includeProperties);
+
         // Hepsini listele
         List<T> GetAll();
+
+        List<T> GetAll(Expression<Func<T, bool>> filter = null, params string[] includeProperties);
     }
 }

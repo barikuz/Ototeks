@@ -1,6 +1,6 @@
 ﻿using DevExpress.XtraGrid.Localization;
 
-namespace Ototeks.UI
+namespace Ototeks.UI.Helpers
 {
     public class TurkishGridLocalizer : GridLocalizer
     {

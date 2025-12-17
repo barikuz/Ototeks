@@ -4,13 +4,14 @@ using Ototeks.DataAccess.Concrete;
 using Ototeks.Entities;
 using System;
 using System.Windows.Forms;
+using Ototeks.Interfaces;
 
 namespace Ototeks.UI
 {
-    public partial class FrmAddFabric : DevExpress.XtraEditors.XtraForm
+    public partial class FrmAddFabric : DevExpress.XtraEditors.XtraForm, IOperationForm
     {
         // Bu, formun dışarıya göndereceği sinyaldir
-        public event EventHandler IslemYapildi;
+        public event EventHandler OperationCompleted;
 
         private int _guncellenecekId = 0; // 0 ise Ekleme Modu, >0 ise Güncelleme Modu
 
@@ -100,7 +101,7 @@ namespace Ototeks.UI
                 }
 
                 // Anne Forma Sinyal Gönder (Yenilesin)
-                IslemYapildi?.Invoke(this, EventArgs.Empty);
+                OperationCompleted?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
