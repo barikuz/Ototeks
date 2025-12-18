@@ -18,8 +18,30 @@ namespace Ototeks.Business.Concrete
 
         public List<Customer> GetAll()
         {
-            // Repository'nin hazır metodunu çağır ve sonucu dön.
+            // Repository'nin hazır metodunu çağır ve sonucu dön (Orders olmadan)
             return _customerRepo.GetAll();
+        }
+
+        public Customer GetById(int id)
+        {
+            return _customerRepo.GetById(
+                filter: c => c.CustomerId == id
+            );
+        }
+
+        public void Add(Customer customer)
+        {
+            _customerRepo.Add(customer);
+        }
+
+        public void Update(Customer customer)
+        {
+            _customerRepo.Update(customer);
+        }
+
+        public void Delete(Customer customer)
+        {
+            _customerRepo.Delete(customer);
         }
     }
 }

@@ -77,5 +77,21 @@ namespace Ototeks
 
             frm.Show();
         }
+
+        private void btnListCustomers_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            FrmCustomerList frm = new FrmCustomerList();
+            frm.MdiParent = this; // Bu formu ana ekranın içinde (sekme gibi) aç
+            frm.Show();
+        }
+
+        private void btnNewCustomer_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            ShowAddFormWithRefresh(
+                createAddForm: () => new FrmAddCustomer(),
+                listFormName: "FrmCustomerList", 
+                refreshAction: (FrmCustomerList listForm) => listForm.RefreshData()
+            );
+        }
     }
 }
