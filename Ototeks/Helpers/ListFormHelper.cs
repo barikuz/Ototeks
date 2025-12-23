@@ -91,8 +91,16 @@ namespace Ototeks.Helpers
 
             if (message == DialogResult.Yes)
             { 
-                deleteAction(selectedEntity); // Veritabanından sil
-                RefreshData();                // Otomatik olarak yenile
+                try
+                {
+                    deleteAction(selectedEntity); // Veritabanından sil
+                    RefreshData();                // Otomatik olarak yenile
+                }
+                catch (Exception ex)
+                {
+                    // Hatayı yakala ve temiz mesaj göster (validasyon hataları gibi)
+                    MessageBox.Show(ex.Message, "Hata Oluştu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 

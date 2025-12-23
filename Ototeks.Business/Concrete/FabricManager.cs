@@ -40,12 +40,17 @@ namespace Ototeks.Business.Concrete
 
         public void Delete(Fabric fabric)
         {
+            // 1. Silme validasyonunu validator'a devret
+            var validator = new FabricValidator(_fabricRepo);
+            validator.ValidateForDeletion(fabric);
+
+            // 2. Validasyon geçtiyse güvenle sil
             _fabricRepo.Delete(fabric);
         }
 
         public List<Fabric> GetAll()
         {
-            return _fabricRepo.GetAll();
+            return _fabricRepo.GetAll(null, "Color");
         }
 
         public Fabric GetById(int id)
@@ -55,13 +60,20 @@ namespace Ototeks.Business.Concrete
 
         public void Update(Fabric fabric)
         {
-            // Stok eksiye düşerse güncelleme yapma
-            if (fabric.StockQuantity < 0)
+            // 1. Veriyi Standartlaştır
+            FormatData(fabric);
+
+            // 2. MODERN VALİDASYON - Güncelleme için özel validator
+            var validator = new FabricValidator(_fabricRepo, fabric.FabricId); // FabricId'yi geç
+            ValidationResult result = validator.Validate(fabric);
+
+            if (!result.IsValid)
             {
-                throw new Exception("Stok miktarı 0'dan küçük olamaz!");
+                // İlk hatayı fırlat
+                throw new Exception(result.Errors[0].ErrorMessage);
             }
 
-            FormatData(fabric);
+            // Kuralları geçtiyse Repository'e gönder
             _fabricRepo.Update(fabric);
         }
 

@@ -110,7 +110,7 @@
             // colColor
             // 
             colColor.Caption = "Renk";
-            colColor.FieldName = "Color";
+            colColor.FieldName = "Color.ColorName";
             colColor.MinWidth = 25;
             colColor.Name = "colColor";
             colColor.Visible = true;
@@ -119,7 +119,7 @@
             // 
             // sagTikMenu
             // 
-            sagTikMenu.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] { new DevExpress.XtraBars.LinkPersistInfo(btnDelete), new DevExpress.XtraBars.LinkPersistInfo(btnAdd), new DevExpress.XtraBars.LinkPersistInfo(btnUpdate) });
+            sagTikMenu.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] { new DevExpress.XtraBars.LinkPersistInfo(btnUpdate), new DevExpress.XtraBars.LinkPersistInfo(btnDelete), new DevExpress.XtraBars.LinkPersistInfo(btnAdd) });
             sagTikMenu.Manager = barManager1;
             sagTikMenu.Name = "sagTikMenu";
             // 

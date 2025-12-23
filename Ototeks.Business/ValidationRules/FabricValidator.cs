@@ -9,10 +9,18 @@ namespace Ototeks.Business.ValidationRules
     public class FabricValidator : AbstractValidator<Fabric>
     {
         private readonly IGenericRepository<Fabric> _fabricRepo;
+        private readonly int? _currentFabricId; // Güncellenen kaydın ID'si
 
-        public FabricValidator(IGenericRepository<Fabric> fabricRepo)
+        // Ekleme için constructor
+        public FabricValidator(IGenericRepository<Fabric> fabricRepo) : this(fabricRepo, null)
+        {
+        }
+
+        // Güncelleme için constructor
+        public FabricValidator(IGenericRepository<Fabric> fabricRepo, int? currentFabricId)
         {
             _fabricRepo = fabricRepo;
+            _currentFabricId = currentFabricId;
 
             // Kural 1: "Kumaş Kodu boş olamaz"
             RuleFor(x => x.FabricCode)
@@ -30,20 +38,46 @@ namespace Ototeks.Business.ValidationRules
 
             // Kural 4: "Renk seçilmeli"
             RuleFor(x => x.ColorId)
-                .NotNull().WithMessage("Renk seçimi yapılmalıdır!");
+                .NotNull().WithMessage("Renk seçimi yapılmalıdır!")
+                .GreaterThan(0).WithMessage("Geçerli bir renk seçilmelidir!");
 
             // Kural 5: "Stok miktarı 0'dan büyük olmalı"
             RuleFor(x => x.StockQuantity)
+                .NotNull().WithMessage("Stok miktarı boş olamaz!")
                 .GreaterThan(0).WithMessage("Stok miktarı 0'dan büyük olmalıdır!");
         }
 
-        // Özel Kontrol Metodu
+        // Özel Kontrol Metodu - Benzersizlik Kontrolü
         private bool BeUniqueCode(string fabricCode)
         {
             // Veritabanına bak: Bu koddan başka var mı?
             var dbList = _fabricRepo.GetAll();
-            bool exists = dbList.Any(x => x.FabricCode == fabricCode);
-            return !exists;
+            var existingFabric = dbList.FirstOrDefault(x => x.FabricCode == fabricCode);
+            
+            if (existingFabric == null)
+            {
+                return true; // Kod yok, benzersiz
+            }
+            
+            // Eğer güncelleme modundaysak ve bulunan kayıt aynı kayıtsa sorun yok
+            if (_currentFabricId.HasValue && existingFabric.FabricId == _currentFabricId.Value)
+            {
+                return true; // Aynı kayıt, sorun yok
+            }
+            
+            return false; // Başka kayıtta var, benzersiz değil
+        }
+
+        // Silme Kontrolü Metodu
+        public void ValidateForDeletion(Fabric fabric)
+        {
+            // Bu kumaşın sipariş kalemlerinde kullanılıp kullanılmadığını kontrol et
+            var fabricWithOrders = _fabricRepo.GetById(f => f.FabricId == fabric.FabricId, "OrderItems");
+            
+            if (fabricWithOrders?.OrderItems != null && fabricWithOrders.OrderItems.Any())
+            {
+                throw new System.Exception($"'{fabric.FabricCode}' kodlu kumaş silinemez! Bu kumaş {fabricWithOrders.OrderItems.Count} adet sipariş kaleminde kullanılmaktadır.");
+            }
         }
     }
 }
