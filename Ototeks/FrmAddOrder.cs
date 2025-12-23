@@ -134,12 +134,15 @@ namespace Ototeks.UI
                     // 1. ADIM: Nesneyi Hazırla
                     Order newOrder = CreateOrderFromUI();
 
-                    // 2. ADIM: İşi Bitir
+                    // 2. ADIM: Stok Kontrolü Yap ve Kullanıcıya Göster
+                    ShowStockValidationResult(newOrder.OrderItems);
+
+                    // 3. ADIM: İşi Bitir
                     var orderManager = new OrderManager(new GenericRepository<Order>());
                     orderManager.Add(newOrder);
 
-                    // 3. ADIM: Kullanıcıya Haber Ver
-                    XtraMessageBox.Show("Sipariş başarıyla sisteme eklendi!", "Tebrikler", 
+                    // 4. ADIM: Kullanıcıya Haber Ver
+                    XtraMessageBox.Show("Sipariş başarıyla sisteme eklendi ve kumaş stokları güncellendi!", "Başarılı", 
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     // Form kutularını temizle
@@ -152,11 +155,14 @@ namespace Ototeks.UI
                     Order guncellenecekOrder = CreateOrderFromUI();
                     guncellenecekOrder.OrderId = _guncellenecekId;
 
+                    // Stok kontrolü yap
+                    ShowStockValidationResult(guncellenecekOrder.OrderItems);
+
                     // Manager'a "Bunu güncelle" de
                     var orderManager = new OrderManager(new GenericRepository<Order>());
                     orderManager.Update(guncellenecekOrder);
 
-                    XtraMessageBox.Show("Sipariş güncellendi!", "Başarılı", 
+                    XtraMessageBox.Show("Sipariş güncellendi ve kumaş stokları yeniden hesaplandı!", "Başarılı", 
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close(); // Güncelleme bitince formu kapatmak daha mantıklıdır.
                 }
@@ -215,5 +221,45 @@ namespace Ototeks.UI
         {
             XtraMessageBox.Show(ex.Message, "Hata Oluştu", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+
+        private void ShowStockValidationResult(ICollection<OrderItem> orderItems)
+        {
+            try
+            {
+                var orderManager = new OrderManager(new GenericRepository<Order>());
+                
+                // Gerekli kumaş miktarlarını hesapla
+                var requiredFabrics = orderManager.CalculateRequiredFabrics(orderItems);
+                
+                if (requiredFabrics.Any())
+                {
+                    var message = new StringBuilder();
+                    message.AppendLine("Bu sipariş için gerekli kumaş miktarları:");
+                    message.AppendLine();
+                    
+                    foreach (var fabric in requiredFabrics)
+                    {
+                        message.AppendLine($"• {fabric.Key}: {fabric.Value:F2} metre");
+                    }
+                    
+                    message.AppendLine();
+                    message.AppendLine("Devam etmek istiyor musunuz?");
+                    
+                    var result = XtraMessageBox.Show(message.ToString(), "Stok Bilgisi", 
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    
+                    if (result == DialogResult.No)
+                    {
+                        throw new Exception("Sipariş işlemi kullanıcı tarafından iptal edildi.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Stok kontrolü hatalarını yakala ve göster
+                throw; // Hatayı yukarı fırlat ki ana catch bloğu yakalasın
+            }
+        }
+
     }
 }

@@ -6,5 +6,6 @@ namespace Ototeks.Business.Abstract
     public interface IProductTypeService
     {
         List<ProductType> GetAll();
+        ProductType GetById(int id);
     }
 }

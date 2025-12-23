@@ -18,5 +18,10 @@ namespace Ototeks.Business.Concrete
         {
             return _productTypeRepo.GetAll();
         }
+
+        public ProductType GetById(int id)
+        {
+            return _productTypeRepo.GetById(id);
+        }
     }
 }

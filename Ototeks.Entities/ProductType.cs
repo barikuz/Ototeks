@@ -10,4 +10,6 @@ public partial class ProductType
     public string TypeName { get; set; } = null!;
 
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+
+    public decimal RequiredFabricAmount { get; set; }
 }

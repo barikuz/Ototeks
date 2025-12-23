@@ -168,6 +168,9 @@ public partial class OtoteksContext : DbContext
 
             entity.Property(e => e.TypeId).HasColumnName("TypeID");
             entity.Property(e => e.TypeName).HasMaxLength(50);
+            entity.Property(e => e.RequiredFabricAmount)
+                .HasDefaultValue(0m)
+                .HasColumnType("decimal(10, 2)");
         });
 
         modelBuilder.Entity<QualityLog>(entity =>
