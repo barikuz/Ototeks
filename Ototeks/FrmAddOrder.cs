@@ -148,27 +148,17 @@ namespace Ototeks.UI
                 // SENARYO 2: GÜNCELLEME (ID > 0)
                 else
                 {
-                    // Önce veritabanındaki orijinal kaydı çek
+                    // Güncellenecek siparişi UI'dan oluştur (ID'sini set et)
+                    Order guncellenecekOrder = CreateOrderFromUI();
+                    guncellenecekOrder.OrderId = _guncellenecekId;
+
+                    // Manager'a "Bunu güncelle" de
                     var orderManager = new OrderManager(new GenericRepository<Order>());
-                    var guncellenecekOrder = orderManager.GetById(_guncellenecekId);
+                    orderManager.Update(guncellenecekOrder);
 
-                    if (guncellenecekOrder != null)
-                    {
-                        // Ekrandaki yeni bilgileri üzerine yaz
-                        guncellenecekOrder.OrderNumber = txtSiparisNo.Text;
-                        guncellenecekOrder.OrderDate = dateTarih.DateTime;
-                        guncellenecekOrder.CustomerId = lkpMusteri.EditValue != null ? (int)lkpMusteri.EditValue : 0;
-
-                        // OrderItems'ları da güncelle
-                        guncellenecekOrder.OrderItems = _orderItems;
-
-                        // Manager'a "Bunu güncelle" de
-                        orderManager.Update(guncellenecekOrder);
-
-                        XtraMessageBox.Show("Sipariş güncellendi!", "Başarılı", 
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        this.Close(); // Güncelleme bitince formu kapatmak daha mantıklıdır.
-                    }
+                    XtraMessageBox.Show("Sipariş güncellendi!", "Başarılı", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Close(); // Güncelleme bitince formu kapatmak daha mantıklıdır.
                 }
 
                 // Anne Forma Sinyal Gönder (Yenilesin)
@@ -193,8 +183,22 @@ namespace Ototeks.UI
             // "Müşteri seçili değilse 0 ata, seçiliyse ID'yi al"
             order.CustomerId = lkpMusteri.EditValue != null ? (int)lkpMusteri.EditValue : 0;
 
-            // 3. İlişkili Veri (Sepet)
-            order.OrderItems = _orderItems;
+            // 3. İlişkili Veri (Sepet) - OrderItem ID'lerini koru
+            order.OrderItems = new List<OrderItem>();
+            foreach (var item in _orderItems)
+            {
+                var orderItem = new OrderItem
+                {
+                    OrderItemId = item.OrderItemId, // Mevcut ID'yi koru (güncelleme için)
+                    OrderId = item.OrderId,
+                    FabricId = item.FabricId,
+                    TypeId = item.TypeId,
+                    Quantity = item.Quantity,
+                    CurrentStage = item.CurrentStage ?? "Planlama",
+                    ProcessedByUserId = item.ProcessedByUserId
+                };
+                order.OrderItems.Add(orderItem);
+            }
 
             return order;
         }
@@ -209,7 +213,7 @@ namespace Ototeks.UI
 
         private void ShowErrorMessage(Exception ex)
         {
-            XtraMessageBox.Show(ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            XtraMessageBox.Show(ex.Message, "Hata Oluştu", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

@@ -10,10 +10,12 @@ namespace Ototeks.Business.ValidationRules
     public class OrderValidator : AbstractValidator<Order>
     {
         private readonly IGenericRepository<Order> _orderRepository;
+        private readonly int? _currentOrderId; // Güncellenen kaydın ID'si
 
-        public OrderValidator(IGenericRepository<Order> orderRepository)
+        public OrderValidator(IGenericRepository<Order> orderRepository, int? currentOrderId = null)
         {
             _orderRepository = orderRepository;
+            _currentOrderId = currentOrderId;
 
             // 1. Sipariş Numarası Kontrolü
             RuleFor(x => x.OrderNumber)
@@ -75,8 +77,21 @@ namespace Ototeks.Business.ValidationRules
         {
             // Veritabanından aynı numaraya sahip sipariş var mı kontrol et
             var existingOrders = _orderRepository.GetAll();
-            return !existingOrders.Any(x => 
+            var existingOrder = existingOrders.FirstOrDefault(x => 
                 x.OrderNumber.Equals(orderNumber, StringComparison.OrdinalIgnoreCase));
+
+            if (existingOrder == null)
+            {
+                return true; // Numara yok, benzersiz
+            }
+
+            // Eğer güncelleme modundaysak ve bulunan kayıt aynı kayıtsa sorun yok
+            if (_currentOrderId.HasValue && existingOrder.OrderId == _currentOrderId.Value)
+            {
+                return true; // Aynı kayıt, sorun yok
+            }
+
+            return false; // Başka kayıtta var, benzersiz değil
         }
     }
 }

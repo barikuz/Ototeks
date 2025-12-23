@@ -67,6 +67,7 @@
             gridView1.GridControl = gridControl1;
             gridView1.Name = "gridView1";
             gridView1.OptionsBehavior.AutoPopulateColumns = false;
+            gridView1.OptionsBehavior.Editable = false;
             gridView1.PopupMenuShowing += gridView1_PopupMenuShowing;
             gridView1.DoubleClick += gridView1_DoubleClick;
             // 
@@ -150,7 +151,7 @@
             // 
             // btnAdd
             // 
-            btnAdd.Caption = "Ekle";
+            btnAdd.Caption = "Müşteri Ekle";
             btnAdd.Id = 0;
             btnAdd.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("btnAdd.ImageOptions.SvgImage");
             btnAdd.Name = "btnAdd";
@@ -158,7 +159,7 @@
             // 
             // btnUpdate
             // 
-            btnUpdate.Caption = "Düzenle";
+            btnUpdate.Caption = "Güncelle";
             btnUpdate.Id = 1;
             btnUpdate.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("btnUpdate.ImageOptions.SvgImage");
             btnUpdate.Name = "btnUpdate";
@@ -174,7 +175,7 @@
             // 
             // sagTikMenu
             // 
-            sagTikMenu.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] { new DevExpress.XtraBars.LinkPersistInfo(btnAdd), new DevExpress.XtraBars.LinkPersistInfo(btnUpdate), new DevExpress.XtraBars.LinkPersistInfo(btnDelete) });
+            sagTikMenu.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] { new DevExpress.XtraBars.LinkPersistInfo(btnUpdate), new DevExpress.XtraBars.LinkPersistInfo(btnDelete), new DevExpress.XtraBars.LinkPersistInfo(btnAdd) });
             sagTikMenu.Manager = barManager1;
             sagTikMenu.Name = "sagTikMenu";
             // 

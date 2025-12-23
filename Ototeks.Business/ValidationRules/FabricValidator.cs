@@ -11,13 +11,7 @@ namespace Ototeks.Business.ValidationRules
         private readonly IGenericRepository<Fabric> _fabricRepo;
         private readonly int? _currentFabricId; // Güncellenen kaydın ID'si
 
-        // Ekleme için constructor
-        public FabricValidator(IGenericRepository<Fabric> fabricRepo) : this(fabricRepo, null)
-        {
-        }
-
-        // Güncelleme için constructor
-        public FabricValidator(IGenericRepository<Fabric> fabricRepo, int? currentFabricId)
+        public FabricValidator(IGenericRepository<Fabric> fabricRepo, int? currentFabricId = null)
         {
             _fabricRepo = fabricRepo;
             _currentFabricId = currentFabricId;

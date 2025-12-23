@@ -24,23 +24,16 @@ namespace Ototeks.Business.Concrete
             // 1. Veriyi Standartlaştır
             FormatData(fabric);
 
-            // 2. MODERN VALİDASYON
-            var validator = new FabricValidator(_fabricRepo);
-            ValidationResult result = validator.Validate(fabric);
+            // 2. Validasyon
+            CheckValidation(fabric);
 
-            if (!result.IsValid)
-            {
-                // İlk hatayı fırlat
-                throw new Exception(result.Errors[0].ErrorMessage);
-            }
-
-            // Kuralları geçtiyse Repository'e gönder
+            // 3. Kuralları geçtiyse Repository'e gönder
             _fabricRepo.Add(fabric);
         }
 
         public void Delete(Fabric fabric)
         {
-            // 1. Silme validasyonunu validator'a devret
+            // 1. Validasyon
             var validator = new FabricValidator(_fabricRepo);
             validator.ValidateForDeletion(fabric);
 
@@ -63,8 +56,19 @@ namespace Ototeks.Business.Concrete
             // 1. Veriyi Standartlaştır
             FormatData(fabric);
 
-            // 2. MODERN VALİDASYON - Güncelleme için özel validator
-            var validator = new FabricValidator(_fabricRepo, fabric.FabricId); // FabricId'yi geç
+            // 2. Validasyon (Güncelleme için fabric ID'si ile)
+            CheckValidation(fabric, fabric.FabricId);
+
+            // 3. Kuralları geçtiyse Repository'e gönder
+            _fabricRepo.Update(fabric);
+        }
+
+        // --- YARDIMCI METOTLAR ---
+        
+        // Validasyon Metodu
+        private void CheckValidation(Fabric fabric, int? excludeId = null)
+        {
+            var validator = new FabricValidator(_fabricRepo, excludeId);
             ValidationResult result = validator.Validate(fabric);
 
             if (!result.IsValid)
@@ -72,12 +76,9 @@ namespace Ototeks.Business.Concrete
                 // İlk hatayı fırlat
                 throw new Exception(result.Errors[0].ErrorMessage);
             }
-
-            // Kuralları geçtiyse Repository'e gönder
-            _fabricRepo.Update(fabric);
         }
 
-        // Yardımcı Metot 1: Veriyi Temizle
+        // Veriyi Temizle
         private static void FormatData(Fabric fabric)
         {
             fabric.FabricCode = fabric.FabricCode?.Trim().ToUpper();

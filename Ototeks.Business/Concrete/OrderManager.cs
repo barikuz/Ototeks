@@ -28,8 +28,8 @@ namespace Ototeks.Business.Concrete
 
         public void Update(Order order)
         {
-            // 1. Validasyon (Repository'yi geç ki duplikasyon kontrol edebilsin)
-            CheckValidation(order);
+            // 1. Validasyon (Güncelleme için order ID'si ile)
+            CheckValidation(order, order.OrderId);
 
             // 2. Veritabanına Kayıt
             _orderRepo.Update(order);
@@ -66,9 +66,9 @@ namespace Ototeks.Business.Concrete
         }
 
         // --- YARDIMCI METOT ---
-        private void CheckValidation(Order order)
+        private void CheckValidation(Order order, int? excludeId = null)
         {
-            var validator = new OrderValidator(_orderRepo);
+            var validator = new OrderValidator(_orderRepo, excludeId);
             var result = validator.Validate(order);
 
             if (!result.IsValid)

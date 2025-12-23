@@ -33,6 +33,9 @@ namespace Ototeks.DataAccess.Concrete
         // GÜNCELLEME İŞLEMİ
         public void Update(T entity)
         {
+            // Önce context'teki tüm tracked entity'leri temizle
+            _context.ChangeTracker.Clear();
+            
             _dbSet.Update(entity);
             _context.SaveChanges();
         }
@@ -49,12 +52,15 @@ namespace Ototeks.DataAccess.Concrete
         {
             // _context.Set<T>() demek: "Bana gelen T neyse (Mesela Orders), git o tabloya bağlan"
             // Set<T>() o tablonun tamamını temsil eder. ToList() veriyi çeker.
-            return _context.Set<T>().ToList();
+            return _context.Set<T>().AsNoTracking().ToList();
         }
 
         public List<T> GetAll(Expression<Func<T, bool>> filter = null, params string[] includeProperties)
         {
             var query = PrepareQuery(filter,includeProperties);
+
+            // AsNoTracking ekle
+            query = query.AsNoTracking();
 
             // Listeye çevirip dön
             return query.ToList();
@@ -63,7 +69,7 @@ namespace Ototeks.DataAccess.Concrete
         // ID İLE BULMA İŞLEMİ
         public T GetById(int id)
         {
-            return _dbSet.Find(id);
+            return _dbSet.AsNoTracking().FirstOrDefault(e => EF.Property<int>(e, GetPrimaryKeyName()) == id);
         }
 
         public T GetById(Expression<Func<T, bool>> filter, params string[] includeProperties)
@@ -71,10 +77,13 @@ namespace Ototeks.DataAccess.Concrete
             // Ortak metodu çağır (Include'ları hallet)
             var query = PrepareQuery(filter,includeProperties);
 
+            // AsNoTracking ekle
+            query = query.AsNoTracking();
+
             return query.FirstOrDefault();
         }
 
-        // --- YARDIMCI METOT ---
+        // --- YARDIMCI METOTLAR ---
         private IQueryable<T> PrepareQuery(Expression<Func<T, bool>> filter, params string[] includeProperties)
         {
             var query = _dbSet.AsQueryable();
@@ -92,6 +101,14 @@ namespace Ototeks.DataAccess.Concrete
                 }
             }
             return query;
+        }
+
+        // Primary key adını dinamik olarak bulma
+        private string GetPrimaryKeyName()
+        {
+            var entityType = _context.Model.FindEntityType(typeof(T));
+            var primaryKey = entityType.FindPrimaryKey();
+            return primaryKey.Properties.First().Name;
         }
     }
 }
