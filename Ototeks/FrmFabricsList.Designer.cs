@@ -1,6 +1,6 @@
 ﻿namespace Ototeks.UI
 {
-    partial class FrmListFabrics
+    partial class FrmFabricsList
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmListFabrics));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmFabricsList));
             gridControl1 = new DevExpress.XtraGrid.GridControl();
             bindingSource1 = new System.Windows.Forms.BindingSource(components);
             gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();

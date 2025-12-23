@@ -47,13 +47,13 @@ namespace Ototeks
             ShowAddFormWithRefresh(
                 createAddForm: () => new FrmAddFabric(),
                 listFormName: "FrmListFabrics",
-                refreshAction: (FrmListFabrics listForm) => listForm.RefreshData()
+                refreshAction: (FrmFabricsList listForm) => listForm.RefreshData()
             );
         }
 
         private void btnKumasListesi_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            FrmListFabrics frm = new FrmListFabrics();
+            FrmFabricsList frm = new FrmFabricsList();
             frm.MdiParent = this; // Bu formu ana ekranın içinde (sekme gibi) aç
             frm.Show();
         }

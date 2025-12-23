@@ -10,13 +10,13 @@ using System.Windows.Forms;
 
 namespace Ototeks.UI
 {
-    public partial class FrmListFabrics : DevExpress.XtraEditors.XtraForm
+    public partial class FrmFabricsList : DevExpress.XtraEditors.XtraForm
     {
         private FabricManager _manager;
         private GenericRepository<Fabric> _repo;
         private ListFormHelper<Fabric> _uiHelper;
 
-        public FrmListFabrics()
+        public FrmFabricsList()
         {
             InitializeComponent();
             InitializeHelper();

@@ -28,9 +28,13 @@ namespace Ototeks.Business.ValidationRules
                 .NotEmpty().WithMessage("Kumaş adı boş olamaz!")
                 .MinimumLength(3).WithMessage("Kumaş adı en az 3 karakter olmalıdır.");
 
-            // Kural 4: "Stok eksi olamaz"
+            // Kural 4: "Renk seçilmeli"
+            RuleFor(x => x.ColorId)
+                .NotNull().WithMessage("Renk seçimi yapılmalıdır!");
+
+            // Kural 5: "Stok miktarı 0'dan büyük olmalı"
             RuleFor(x => x.StockQuantity)
-                .GreaterThanOrEqualTo(0).WithMessage("Stok eksiye düşemez.");
+                .GreaterThan(0).WithMessage("Stok miktarı 0'dan büyük olmalıdır!");
         }
 
         // Özel Kontrol Metodu

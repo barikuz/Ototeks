@@ -35,6 +35,10 @@
             txtKumasKodu = new DevExpress.XtraEditors.TextEdit();
             lblKumasAdi = new DevExpress.XtraEditors.LabelControl();
             txtKumasAdi = new DevExpress.XtraEditors.TextEdit();
+            lblRenk = new DevExpress.XtraEditors.LabelControl();
+            cmbRenk = new DevExpress.XtraEditors.ComboBoxEdit();
+            lblStok = new DevExpress.XtraEditors.LabelControl();
+            txtStok = new DevExpress.XtraEditors.TextEdit();
             btnKaydet = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)tablePanel1).BeginInit();
             tablePanel1.SuspendLayout();
@@ -42,6 +46,8 @@
             stackPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)txtKumasKodu.Properties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)txtKumasAdi.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)cmbRenk.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)txtStok.Properties).BeginInit();
             SuspendLayout();
             // 
             // tablePanel1
@@ -52,7 +58,7 @@
             tablePanel1.Location = new System.Drawing.Point(0, 0);
             tablePanel1.Name = "tablePanel1";
             tablePanel1.Rows.AddRange(new DevExpress.Utils.Layout.TablePanelRow[] { new DevExpress.Utils.Layout.TablePanelRow(DevExpress.Utils.Layout.TablePanelEntityStyle.Relative, 50F), new DevExpress.Utils.Layout.TablePanelRow(DevExpress.Utils.Layout.TablePanelEntityStyle.AutoSize, 500F), new DevExpress.Utils.Layout.TablePanelRow(DevExpress.Utils.Layout.TablePanelEntityStyle.Relative, 50F) });
-            tablePanel1.Size = new System.Drawing.Size(599, 420);
+            tablePanel1.Size = new System.Drawing.Size(599, 702);
             tablePanel1.TabIndex = 0;
             tablePanel1.UseSkinIndents = true;
             // 
@@ -65,14 +71,18 @@
             stackPanel1.Controls.Add(txtKumasKodu);
             stackPanel1.Controls.Add(lblKumasAdi);
             stackPanel1.Controls.Add(txtKumasAdi);
+            stackPanel1.Controls.Add(lblRenk);
+            stackPanel1.Controls.Add(cmbRenk);
+            stackPanel1.Controls.Add(lblStok);
+            stackPanel1.Controls.Add(txtStok);
             stackPanel1.Controls.Add(btnKaydet);
             stackPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             stackPanel1.LayoutDirection = DevExpress.Utils.Layout.StackPanelLayoutDirection.TopDown;
-            stackPanel1.Location = new System.Drawing.Point(126, 21);
+            stackPanel1.Location = new System.Drawing.Point(126, 54);
             stackPanel1.Name = "stackPanel1";
             stackPanel1.Padding = new System.Windows.Forms.Padding(16);
             tablePanel1.SetRow(stackPanel1, 1);
-            stackPanel1.Size = new System.Drawing.Size(340, 378);
+            stackPanel1.Size = new System.Drawing.Size(340, 594);
             stackPanel1.TabIndex = 1;
             stackPanel1.UseSkinIndents = true;
             // 
@@ -139,12 +149,73 @@
             // 
             txtKumasAdi.Anchor = System.Windows.Forms.AnchorStyles.None;
             txtKumasAdi.Location = new System.Drawing.Point(20, 236);
-            txtKumasAdi.Margin = new System.Windows.Forms.Padding(3, 3, 3, 32);
+            txtKumasAdi.Margin = new System.Windows.Forms.Padding(3, 3, 3, 24);
             txtKumasAdi.Name = "txtKumasAdi";
             txtKumasAdi.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 10.8F);
             txtKumasAdi.Properties.Appearance.Options.UseFont = true;
             txtKumasAdi.Size = new System.Drawing.Size(300, 44);
             txtKumasAdi.TabIndex = 4;
+            // 
+            // lblRenk
+            // 
+            lblRenk.Anchor = System.Windows.Forms.AnchorStyles.None;
+            lblRenk.Appearance.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold);
+            lblRenk.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
+            lblRenk.Appearance.Options.UseFont = true;
+            lblRenk.Appearance.Options.UseForeColor = true;
+            lblRenk.Appearance.Options.UseTextOptions = true;
+            lblRenk.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            lblRenk.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Vertical;
+            lblRenk.Location = new System.Drawing.Point(20, 308);
+            lblRenk.Name = "lblRenk";
+            lblRenk.Padding = new System.Windows.Forms.Padding(2);
+            lblRenk.Size = new System.Drawing.Size(300, 29);
+            lblRenk.TabIndex = 5;
+            lblRenk.Text = "Renk:";
+            // 
+            // cmbRenk
+            // 
+            cmbRenk.Anchor = System.Windows.Forms.AnchorStyles.None;
+            cmbRenk.Location = new System.Drawing.Point(20, 344);
+            cmbRenk.Margin = new System.Windows.Forms.Padding(3, 3, 3, 24);
+            cmbRenk.Name = "cmbRenk";
+            cmbRenk.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 10.8F);
+            cmbRenk.Properties.Appearance.Options.UseFont = true;
+            cmbRenk.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
+            cmbRenk.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
+            cmbRenk.Size = new System.Drawing.Size(300, 44);
+            cmbRenk.TabIndex = 6;
+            // 
+            // lblStok
+            // 
+            lblStok.Anchor = System.Windows.Forms.AnchorStyles.None;
+            lblStok.Appearance.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold);
+            lblStok.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
+            lblStok.Appearance.Options.UseFont = true;
+            lblStok.Appearance.Options.UseForeColor = true;
+            lblStok.Appearance.Options.UseTextOptions = true;
+            lblStok.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            lblStok.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Vertical;
+            lblStok.Location = new System.Drawing.Point(20, 416);
+            lblStok.Name = "lblStok";
+            lblStok.Padding = new System.Windows.Forms.Padding(2);
+            lblStok.Size = new System.Drawing.Size(300, 29);
+            lblStok.TabIndex = 7;
+            lblStok.Text = "Stok Miktarı:";
+            // 
+            // txtStok
+            // 
+            txtStok.Anchor = System.Windows.Forms.AnchorStyles.None;
+            txtStok.Location = new System.Drawing.Point(20, 452);
+            txtStok.Margin = new System.Windows.Forms.Padding(3, 3, 3, 32);
+            txtStok.Name = "txtStok";
+            txtStok.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 10.8F);
+            txtStok.Properties.Appearance.Options.UseFont = true;
+            txtStok.Properties.MaskSettings.Set("MaskManagerType", typeof(DevExpress.Data.Mask.NumericMaskManager));
+            txtStok.Properties.MaskSettings.Set("MaskManagerSignature", "allowNull=False");
+            txtStok.Properties.MaskSettings.Set("mask", "f2");
+            txtStok.Size = new System.Drawing.Size(300, 44);
+            txtStok.TabIndex = 8;
             // 
             // btnKaydet
             // 
@@ -153,10 +224,10 @@
             btnKaydet.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
             btnKaydet.Appearance.Options.UseFont = true;
             btnKaydet.Appearance.Options.UseForeColor = true;
-            btnKaydet.Location = new System.Drawing.Point(111, 316);
+            btnKaydet.Location = new System.Drawing.Point(111, 532);
             btnKaydet.Name = "btnKaydet";
             btnKaydet.Size = new System.Drawing.Size(118, 42);
-            btnKaydet.TabIndex = 5;
+            btnKaydet.TabIndex = 9;
             btnKaydet.Text = "Kaydet";
             btnKaydet.Click += btnKaydet_Click;
             // 
@@ -165,7 +236,7 @@
             AcceptButton = btnKaydet;
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(599, 420);
+            ClientSize = new System.Drawing.Size(599, 702);
             Controls.Add(tablePanel1);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             MaximizeBox = false;
@@ -180,6 +251,8 @@
             stackPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)txtKumasKodu.Properties).EndInit();
             ((System.ComponentModel.ISupportInitialize)txtKumasAdi.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)cmbRenk.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)txtStok.Properties).EndInit();
             ResumeLayout(false);
         }
 
@@ -192,6 +265,10 @@
         private DevExpress.XtraEditors.TextEdit txtKumasKodu;
         private DevExpress.XtraEditors.LabelControl lblKumasAdi;
         private DevExpress.XtraEditors.TextEdit txtKumasAdi;
+        private DevExpress.XtraEditors.LabelControl lblRenk;
+        private DevExpress.XtraEditors.ComboBoxEdit cmbRenk;
+        private DevExpress.XtraEditors.LabelControl lblStok;
+        private DevExpress.XtraEditors.TextEdit txtStok;
         private DevExpress.XtraEditors.SimpleButton btnKaydet;
     }
 }

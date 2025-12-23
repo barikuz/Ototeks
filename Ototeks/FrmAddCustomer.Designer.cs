@@ -58,7 +58,7 @@ namespace Ototeks.UI
             tablePanel1.Location = new System.Drawing.Point(0, 0);
             tablePanel1.Name = "tablePanel1";
             tablePanel1.Rows.AddRange(new DevExpress.Utils.Layout.TablePanelRow[] { new DevExpress.Utils.Layout.TablePanelRow(DevExpress.Utils.Layout.TablePanelEntityStyle.Relative, 30F), new DevExpress.Utils.Layout.TablePanelRow(DevExpress.Utils.Layout.TablePanelEntityStyle.AutoSize, 500F), new DevExpress.Utils.Layout.TablePanelRow(DevExpress.Utils.Layout.TablePanelEntityStyle.Relative, 30F) });
-            tablePanel1.Size = new System.Drawing.Size(617, 695);
+            tablePanel1.Size = new System.Drawing.Size(617, 699);
             tablePanel1.TabIndex = 0;
             tablePanel1.UseSkinIndents = true;
             // 
@@ -78,7 +78,7 @@ namespace Ototeks.UI
             stackPanel1.Controls.Add(btnKaydet);
             stackPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             stackPanel1.LayoutDirection = DevExpress.Utils.Layout.StackPanelLayoutDirection.TopDown;
-            stackPanel1.Location = new System.Drawing.Point(134, 48);
+            stackPanel1.Location = new System.Drawing.Point(134, 50);
             stackPanel1.Name = "stackPanel1";
             stackPanel1.Padding = new System.Windows.Forms.Padding(16);
             tablePanel1.SetRow(stackPanel1, 1);
@@ -231,7 +231,7 @@ namespace Ototeks.UI
             AcceptButton = btnKaydet;
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(617, 695);
+            ClientSize = new System.Drawing.Size(617, 699);
             Controls.Add(tablePanel1);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             MaximizeBox = false;
