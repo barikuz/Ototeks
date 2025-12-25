@@ -62,7 +62,10 @@
             ribbonControl1.Name = "ribbonControl1";
             ribbonControl1.OptionsMenuMinWidth = 385;
             ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] { ribbonPage1 });
+            ribbonControl1.ShowApplicationButton = DevExpress.Utils.DefaultBoolean.False;
+            ribbonControl1.ShowDisplayOptionsMenuButton = DevExpress.Utils.DefaultBoolean.False;
             ribbonControl1.Size = new System.Drawing.Size(973, 242);
+            ribbonControl1.ToolbarLocation = DevExpress.XtraBars.Ribbon.RibbonQuickAccessToolbarLocation.Hidden;
             // 
             // skinRibbonGalleryBarItem1
             // 
@@ -137,7 +140,7 @@
             // 
             ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] { ribbonPageGroup1, ribbonPageGroup2, ribbonPageGroup3, ribbonPageGroup4 });
             ribbonPage1.Name = "ribbonPage1";
-            ribbonPage1.Text = "Stok Yönetimi";
+            ribbonPage1.Text = "İşlemler";
             // 
             // ribbonPageGroup1
             // 
@@ -184,7 +187,7 @@
             Name = "Form1";
             Ribbon = ribbonControl1;
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            Text = "Form1";
+            Text = "Ototeks";
             WindowState = System.Windows.Forms.FormWindowState.Maximized;
             ((System.ComponentModel.ISupportInitialize)ribbonControl1).EndInit();
             ((System.ComponentModel.ISupportInitialize)documentManager1).EndInit();

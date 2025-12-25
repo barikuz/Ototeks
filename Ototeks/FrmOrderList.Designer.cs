@@ -35,6 +35,7 @@
             colFabricType = new DevExpress.XtraGrid.Columns.GridColumn();
             colProductType = new DevExpress.XtraGrid.Columns.GridColumn();
             colQuantity = new DevExpress.XtraGrid.Columns.GridColumn();
+            colCurrentStage = new DevExpress.XtraGrid.Columns.GridColumn();
             gridOrders = new DevExpress.XtraGrid.GridControl();
             orderBindingSource = new System.Windows.Forms.BindingSource(components);
             gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
@@ -62,10 +63,11 @@
             // 
             // gridView2
             // 
-            gridView2.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { colFabricType, colProductType, colQuantity });
+            gridView2.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { colFabricType, colProductType, colQuantity, colCurrentStage });
             gridView2.GridControl = gridOrders;
             gridView2.Name = "gridView2";
             gridView2.OptionsBehavior.Editable = false;
+            gridView2.CustomColumnDisplayText += gridView2_CustomColumnDisplayText;
             // 
             // colFabricType
             // 
@@ -97,6 +99,16 @@
             colQuantity.VisibleIndex = 2;
             colQuantity.Width = 94;
             // 
+            // colCurrentStage
+            // 
+            colCurrentStage.Caption = "Kalem Durumu";
+            colCurrentStage.FieldName = "CurrentStage";
+            colCurrentStage.MinWidth = 25;
+            colCurrentStage.Name = "colCurrentStage";
+            colCurrentStage.Visible = true;
+            colCurrentStage.VisibleIndex = 3;
+            colCurrentStage.Width = 94;
+            // 
             // gridOrders
             // 
             gridOrders.DataSource = orderBindingSource;
@@ -122,6 +134,7 @@
             gridView1.Name = "gridView1";
             gridView1.OptionsBehavior.Editable = false;
             gridView1.OptionsDetail.ShowDetailTabs = false;
+            gridView1.CustomColumnDisplayText += gridView1_CustomColumnDisplayText;
             gridView1.PopupMenuShowing += gridView1_PopupMenuShowing;
             gridView1.DoubleClick += gridView1_DoubleClick;
             // 
@@ -284,6 +297,7 @@
         private DevExpress.XtraGrid.Columns.GridColumn colFabricType;
         private DevExpress.XtraGrid.Columns.GridColumn colProductType;
         private DevExpress.XtraGrid.Columns.GridColumn colQuantity;
+        private DevExpress.XtraGrid.Columns.GridColumn colCurrentStage;
         private DevExpress.XtraBars.PopupMenu sagTikMenu;
         private DevExpress.XtraBars.BarManager barManager1;
         private DevExpress.XtraBars.BarDockControl barDockControlTop;

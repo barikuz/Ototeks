@@ -65,6 +65,24 @@ namespace Ototeks.UI
             gridView1.ActivateMasterDetail<Order>("OrderItems", order => order.OrderItems);
         }
 
+        private void gridView1_CustomColumnDisplayText(object sender, DevExpress.XtraGrid.Views.Base.CustomColumnDisplayTextEventArgs e)
+        {
+            // Ana tablodaki OrderStatus kolonunu Türkçe göster
+            if (e.Column.FieldName == "OrderStatus" && e.Value is OrderStatus status)
+            {
+                e.DisplayText = EnumHelper.GetOrderStatusName(status);
+            }
+        }
+
+        private void gridView2_CustomColumnDisplayText(object sender, DevExpress.XtraGrid.Views.Base.CustomColumnDisplayTextEventArgs e)
+        {
+            // Alt tablodaki CurrentStage kolonunu Türkçe göster
+            if (e.Column.FieldName == "CurrentStage" && e.Value is OrderStatus status)
+            {
+                e.DisplayText = EnumHelper.GetOrderStatusName(status);
+            }
+        }
+
         public void RefreshData()
         {
             _uiHelper.RefreshData();
