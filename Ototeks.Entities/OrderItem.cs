@@ -15,7 +15,7 @@ public partial class OrderItem
 
     public int Quantity { get; set; }
 
-    public string? CurrentStage { get; set; }
+    public OrderStatus CurrentStage { get; set; } = OrderStatus.Pending;
 
     public int? ProcessedByUserId { get; set; }
 

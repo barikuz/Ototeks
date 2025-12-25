@@ -122,8 +122,8 @@ public partial class OtoteksContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.OrderNumber).HasMaxLength(20);
             entity.Property(e => e.OrderStatus)
-                .HasMaxLength(20)
-                .HasDefaultValue("Beklemede");
+                .HasDefaultValue(OrderStatus.Pending)
+                .HasConversion<int>(); // OrderStatus enum'unu int olarak sakla
 
             entity.HasOne(d => d.Customer).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.CustomerId)
@@ -136,8 +136,8 @@ public partial class OtoteksContext : DbContext
 
             entity.Property(e => e.OrderItemId).HasColumnName("OrderItemID");
             entity.Property(e => e.CurrentStage)
-                .HasMaxLength(50)
-                .HasDefaultValue("Planlama");
+                .HasDefaultValue(OrderStatus.Pending)
+                .HasConversion<int>(); // OrderStatus enum'unu int olarak sakla
             entity.Property(e => e.FabricId).HasColumnName("FabricID");
             entity.Property(e => e.OrderId).HasColumnName("OrderID");
             entity.Property(e => e.ProcessedByUserId).HasColumnName("ProcessedByUserID");

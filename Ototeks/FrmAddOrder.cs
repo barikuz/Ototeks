@@ -184,7 +184,7 @@ namespace Ototeks.UI
             // 1. Basit Atamalar
             order.OrderNumber = txtSiparisNo.Text;
             order.OrderDate = dateTarih.DateTime;
-            order.OrderStatus = "Yeni";
+            order.OrderStatus = OrderStatus.Pending;
 
             // "Müşteri seçili değilse 0 ata, seçiliyse ID'yi al"
             order.CustomerId = lkpMusteri.EditValue != null ? (int)lkpMusteri.EditValue : 0;
@@ -200,7 +200,7 @@ namespace Ototeks.UI
                     FabricId = item.FabricId,
                     TypeId = item.TypeId,
                     Quantity = item.Quantity,
-                    CurrentStage = item.CurrentStage ?? "Planlama",
+                    CurrentStage = item.CurrentStage,
                     ProcessedByUserId = item.ProcessedByUserId
                 };
                 order.OrderItems.Add(orderItem);

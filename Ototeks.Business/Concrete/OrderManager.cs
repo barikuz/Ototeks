@@ -52,23 +52,33 @@ namespace Ototeks.Business.Concrete
             if (existingOrder == null)
                 throw new Exception("Güncellenecek sipariş bulunamadı!");
 
-            // 1. Validasyon (Güncelleme için order ID'si ile)
-            CheckValidation(order, order.OrderId);
+            // Eğer sadece OrderStatus güncellemesi yapılıyorsa (OrderItems null veya boşsa)
+            // Stok işlemlerini atlayalım
+            bool isStatusOnlyUpdate = order.OrderItems == null || !order.OrderItems.Any();
 
-            // 2. Eski siparişin stokunu geri ekle
-            if (existingOrder.OrderItems != null && existingOrder.OrderItems.Any())
+            if (!isStatusOnlyUpdate)
             {
-                _stockService.RestoreStockToFabrics(existingOrder.OrderItems);
-            }
+                // 1. Validasyon (Güncelleme için order ID'si ile)
+                CheckValidation(order, order.OrderId);
 
-            // 3. Yeni sipariş için stok kontrolü
-            CheckStockAvailability(order.OrderItems);
+                // 2. Eski siparişin stokunu geri ekle
+                if (existingOrder.OrderItems != null && existingOrder.OrderItems.Any())
+                {
+                    _stockService.RestoreStockToFabrics(existingOrder.OrderItems);
+                }
+
+                // 3. Yeni sipariş için stok kontrolü
+                CheckStockAvailability(order.OrderItems);
+            }
 
             // 4. Veritabanına güncelleme kayıt
             _orderRepo.Update(order);
 
-            // 5. Yeni sipariş için stoktan düşürme
-            _stockService.DeductStockFromFabrics(order.OrderItems);
+            if (!isStatusOnlyUpdate)
+            {
+                // 5. Yeni sipariş için stoktan düşürme
+                _stockService.DeductStockFromFabrics(order.OrderItems);
+            }
         }
 
         public void Delete(Order order)

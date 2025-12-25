@@ -15,7 +15,7 @@ public partial class Order
 
     public DateTime? DueDate { get; set; }
 
-    public string? OrderStatus { get; set; }
+    public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
 
     public virtual Customer? Customer { get; set; }
 

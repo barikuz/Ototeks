@@ -93,5 +93,12 @@ namespace Ototeks
                 refreshAction: (FrmCustomerList listForm) => listForm.RefreshData()
             );
         }
+
+        private void btnProductionTrack_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            FrmProductionTrack frm = new FrmProductionTrack();
+            frm.MdiParent = this; // Bu formu ana ekranın içinde (sekme gibi) aç
+            frm.Show();
+        }
     }
 }
