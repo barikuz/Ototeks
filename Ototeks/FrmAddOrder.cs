@@ -23,6 +23,7 @@ namespace Ototeks.UI
 
         private BindingList<OrderItem> _orderItems;
         private int _guncellenecekId = 0; // 0 ise Ekleme Modu, >0 ise Güncelleme Modu
+        private OrderStatus _mevcutSiparisDurumu = OrderStatus.Pending; // Mevcut sipariş durumunu sakla
 
         public FrmAddOrder()
         {
@@ -64,6 +65,9 @@ namespace Ototeks.UI
 
                 if (order != null)
                 {
+                    // Mevcut sipariş durumunu sakla
+                    _mevcutSiparisDurumu = order.OrderStatus;
+
                     // Form kutularını doldur
                     txtSiparisNo.Text = order.OrderNumber;
                     dateTarih.DateTime = order.OrderDate ?? DateTime.Now;
@@ -184,7 +188,9 @@ namespace Ototeks.UI
             // 1. Basit Atamalar
             order.OrderNumber = txtSiparisNo.Text;
             order.OrderDate = dateTarih.DateTime;
-            order.OrderStatus = OrderStatus.Pending;
+            
+            // Güncelleme modundaysa mevcut durumu koru, yeni kayıtta Pending yap
+            order.OrderStatus = _guncellenecekId > 0 ? _mevcutSiparisDurumu : OrderStatus.Pending;
 
             // "Müşteri seçili değilse 0 ata, seçiliyse ID'yi al"
             order.CustomerId = lkpMusteri.EditValue != null ? (int)lkpMusteri.EditValue : 0;

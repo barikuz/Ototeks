@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DevExpress.XtraGrid.GridLevelNode gridLevelNode2 = new DevExpress.XtraGrid.GridLevelNode();
+            DevExpress.XtraGrid.GridLevelNode gridLevelNode1 = new DevExpress.XtraGrid.GridLevelNode();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmOrderList));
             gridView2 = new DevExpress.XtraGrid.Views.Grid.GridView();
             colFabricType = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -45,14 +45,15 @@
             colOrderStatus = new DevExpress.XtraGrid.Columns.GridColumn();
             colCustomer = new DevExpress.XtraGrid.Columns.GridColumn();
             sagTikMenu = new DevExpress.XtraBars.PopupMenu(components);
+            btnUpdate = new DevExpress.XtraBars.BarButtonItem();
+            btnDelete = new DevExpress.XtraBars.BarButtonItem();
+            btnAdd = new DevExpress.XtraBars.BarButtonItem();
+            btnCancel = new DevExpress.XtraBars.BarButtonItem();
             barManager1 = new DevExpress.XtraBars.BarManager(components);
             barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
             barDockControlRight = new DevExpress.XtraBars.BarDockControl();
-            btnDelete = new DevExpress.XtraBars.BarButtonItem();
-            btnAdd = new DevExpress.XtraBars.BarButtonItem();
-            btnUpdate = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)gridView2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gridOrders).BeginInit();
             ((System.ComponentModel.ISupportInitialize)orderBindingSource).BeginInit();
@@ -113,13 +114,13 @@
             // 
             gridOrders.DataSource = orderBindingSource;
             gridOrders.Dock = System.Windows.Forms.DockStyle.Fill;
-            gridLevelNode2.LevelTemplate = gridView2;
-            gridLevelNode2.RelationName = "OrderItems";
-            gridOrders.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] { gridLevelNode2 });
+            gridLevelNode1.LevelTemplate = gridView2;
+            gridLevelNode1.RelationName = "OrderItems";
+            gridOrders.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] { gridLevelNode1 });
             gridOrders.Location = new System.Drawing.Point(0, 0);
             gridOrders.MainView = gridView1;
             gridOrders.Name = "gridOrders";
-            gridOrders.Size = new System.Drawing.Size(551, 443);
+            gridOrders.Size = new System.Drawing.Size(551, 441);
             gridOrders.TabIndex = 0;
             gridOrders.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gridView1, gridView2 });
             // 
@@ -134,8 +135,8 @@
             gridView1.Name = "gridView1";
             gridView1.OptionsBehavior.Editable = false;
             gridView1.OptionsDetail.ShowDetailTabs = false;
-            gridView1.CustomColumnDisplayText += gridView1_CustomColumnDisplayText;
             gridView1.PopupMenuShowing += gridView1_PopupMenuShowing;
+            gridView1.CustomColumnDisplayText += gridView1_CustomColumnDisplayText;
             gridView1.DoubleClick += gridView1_DoubleClick;
             // 
             // colOrderNumber
@@ -190,9 +191,41 @@
             // 
             // sagTikMenu
             // 
-            sagTikMenu.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] { new DevExpress.XtraBars.LinkPersistInfo(btnUpdate), new DevExpress.XtraBars.LinkPersistInfo(btnDelete), new DevExpress.XtraBars.LinkPersistInfo(btnAdd) });
+            sagTikMenu.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] { new DevExpress.XtraBars.LinkPersistInfo(btnUpdate), new DevExpress.XtraBars.LinkPersistInfo(btnDelete), new DevExpress.XtraBars.LinkPersistInfo(btnAdd), new DevExpress.XtraBars.LinkPersistInfo(btnCancel) });
             sagTikMenu.Manager = barManager1;
             sagTikMenu.Name = "sagTikMenu";
+            // 
+            // btnUpdate
+            // 
+            btnUpdate.Caption = "Güncelle";
+            btnUpdate.Id = 2;
+            btnUpdate.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("btnUpdate.ImageOptions.SvgImage");
+            btnUpdate.Name = "btnUpdate";
+            btnUpdate.ItemClick += btnUpdate_ItemClick;
+            // 
+            // btnDelete
+            // 
+            btnDelete.Caption = "Sil";
+            btnDelete.Id = 0;
+            btnDelete.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("btnDelete.ImageOptions.SvgImage");
+            btnDelete.Name = "btnDelete";
+            btnDelete.ItemClick += btnDelete_ItemClick;
+            // 
+            // btnAdd
+            // 
+            btnAdd.Caption = "Sipariş Ekle";
+            btnAdd.Id = 1;
+            btnAdd.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("btnAdd.ImageOptions.SvgImage");
+            btnAdd.Name = "btnAdd";
+            btnAdd.ItemClick += btnAdd_ItemClick;
+            // 
+            // btnCancel
+            // 
+            btnCancel.Caption = "İptal Et";
+            btnCancel.Id = 3;
+            btnCancel.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("btnCancel.ImageOptions.SvgImage");
+            btnCancel.Name = "btnCancel";
+            btnCancel.ItemClick += btnCancel_ItemClick;
             // 
             // barManager1
             // 
@@ -201,8 +234,8 @@
             barManager1.DockControls.Add(barDockControlLeft);
             barManager1.DockControls.Add(barDockControlRight);
             barManager1.Form = this;
-            barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { btnDelete, btnAdd, btnUpdate });
-            barManager1.MaxItemId = 3;
+            barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { btnDelete, btnAdd, btnUpdate, btnCancel });
+            barManager1.MaxItemId = 4;
             // 
             // barDockControlTop
             // 
@@ -216,7 +249,7 @@
             // 
             barDockControlBottom.CausesValidation = false;
             barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            barDockControlBottom.Location = new System.Drawing.Point(0, 443);
+            barDockControlBottom.Location = new System.Drawing.Point(0, 441);
             barDockControlBottom.Manager = barManager1;
             barDockControlBottom.Size = new System.Drawing.Size(551, 0);
             // 
@@ -226,7 +259,7 @@
             barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
             barDockControlLeft.Location = new System.Drawing.Point(0, 0);
             barDockControlLeft.Manager = barManager1;
-            barDockControlLeft.Size = new System.Drawing.Size(0, 443);
+            barDockControlLeft.Size = new System.Drawing.Size(0, 441);
             // 
             // barDockControlRight
             // 
@@ -234,37 +267,13 @@
             barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
             barDockControlRight.Location = new System.Drawing.Point(551, 0);
             barDockControlRight.Manager = barManager1;
-            barDockControlRight.Size = new System.Drawing.Size(0, 443);
-            // 
-            // btnDelete
-            // 
-            btnDelete.Caption = "Sil";
-            btnDelete.Id = 0;
-            btnDelete.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("barButtonItem1.ImageOptions.SvgImage");
-            btnDelete.Name = "btnDelete";
-            btnDelete.ItemClick += btnDelete_ItemClick;
-            // 
-            // btnAdd
-            // 
-            btnAdd.Caption = "Sipariş Ekle";
-            btnAdd.Id = 1;
-            btnAdd.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("barButtonItem2.ImageOptions.SvgImage");
-            btnAdd.Name = "btnAdd";
-            btnAdd.ItemClick += btnAdd_ItemClick;
-            // 
-            // btnUpdate
-            // 
-            btnUpdate.Caption = "Güncelle";
-            btnUpdate.Id = 2;
-            btnUpdate.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("barButtonItem3.ImageOptions.SvgImage");
-            btnUpdate.Name = "btnUpdate";
-            btnUpdate.ItemClick += btnUpdate_ItemClick;
+            barDockControlRight.Size = new System.Drawing.Size(0, 441);
             // 
             // FrmOrderList
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(551, 443);
+            ClientSize = new System.Drawing.Size(551, 441);
             Controls.Add(gridOrders);
             Controls.Add(barDockControlLeft);
             Controls.Add(barDockControlRight);
@@ -307,5 +316,6 @@
         private DevExpress.XtraBars.BarButtonItem btnDelete;
         private DevExpress.XtraBars.BarButtonItem btnAdd;
         private DevExpress.XtraBars.BarButtonItem btnUpdate;
+        private DevExpress.XtraBars.BarButtonItem btnCancel;
     }
 }

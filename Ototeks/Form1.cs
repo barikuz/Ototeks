@@ -17,6 +17,24 @@ namespace Ototeks
             InitializeComponent();
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // Uygulama açıldığında otomatik olarak Dashboard formunu aç
+            OpenDashboard();
+        }
+
+        private void OpenDashboard()
+        {
+            FrmDashboard frm = new FrmDashboard();
+            frm.MdiParent = this;
+            frm.Show();
+        }
+
+        private void btnDashboard_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            OpenDashboard();
+        }
+
         // Generic helper metod - form ekleme ve liste yenileme işlemlerini tek yerde toplar
         private void ShowAddFormWithRefresh<TAddForm, TListForm>(Func<TAddForm> createAddForm, string listFormName, Action<TListForm> refreshAction)
             where TAddForm : Form, Ototeks.Interfaces.IOperationForm

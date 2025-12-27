@@ -23,10 +23,27 @@ namespace Ototeks.UI
         private GenericRepository<Customer> _repo;
         private ListFormHelper<Customer> _uiHelper;
 
+        // Filtreleme için
+        private bool _showOnlyWithOrders = false;
+
         public FrmCustomerList()
         {
             InitializeComponent();
             InitializeHelper();
+        }
+
+        /// <summary>
+        /// Filtrelenmiş müşteri listesi için constructor
+        /// </summary>
+        /// <param name="showOnlyWithOrders">True ise sadece sipariş veren müşterileri gösterir</param>
+        public FrmCustomerList(bool showOnlyWithOrders) : this()
+        {
+            _showOnlyWithOrders = showOnlyWithOrders;
+            
+            if (_showOnlyWithOrders)
+            {
+                this.Text = "Sipariş Veren Müşteriler";
+            }
         }
 
         private void InitializeHelper()
@@ -48,8 +65,25 @@ namespace Ototeks.UI
             _repo = new GenericRepository<Customer>();
             _manager = new CustomerManager(_repo);
 
-            // 2. Verileri Çek (Orders olmadan)
-            return _manager.GetAll();
+            // 2. Verileri Çek
+            var customers = _manager.GetAll();
+
+            // 3. Filtre uygula - Sipariş veren müşteriler
+            if (_showOnlyWithOrders)
+            {
+                // Sipariş tablosundan müşteri ID'lerini al
+                var orderRepo = new GenericRepository<Order>();
+                var orders = orderRepo.GetAll();
+                var customerIdsWithOrders = orders
+                    .Where(o => o.CustomerId.HasValue)
+                    .Select(o => o.CustomerId.Value)
+                    .Distinct()
+                    .ToList();
+
+                customers = customers.Where(c => customerIdsWithOrders.Contains(c.CustomerId)).ToList();
+            }
+
+            return customers;
         }
 
         private void FrmCustomerList_Load(object sender, EventArgs e)

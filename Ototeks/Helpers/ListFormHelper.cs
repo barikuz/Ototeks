@@ -6,6 +6,8 @@ using Ototeks.Interfaces;
 using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Ototeks.Helpers
 {
@@ -19,6 +21,9 @@ namespace Ototeks.Helpers
         private BarButtonItem _btnDelete;
         private GridControl _gridControl;
         private Func<List<T>> _dataProvider;
+
+        // Cache primary key property info for type T
+        private PropertyInfo _keyProperty;
 
         // Constructor: Formdaki bileşenleri buraya tanıtıyoruz
         public ListFormHelper(GridView view, PopupMenu popupMenu, BarButtonItem btnAdd, BarButtonItem btnEdit, BarButtonItem btnDelete)
@@ -44,8 +49,51 @@ namespace Ototeks.Helpers
             {
                 try
                 {
+                    // 1) Yakalanacak anahtar değeri (odaklanan satır)
+                    object focusedKeyValue = null;
+
+                    var focusedRow = _view.GetFocusedRow() as T;
+                    if (focusedRow != null)
+                    {
+                        var keyProp = GetKeyProperty();
+                        if (keyProp != null)
+                        {
+                            focusedKeyValue = keyProp.GetValue(focusedRow);
+                        }
+                    }
+
+                    // 2) Verileri çek ve ata
                     var data = _dataProvider();
                     _gridControl.DataSource = data;
+
+                    // 3) Eğer daha önce bir satır seçili idiyse, aynı id'yi bulup odakla
+                    if (focusedKeyValue != null)
+                    {
+                        var keyProp = GetKeyProperty();
+                        if (keyProp != null)
+                        {
+                            int targetRowHandle = GridControl.InvalidRowHandle;
+
+                            for (int i = 0; i < _view.DataRowCount; i++)
+                            {
+                                var row = _view.GetRow(i) as T;
+                                if (row == null)
+                                    continue;
+
+                                var val = keyProp.GetValue(row);
+                                if (object.Equals(val, focusedKeyValue))
+                                {
+                                    targetRowHandle = i;
+                                    break;
+                                }
+                            }
+
+                            if (targetRowHandle != GridControl.InvalidRowHandle)
+                            {
+                                _view.FocusedRowHandle = targetRowHandle;
+                            }
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -53,6 +101,30 @@ namespace Ototeks.Helpers
                         "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        // Find primary key property for type T. Uses cached value.
+        private PropertyInfo GetKeyProperty()
+        {
+            if (_keyProperty != null)
+                return _keyProperty;
+
+            var type = typeof(T);
+
+            // First try convention: TypeName + "Id" e.g., Order -> OrderId
+            var prop = type.GetProperty(type.Name + "Id", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+            if (prop != null)
+            {
+                _keyProperty = prop;
+                return _keyProperty;
+            }
+
+            // Otherwise find first property that ends with "Id"
+            prop = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                       .FirstOrDefault(p => p.Name.EndsWith("Id", StringComparison.OrdinalIgnoreCase));
+
+            _keyProperty = prop;
+            return _keyProperty;
         }
 
         // 1. POPUP GÖSTERME MANTIĞI

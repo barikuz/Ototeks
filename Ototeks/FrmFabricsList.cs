@@ -6,6 +6,7 @@ using Ototeks.Entities;
 using Ototeks.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Ototeks.UI
@@ -16,10 +17,28 @@ namespace Ototeks.UI
         private GenericRepository<Fabric> _repo;
         private ListFormHelper<Fabric> _uiHelper;
 
+        // Filtreleme için
+        private bool _showOnlyCriticalStock = false;
+        private const decimal CRITICAL_STOCK_THRESHOLD = 50;
+
         public FrmFabricsList()
         {
             InitializeComponent();
             InitializeHelper();
+        }
+
+        /// <summary>
+        /// Filtrelenmiş kumaş listesi için constructor
+        /// </summary>
+        /// <param name="showOnlyCriticalStock">True ise sadece kritik stokta olan kumaşları gösterir</param>
+        public FrmFabricsList(bool showOnlyCriticalStock) : this()
+        {
+            _showOnlyCriticalStock = showOnlyCriticalStock;
+            
+            if (_showOnlyCriticalStock)
+            {
+                this.Text = "Kritik Stokta Olan Kumaşlar";
+            }
         }
 
         private void InitializeHelper()
@@ -39,7 +58,20 @@ namespace Ototeks.UI
         {
             _repo = new GenericRepository<Fabric>();
             _manager = new FabricManager(_repo);
-            return _manager.GetAll();
+            var fabrics = _manager.GetAll();
+
+            // Filtre uygula
+            if (_showOnlyCriticalStock)
+            {
+                fabrics = fabrics
+                    .Where(f => 
+                        f.StockQuantity.HasValue && 
+                        f.StockQuantity.Value < CRITICAL_STOCK_THRESHOLD)
+                    .OrderBy(f => f.StockQuantity ?? 0) // Stok miktarı en az olan üstte
+                    .ToList();
+            }
+
+            return fabrics;
         }
 
         private void FrmListFabrics_Load(object sender, EventArgs e)

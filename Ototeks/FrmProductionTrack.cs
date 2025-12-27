@@ -48,7 +48,8 @@ namespace Ototeks.UI
                 _orderItemRepo = new GenericRepository<OrderItem>();
                 _orderManager = new OrderManager(_orderRepo);
 
-                var orders = _orderManager.GetAll();
+                // Veritabanından doğrudan iptal edilmiş siparişleri getirmiyoruz
+                var orders = _orderRepo.GetAll(o => o.OrderStatus != OrderStatus.Cancelled, "OrderItems");
                 
                 // Her siparişin durumunu kalemlerden hesapla
                 foreach (var order in orders)
