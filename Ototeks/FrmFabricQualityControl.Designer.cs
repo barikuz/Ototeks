@@ -28,6 +28,8 @@ namespace Ototeks.UI
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            DevExpress.XtraGrid.GridLevelNode gridLevelNode1 = new DevExpress.XtraGrid.GridLevelNode();
             splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
             layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
             simpleButton1 = new DevExpress.XtraEditors.SimpleButton();
@@ -45,7 +47,17 @@ namespace Ototeks.UI
             layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
             layoutControlItem3 = new DevExpress.XtraLayout.LayoutControlItem();
             gridControl1 = new DevExpress.XtraGrid.GridControl();
+            orderBindingSource = new System.Windows.Forms.BindingSource(components);
             gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            colOrderNumber = new DevExpress.XtraGrid.Columns.GridColumn();
+            colOrderDate = new DevExpress.XtraGrid.Columns.GridColumn();
+            colDueDate = new DevExpress.XtraGrid.Columns.GridColumn();
+            colCustomer = new DevExpress.XtraGrid.Columns.GridColumn();
+            gridView2 = new DevExpress.XtraGrid.Views.Grid.GridView();
+            colFabricType = new DevExpress.XtraGrid.Columns.GridColumn();
+            colProductType = new DevExpress.XtraGrid.Columns.GridColumn();
+            colQuantity = new DevExpress.XtraGrid.Columns.GridColumn();
+            colCurrentStage = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)splitContainerControl1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)splitContainerControl1.Panel1).BeginInit();
             splitContainerControl1.Panel1.SuspendLayout();
@@ -63,7 +75,9 @@ namespace Ototeks.UI
             ((System.ComponentModel.ISupportInitialize)layoutControlItem2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)layoutControlItem3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gridControl1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)orderBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)gridView2).BeginInit();
             SuspendLayout();
             // 
             // splitContainerControl1
@@ -107,6 +121,7 @@ namespace Ototeks.UI
             simpleButton1.StyleController = layoutControl1;
             simpleButton1.TabIndex = 6;
             simpleButton1.Text = "Resim Seç ve Analiz Et";
+            simpleButton1.Click += simpleButton1_Click;
             // 
             // groupControl1
             // 
@@ -224,6 +239,7 @@ namespace Ototeks.UI
             pictureEdit1.Location = new System.Drawing.Point(20, 49);
             pictureEdit1.Name = "pictureEdit1";
             pictureEdit1.Properties.ShowCameraMenuItem = DevExpress.XtraEditors.Controls.CameraMenuItemVisibility.Auto;
+            pictureEdit1.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom;
             pictureEdit1.Size = new System.Drawing.Size(334, 309);
             pictureEdit1.StyleController = layoutControl1;
             pictureEdit1.TabIndex = 4;
@@ -267,20 +283,119 @@ namespace Ototeks.UI
             layoutControlItem3.Size = new System.Drawing.Size(342, 42);
             layoutControlItem3.TextVisible = false;
             // 
+            // gridView2
+            // 
+            gridView2.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { colFabricType, colProductType, colQuantity, colCurrentStage });
+            gridView2.GridControl = gridControl1;
+            gridView2.Name = "gridView2";
+            gridView2.OptionsBehavior.Editable = false;
+            gridView2.CustomColumnDisplayText += gridView2_CustomColumnDisplayText;
+            // 
+            // colFabricType
+            // 
+            colFabricType.Caption = "Kumaþ Türü";
+            colFabricType.FieldName = "Fabric.FabricName";
+            colFabricType.MinWidth = 25;
+            colFabricType.Name = "colFabricType";
+            colFabricType.Visible = true;
+            colFabricType.VisibleIndex = 0;
+            colFabricType.Width = 94;
+            // 
+            // colProductType
+            // 
+            colProductType.Caption = "Ürün Türü";
+            colProductType.FieldName = "Type.TypeName";
+            colProductType.MinWidth = 25;
+            colProductType.Name = "colProductType";
+            colProductType.Visible = true;
+            colProductType.VisibleIndex = 1;
+            colProductType.Width = 94;
+            // 
+            // colQuantity
+            // 
+            colQuantity.Caption = "Adet";
+            colQuantity.FieldName = "Quantity";
+            colQuantity.MinWidth = 25;
+            colQuantity.Name = "colQuantity";
+            colQuantity.Visible = true;
+            colQuantity.VisibleIndex = 2;
+            colQuantity.Width = 94;
+            // 
+            // colCurrentStage
+            // 
+            colCurrentStage.Caption = "Kalem Durumu";
+            colCurrentStage.FieldName = "CurrentStage";
+            colCurrentStage.MinWidth = 25;
+            colCurrentStage.Name = "colCurrentStage";
+            colCurrentStage.Visible = true;
+            colCurrentStage.VisibleIndex = 3;
+            colCurrentStage.Width = 94;
+            // 
             // gridControl1
             // 
+            gridControl1.DataSource = orderBindingSource;
             gridControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            gridLevelNode1.LevelTemplate = gridView2;
+            gridLevelNode1.RelationName = "OrderItems";
+            gridControl1.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] { gridLevelNode1 });
             gridControl1.Location = new System.Drawing.Point(0, 0);
             gridControl1.MainView = gridView1;
             gridControl1.Name = "gridControl1";
             gridControl1.Size = new System.Drawing.Size(406, 717);
             gridControl1.TabIndex = 0;
-            gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gridView1 });
+            gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gridView1, gridView2 });
+            // 
+            // orderBindingSource
+            // 
+            orderBindingSource.DataSource = typeof(Entities.Order);
             // 
             // gridView1
             // 
+            gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { colOrderNumber, colOrderDate, colDueDate, colCustomer });
             gridView1.GridControl = gridControl1;
             gridView1.Name = "gridView1";
+            gridView1.OptionsBehavior.Editable = false;
+            gridView1.OptionsDetail.ShowDetailTabs = false;
+            // 
+            // colOrderNumber
+            // 
+            colOrderNumber.Caption = "Sipariþ Numarasý";
+            colOrderNumber.FieldName = "OrderNumber";
+            colOrderNumber.MinWidth = 25;
+            colOrderNumber.Name = "colOrderNumber";
+            colOrderNumber.Visible = true;
+            colOrderNumber.VisibleIndex = 0;
+            colOrderNumber.Width = 94;
+            // 
+            // colOrderDate
+            // 
+            colOrderDate.Caption = "Sipariþ Tarihi";
+            colOrderDate.FieldName = "OrderDate";
+            colOrderDate.MinWidth = 25;
+            colOrderDate.Name = "colOrderDate";
+            colOrderDate.Visible = true;
+            colOrderDate.VisibleIndex = 2;
+            colOrderDate.Width = 94;
+            // 
+            // colDueDate
+            // 
+            colDueDate.Caption = "Teslim Tarihi";
+            colDueDate.FieldName = "DueDate";
+            colDueDate.MinWidth = 25;
+            colDueDate.Name = "colDueDate";
+            colDueDate.Visible = true;
+            colDueDate.VisibleIndex = 3;
+            colDueDate.Width = 94;
+            // 
+            // colCustomer
+            // 
+            colCustomer.Caption = "Müþteri";
+            colCustomer.FieldName = "Customer.CustomerName";
+            colCustomer.MinWidth = 25;
+            colCustomer.Name = "colCustomer";
+            colCustomer.Visible = true;
+            colCustomer.VisibleIndex = 1;
+            colCustomer.Width = 94;
             // 
             // FrmFabricQualityControl
             // 
@@ -290,6 +405,7 @@ namespace Ototeks.UI
             Controls.Add(splitContainerControl1);
             Name = "FrmFabricQualityControl";
             Text = "Kumaþ Kontrol";
+            Load += FrmFabricQualityControl_Load;
             ((System.ComponentModel.ISupportInitialize)splitContainerControl1.Panel1).EndInit();
             splitContainerControl1.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainerControl1.Panel2).EndInit();
@@ -308,7 +424,9 @@ namespace Ototeks.UI
             ((System.ComponentModel.ISupportInitialize)layoutControlItem2).EndInit();
             ((System.ComponentModel.ISupportInitialize)layoutControlItem3).EndInit();
             ((System.ComponentModel.ISupportInitialize)gridControl1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)orderBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)gridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)gridView2).EndInit();
             ResumeLayout(false);
         }
 
@@ -323,7 +441,17 @@ namespace Ototeks.UI
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem1;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem2;
         private DevExpress.XtraGrid.GridControl gridControl1;
+        private System.Windows.Forms.BindingSource orderBindingSource;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
+        private DevExpress.XtraGrid.Columns.GridColumn colOrderNumber;
+        private DevExpress.XtraGrid.Columns.GridColumn colOrderDate;
+        private DevExpress.XtraGrid.Columns.GridColumn colDueDate;
+        private DevExpress.XtraGrid.Columns.GridColumn colCustomer;
+        private DevExpress.XtraGrid.Views.Grid.GridView gridView2;
+        private DevExpress.XtraGrid.Columns.GridColumn colFabricType;
+        private DevExpress.XtraGrid.Columns.GridColumn colProductType;
+        private DevExpress.XtraGrid.Columns.GridColumn colQuantity;
+        private DevExpress.XtraGrid.Columns.GridColumn colCurrentStage;
         private DevExpress.XtraEditors.LabelControl lblTitleConfidence;
         private DevExpress.XtraEditors.LabelControl lblTitleDefectType;
         private DevExpress.XtraEditors.LabelControl lblTitleStatus;
