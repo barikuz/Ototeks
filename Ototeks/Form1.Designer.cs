@@ -39,15 +39,18 @@
             btnNewCustomer = new DevExpress.XtraBars.BarButtonItem();
             btnListCustomers = new DevExpress.XtraBars.BarButtonItem();
             btnProductionTrack = new DevExpress.XtraBars.BarButtonItem();
+            btnDashboard = new DevExpress.XtraBars.BarButtonItem();
+            btnStatistics = new DevExpress.XtraBars.BarButtonItem();
             ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
-            ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            ribbonPageGroup5 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            ribbonPageGroup3 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             ribbonPageGroup4 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            ribbonPageGroup3 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             documentManager1 = new DevExpress.XtraBars.Docking2010.DocumentManager(components);
             tabbedView1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(components);
-            ribbonPageGroup5 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            btnDashboard = new DevExpress.XtraBars.BarButtonItem();
+            ribbonPageGroup6 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            btnQualityControl = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)ribbonControl1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)documentManager1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)tabbedView1).BeginInit();
@@ -57,16 +60,16 @@
             // 
             ribbonControl1.EmptyAreaImageOptions.ImagePadding = new System.Windows.Forms.Padding(35, 37, 35, 37);
             ribbonControl1.ExpandCollapseItem.Id = 0;
-            ribbonControl1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl1.ExpandCollapseItem, skinRibbonGalleryBarItem1, btnYeniKumas, btnKumasListesi, btnNewOrder, btnSiparisListesi, btnNewCustomer, btnListCustomers, btnProductionTrack, btnDashboard });
+            ribbonControl1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl1.ExpandCollapseItem, skinRibbonGalleryBarItem1, btnYeniKumas, btnKumasListesi, btnNewOrder, btnSiparisListesi, btnNewCustomer, btnListCustomers, btnProductionTrack, btnDashboard, btnStatistics, btnQualityControl });
             ribbonControl1.Location = new System.Drawing.Point(0, 0);
             ribbonControl1.Margin = new System.Windows.Forms.Padding(4);
-            ribbonControl1.MaxItemId = 10;
+            ribbonControl1.MaxItemId = 12;
             ribbonControl1.Name = "ribbonControl1";
             ribbonControl1.OptionsMenuMinWidth = 385;
             ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] { ribbonPage1 });
             ribbonControl1.ShowApplicationButton = DevExpress.Utils.DefaultBoolean.False;
             ribbonControl1.ShowDisplayOptionsMenuButton = DevExpress.Utils.DefaultBoolean.False;
-            ribbonControl1.Size = new System.Drawing.Size(973, 242);
+            ribbonControl1.Size = new System.Drawing.Size(1287, 242);
             ribbonControl1.ToolbarLocation = DevExpress.XtraBars.Ribbon.RibbonQuickAccessToolbarLocation.Hidden;
             // 
             // skinRibbonGalleryBarItem1
@@ -138,52 +141,6 @@
             btnProductionTrack.Name = "btnProductionTrack";
             btnProductionTrack.ItemClick += btnProductionTrack_ItemClick;
             // 
-            // ribbonPage1
-            // 
-            ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] { ribbonPageGroup5, ribbonPageGroup2, ribbonPageGroup4, ribbonPageGroup1, ribbonPageGroup3 });
-            ribbonPage1.Name = "ribbonPage1";
-            ribbonPage1.Text = "İşlemler";
-            // 
-            // ribbonPageGroup1
-            // 
-            ribbonPageGroup1.ItemLinks.Add(btnYeniKumas);
-            ribbonPageGroup1.ItemLinks.Add(btnKumasListesi);
-            ribbonPageGroup1.Name = "ribbonPageGroup1";
-            ribbonPageGroup1.Text = "Kumaş İşlemleri";
-            // 
-            // ribbonPageGroup2
-            // 
-            ribbonPageGroup2.ItemLinks.Add(btnNewOrder);
-            ribbonPageGroup2.ItemLinks.Add(btnSiparisListesi);
-            ribbonPageGroup2.Name = "ribbonPageGroup2";
-            ribbonPageGroup2.Text = "Sipariş İşlemleri";
-            // 
-            // ribbonPageGroup3
-            // 
-            ribbonPageGroup3.ItemLinks.Add(btnNewCustomer);
-            ribbonPageGroup3.ItemLinks.Add(btnListCustomers);
-            ribbonPageGroup3.Name = "ribbonPageGroup3";
-            ribbonPageGroup3.Text = "Müşteri İşlemleri";
-            // 
-            // ribbonPageGroup4
-            // 
-            ribbonPageGroup4.ItemLinks.Add(btnProductionTrack);
-            ribbonPageGroup4.Name = "ribbonPageGroup4";
-            ribbonPageGroup4.Text = "Üretim İşlemleri";
-            // 
-            // documentManager1
-            // 
-            documentManager1.MdiParent = this;
-            documentManager1.MenuManager = ribbonControl1;
-            documentManager1.View = tabbedView1;
-            documentManager1.ViewCollection.AddRange(new DevExpress.XtraBars.Docking2010.Views.BaseView[] { tabbedView1 });
-            // 
-            // ribbonPageGroup5
-            // 
-            ribbonPageGroup5.ItemLinks.Add(btnDashboard);
-            ribbonPageGroup5.Name = "ribbonPageGroup5";
-            ribbonPageGroup5.Text = "Raporlama";
-            // 
             // btnDashboard
             // 
             btnDashboard.Caption = "Genel Bakış";
@@ -193,11 +150,82 @@
             btnDashboard.Name = "btnDashboard";
             btnDashboard.ItemClick += btnDashboard_ItemClick;
             // 
+            // btnStatistics
+            // 
+            btnStatistics.Caption = "İstatistik";
+            btnStatistics.Id = 10;
+            btnStatistics.ImageOptions.Image = UI.Properties.Resources.previewchart_16x16;
+            btnStatistics.ImageOptions.LargeImage = UI.Properties.Resources.previewchart_32x32;
+            btnStatistics.Name = "btnStatistics";
+            btnStatistics.ItemClick += btnStatistics_ItemClick;
+            // 
+            // ribbonPage1
+            // 
+            ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] { ribbonPageGroup5, ribbonPageGroup2, ribbonPageGroup4, ribbonPageGroup1, ribbonPageGroup3, ribbonPageGroup6 });
+            ribbonPage1.Name = "ribbonPage1";
+            ribbonPage1.Text = "İşlemler";
+            // 
+            // ribbonPageGroup5
+            // 
+            ribbonPageGroup5.ItemLinks.Add(btnDashboard);
+            ribbonPageGroup5.ItemLinks.Add(btnStatistics);
+            ribbonPageGroup5.Name = "ribbonPageGroup5";
+            ribbonPageGroup5.Text = "Raporlama";
+            // 
+            // ribbonPageGroup2
+            // 
+            ribbonPageGroup2.ItemLinks.Add(btnNewOrder);
+            ribbonPageGroup2.ItemLinks.Add(btnSiparisListesi);
+            ribbonPageGroup2.Name = "ribbonPageGroup2";
+            ribbonPageGroup2.Text = "Sipariş İşlemleri";
+            // 
+            // ribbonPageGroup4
+            // 
+            ribbonPageGroup4.ItemLinks.Add(btnProductionTrack);
+            ribbonPageGroup4.Name = "ribbonPageGroup4";
+            ribbonPageGroup4.Text = "Üretim İşlemleri";
+            // 
+            // ribbonPageGroup1
+            // 
+            ribbonPageGroup1.ItemLinks.Add(btnYeniKumas);
+            ribbonPageGroup1.ItemLinks.Add(btnKumasListesi);
+            ribbonPageGroup1.Name = "ribbonPageGroup1";
+            ribbonPageGroup1.Text = "Kumaş İşlemleri";
+            // 
+            // ribbonPageGroup3
+            // 
+            ribbonPageGroup3.ItemLinks.Add(btnNewCustomer);
+            ribbonPageGroup3.ItemLinks.Add(btnListCustomers);
+            ribbonPageGroup3.Name = "ribbonPageGroup3";
+            ribbonPageGroup3.Text = "Müşteri İşlemleri";
+            // 
+            // documentManager1
+            // 
+            documentManager1.MdiParent = this;
+            documentManager1.MenuManager = ribbonControl1;
+            documentManager1.View = tabbedView1;
+            documentManager1.ViewCollection.AddRange(new DevExpress.XtraBars.Docking2010.Views.BaseView[] { tabbedView1 });
+            // 
+            // ribbonPageGroup6
+            // 
+            ribbonPageGroup6.ItemLinks.Add(btnQualityControl);
+            ribbonPageGroup6.Name = "ribbonPageGroup6";
+            ribbonPageGroup6.Text = "Kalite Kontrol";
+            // 
+            // btnQualityControl
+            // 
+            btnQualityControl.Caption = "Kumaş Kontrol";
+            btnQualityControl.Id = 11;
+            btnQualityControl.ImageOptions.Image = UI.Properties.Resources.find_16x161;
+            btnQualityControl.ImageOptions.LargeImage = UI.Properties.Resources.find_32x321;
+            btnQualityControl.Name = "btnQualityControl";
+            btnQualityControl.ItemClick += btnQualityControl_ItemClick;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(973, 649);
+            ClientSize = new System.Drawing.Size(1287, 649);
             Controls.Add(ribbonControl1);
             IsMdiContainer = true;
             Margin = new System.Windows.Forms.Padding(4);
@@ -235,6 +263,9 @@
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup4;
         private DevExpress.XtraBars.BarButtonItem btnDashboard;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup5;
+        private DevExpress.XtraBars.BarButtonItem btnStatistics;
+        private DevExpress.XtraBars.BarButtonItem btnQualityControl;
+        private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup6;
     }
 }
 

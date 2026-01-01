@@ -35,6 +35,14 @@ namespace Ototeks
             OpenDashboard();
         }
 
+        private void btnStatistics_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            // İstatistikler formunu MDI child olarak aç
+            FrmStatistics frm = new FrmStatistics();
+            frm.MdiParent = this;
+            frm.Show();
+        }
+
         // Generic helper metod - form ekleme ve liste yenileme işlemlerini tek yerde toplar
         private void ShowAddFormWithRefresh<TAddForm, TListForm>(Func<TAddForm> createAddForm, string listFormName, Action<TListForm> refreshAction)
             where TAddForm : Form, Ototeks.Interfaces.IOperationForm
@@ -107,7 +115,7 @@ namespace Ototeks
         {
             ShowAddFormWithRefresh(
                 createAddForm: () => new FrmAddCustomer(),
-                listFormName: "FrmCustomerList", 
+                listFormName: "FrmCustomerList",
                 refreshAction: (FrmCustomerList listForm) => listForm.RefreshData()
             );
         }
@@ -116,6 +124,13 @@ namespace Ototeks
         {
             FrmProductionTrack frm = new FrmProductionTrack();
             frm.MdiParent = this; // Bu formu ana ekranın içinde (sekme gibi) aç
+            frm.Show();
+        }
+
+        private void btnQualityControl_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            FrmFabricQualityControl frm = new FrmFabricQualityControl();
+            frm.MdiParent = this; 
             frm.Show();
         }
     }

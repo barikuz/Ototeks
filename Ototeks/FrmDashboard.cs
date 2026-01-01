@@ -170,36 +170,43 @@ namespace Ototeks.UI
                     .OrderBy(x => (int)x.Stage) // Aşama sırasına göre sırala
                     .ToList();
 
-                // Grafik serisini temizle ve doldur
-                var series = chartControl1.Series["stagesBarChart"];
-                series.Points.Clear();
+                // Grafik: mevcut seriyi temizle ve huni (funnel) serisi oluştur
+                chartControl1.Series.Clear();
+
+                var funnelSeries = new DevExpress.XtraCharts.Series("stagesFunnel", DevExpress.XtraCharts.ViewType.Funnel);
 
                 // --- GÖRSEL İYİLEŞTİRMELER ---
 
                 // A. LEJANT (SAĞDAKİ KUTU) AYARI:
-                series.LegendTextPattern = "{A}";
+                funnelSeries.LegendTextPattern = "{A}";
 
-                // B. RENKLENDİRME AYARI (ColorEach):
-                if (series.View is SideBySideBarSeriesView view)
+                // B. RENKLENDİRME AYARI (ColorEach) - her dilimi farklı renklendir
+                if (funnelSeries.View is DevExpress.XtraCharts.FunnelSeriesView funnelView)
                 {
-                    view.ColorEach = true;
+                    funnelView.ColorEach = true;
                 }
+
+                // Etiketleri görünür yap ve format ayarla (Series üzerinde yapılmalı)
+                funnelSeries.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
+                funnelSeries.Label.TextPattern = "{A}: {V}";
 
                 // C. PALET SEÇİMİ:
                 chartControl1.PaletteName = "Office 2013";
 
-                // Her aşama için bar ekle
+                // Her aşama için huni dilimi ekle
                 foreach (var stage in stageData)
                 {
-                    var point = new SeriesPoint(stage.StageName, stage.Count);
-                    series.Points.Add(point);
+                    var point = new DevExpress.XtraCharts.SeriesPoint(stage.StageName, stage.Count);
+                    funnelSeries.Points.Add(point);
                 }
 
                 // Eğer veri yoksa bilgilendirme
                 if (!stageData.Any())
                 {
-                    series.Points.Add(new SeriesPoint("Veri Yok", 0));
+                    funnelSeries.Points.Add(new DevExpress.XtraCharts.SeriesPoint("Veri Yok", 0));
                 }
+
+                chartControl1.Series.Add(funnelSeries);
             }
             catch (Exception ex)
             {

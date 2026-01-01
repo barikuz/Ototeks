@@ -49,7 +49,13 @@ namespace Ototeks.UI
                 _orderManager = new OrderManager(_orderRepo);
 
                 // Veritabanından doğrudan iptal edilmiş siparişleri getirmiyoruz
-                var orders = _orderRepo.GetAll(o => o.OrderStatus != OrderStatus.Cancelled, "OrderItems");
+                // Include OrderItems and their related Fabric and Type so detail grid can show names
+                var orders = _orderRepo.GetAll(
+                    o => o.OrderStatus != OrderStatus.Cancelled,
+                    "OrderItems",
+                    "OrderItems.Fabric",
+                    "OrderItems.Type"
+                );
                 
                 // Her siparişin durumunu kalemlerden hesapla
                 foreach (var order in orders)
