@@ -30,7 +30,7 @@
         {
             components = new System.ComponentModel.Container();
             DevExpress.XtraGrid.GridLevelNode gridLevelNode1 = new DevExpress.XtraGrid.GridLevelNode();
-            // Detail View (gridView2)
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDefectedFabricList));
             gridView2 = new DevExpress.XtraGrid.Views.Grid.GridView();
             colFabricType = new DevExpress.XtraGrid.Columns.GridColumn();
             colProductType = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -39,7 +39,6 @@
             colDefectType = new DevExpress.XtraGrid.Columns.GridColumn();
             colConfidenceScore = new DevExpress.XtraGrid.Columns.GridColumn();
             colAnalysisDate = new DevExpress.XtraGrid.Columns.GridColumn();
-            // Master View (gridView1)
             gridControl1 = new DevExpress.XtraGrid.GridControl();
             gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
             colOrderNumber = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -47,18 +46,28 @@
             colOrderDate = new DevExpress.XtraGrid.Columns.GridColumn();
             colDueDate = new DevExpress.XtraGrid.Columns.GridColumn();
             colOrderStatus = new DevExpress.XtraGrid.Columns.GridColumn();
+            barManager1 = new DevExpress.XtraBars.BarManager(components);
+            barDockControlTop = new DevExpress.XtraBars.BarDockControl();
+            barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
+            barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
+            barDockControlRight = new DevExpress.XtraBars.BarDockControl();
+            btnDelete = new DevExpress.XtraBars.BarButtonItem();
+            popupMenuDetail = new DevExpress.XtraBars.PopupMenu(components);
             ((System.ComponentModel.ISupportInitialize)gridView2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gridControl1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)barManager1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)popupMenuDetail).BeginInit();
             SuspendLayout();
             // 
-            // gridView2 (Detail View - Sipariş Kalemleri)
+            // gridView2
             // 
             gridView2.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { colFabricType, colProductType, colQuantity, colCurrentStage, colDefectType, colConfidenceScore, colAnalysisDate });
             gridView2.GridControl = gridControl1;
             gridView2.Name = "gridView2";
             gridView2.OptionsBehavior.Editable = false;
             gridView2.OptionsView.ShowGroupPanel = false;
+            gridView2.PopupMenuShowing += gridView2_PopupMenuShowing;
             gridView2.CustomColumnDisplayText += gridView2_CustomColumnDisplayText;
             // 
             // colFabricType
@@ -140,11 +149,11 @@
             gridControl1.Location = new System.Drawing.Point(0, 0);
             gridControl1.MainView = gridView1;
             gridControl1.Name = "gridControl1";
-            gridControl1.Size = new System.Drawing.Size(800, 500);
+            gridControl1.Size = new System.Drawing.Size(800, 496);
             gridControl1.TabIndex = 0;
             gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gridView1, gridView2 });
             // 
-            // gridView1 (Master View - Siparişler)
+            // gridView1
             // 
             gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { colOrderNumber, colCustomer, colOrderDate, colDueDate, colOrderStatus });
             gridView1.GridControl = gridControl1;
@@ -204,19 +213,82 @@
             colOrderStatus.VisibleIndex = 4;
             colOrderStatus.Width = 94;
             // 
+            // barManager1
+            // 
+            barManager1.DockControls.Add(barDockControlTop);
+            barManager1.DockControls.Add(barDockControlBottom);
+            barManager1.DockControls.Add(barDockControlLeft);
+            barManager1.DockControls.Add(barDockControlRight);
+            barManager1.Form = this;
+            barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { btnDelete });
+            barManager1.MaxItemId = 1;
+            // 
+            // barDockControlTop
+            // 
+            barDockControlTop.CausesValidation = false;
+            barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
+            barDockControlTop.Location = new System.Drawing.Point(0, 0);
+            barDockControlTop.Manager = barManager1;
+            barDockControlTop.Size = new System.Drawing.Size(800, 0);
+            // 
+            // barDockControlBottom
+            // 
+            barDockControlBottom.CausesValidation = false;
+            barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            barDockControlBottom.Location = new System.Drawing.Point(0, 496);
+            barDockControlBottom.Manager = barManager1;
+            barDockControlBottom.Size = new System.Drawing.Size(800, 0);
+            // 
+            // barDockControlLeft
+            // 
+            barDockControlLeft.CausesValidation = false;
+            barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
+            barDockControlLeft.Location = new System.Drawing.Point(0, 0);
+            barDockControlLeft.Manager = barManager1;
+            barDockControlLeft.Size = new System.Drawing.Size(0, 496);
+            // 
+            // barDockControlRight
+            // 
+            barDockControlRight.CausesValidation = false;
+            barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
+            barDockControlRight.Location = new System.Drawing.Point(800, 0);
+            barDockControlRight.Manager = barManager1;
+            barDockControlRight.Size = new System.Drawing.Size(0, 496);
+            // 
+            // btnDelete
+            // 
+            btnDelete.Caption = "Sil";
+            btnDelete.Id = 0;
+            btnDelete.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("btnDelete.ImageOptions.SvgImage");
+            btnDelete.Name = "btnDelete";
+            btnDelete.ItemClick += btnDelete_ItemClick;
+            // 
+            // popupMenuDetail
+            // 
+            popupMenuDetail.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] { new DevExpress.XtraBars.LinkPersistInfo(btnDelete) });
+            popupMenuDetail.Manager = barManager1;
+            popupMenuDetail.Name = "popupMenuDetail";
+            // 
             // FrmDefectedFabricList
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(800, 500);
+            ClientSize = new System.Drawing.Size(800, 496);
             Controls.Add(gridControl1);
+            Controls.Add(barDockControlLeft);
+            Controls.Add(barDockControlRight);
+            Controls.Add(barDockControlBottom);
+            Controls.Add(barDockControlTop);
             Name = "FrmDefectedFabricList";
             Text = "Hatalı Kumaşlar";
             Load += FrmDefectedFabricList_Load;
             ((System.ComponentModel.ISupportInitialize)gridView2).EndInit();
             ((System.ComponentModel.ISupportInitialize)gridControl1).EndInit();
             ((System.ComponentModel.ISupportInitialize)gridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)barManager1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)popupMenuDetail).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -239,5 +311,13 @@
         private DevExpress.XtraGrid.Columns.GridColumn colDefectType;
         private DevExpress.XtraGrid.Columns.GridColumn colConfidenceScore;
         private DevExpress.XtraGrid.Columns.GridColumn colAnalysisDate;
+        // Context Menu Components
+        private DevExpress.XtraBars.BarManager barManager1;
+        private DevExpress.XtraBars.BarDockControl barDockControlTop;
+        private DevExpress.XtraBars.BarDockControl barDockControlBottom;
+        private DevExpress.XtraBars.BarDockControl barDockControlLeft;
+        private DevExpress.XtraBars.BarDockControl barDockControlRight;
+        private DevExpress.XtraBars.BarButtonItem btnDelete;
+        private DevExpress.XtraBars.PopupMenu popupMenuDetail;
     }
 }

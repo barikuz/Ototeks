@@ -33,6 +33,11 @@
             DevExpress.XtraCharts.PieSeriesView pieSeriesView = new DevExpress.XtraCharts.PieSeriesView();
             DevExpress.XtraCharts.ChartTitle chartTitle1 = new DevExpress.XtraCharts.ChartTitle();
 
+            // chartControl2 - Pie Chart (AI Kalite Kontrol - Sağlam/Hatalı Dağılımı)
+            DevExpress.XtraCharts.Series pieSeries2 = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.PieSeriesView pieSeriesView2 = new DevExpress.XtraCharts.PieSeriesView();
+            DevExpress.XtraCharts.ChartTitle chartTitle2 = new DevExpress.XtraCharts.ChartTitle();
+
             // chartControl3 - Bar Chart (En Çok İhtiyaç Duyulan Kumaşlar)
             DevExpress.XtraCharts.XYDiagram xyDiagram3 = new DevExpress.XtraCharts.XYDiagram();
             DevExpress.XtraCharts.Series barSeries3 = new DevExpress.XtraCharts.Series();
@@ -44,6 +49,12 @@
             DevExpress.XtraCharts.Series barSeries4 = new DevExpress.XtraCharts.Series();
             DevExpress.XtraCharts.SideBySideBarSeriesView barSeriesView4 = new DevExpress.XtraCharts.SideBySideBarSeriesView();
             DevExpress.XtraCharts.ChartTitle chartTitle4 = new DevExpress.XtraCharts.ChartTitle();
+
+            // chartControl5 - Bar Chart (Hata Türleri Dağılımı)
+            DevExpress.XtraCharts.XYDiagram xyDiagram5 = new DevExpress.XtraCharts.XYDiagram();
+            DevExpress.XtraCharts.Series barSeries5 = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.SideBySideBarSeriesView barSeriesView5 = new DevExpress.XtraCharts.SideBySideBarSeriesView();
+            DevExpress.XtraCharts.ChartTitle chartTitle5 = new DevExpress.XtraCharts.ChartTitle();
 
             layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
             chartControl5 = new DevExpress.XtraCharts.ChartControl();
@@ -60,7 +71,12 @@
             ((System.ComponentModel.ISupportInitialize)layoutControl1).BeginInit();
             layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)chartControl5).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)xyDiagram5).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)barSeries5).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)barSeriesView5).BeginInit();
             ((System.ComponentModel.ISupportInitialize)chartControl2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pieSeries2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pieSeriesView2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)chartControl4).BeginInit();
             ((System.ComponentModel.ISupportInitialize)xyDiagram4).BeginInit();
             ((System.ComponentModel.ISupportInitialize)barSeries4).BeginInit();
@@ -96,19 +112,67 @@
             layoutControl1.TabIndex = 0;
             layoutControl1.Text = "layoutControl1";
             // 
-            // chartControl5
+            // chartControl5 - Hata Türleri Dağılımı (Dikey Bar)
             // 
+            xyDiagram5.AxisX.VisibleInPanesSerializable = "-1";
+            xyDiagram5.AxisX.Label.ResolveOverlappingOptions.AllowHide = false;
+            xyDiagram5.AxisX.Label.Angle = -45;
+            xyDiagram5.AxisX.Label.TextPattern = "{A}";
+            xyDiagram5.AxisY.VisibleInPanesSerializable = "-1";
+            xyDiagram5.AxisY.Title.Text = "Adet";
+            xyDiagram5.AxisY.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            chartControl5.Diagram = xyDiagram5;
             chartControl5.Location = new System.Drawing.Point(423, 294);
             chartControl5.Name = "chartControl5";
+            chartControl5.PaletteName = "Office 2013";
+            // barSeries5
+            barSeries5.Name = "Hata Sayısı";
+            barSeries5.SeriesID = 0;
+            barSeries5.ArgumentScaleType = DevExpress.XtraCharts.ScaleType.Qualitative;
+            barSeries5.LegendTextPattern = "{A}";
+            barSeriesView5.ColorEach = true;
+            barSeriesView5.BarWidth = 0.8;
+            barSeries5.View = barSeriesView5;
+            chartControl5.SeriesSerializable = new DevExpress.XtraCharts.Series[] { barSeries5 };
+            chartControl5.SeriesTemplate.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
             chartControl5.Size = new System.Drawing.Size(396, 273);
             chartControl5.TabIndex = 9;
+            // Legend ayarları
+            chartControl5.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            chartControl5.Legend.Direction = DevExpress.XtraCharts.LegendDirection.TopToBottom;
+            chartControl5.Legend.AlignmentHorizontal = DevExpress.XtraCharts.LegendAlignmentHorizontal.RightOutside;
+            chartControl5.Legend.AlignmentVertical = DevExpress.XtraCharts.LegendAlignmentVertical.Center;
+            // Başlık
+            chartTitle5.Text = "AI Kalite Kontrol - Hata Türleri Dağılımı";
+            chartTitle5.Dock = DevExpress.XtraCharts.ChartTitleDockStyle.Top;
+            chartTitle5.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Bold);
+            chartControl5.Titles.AddRange(new DevExpress.XtraCharts.ChartTitle[] { chartTitle5 });
             // 
-            // chartControl2
+            // chartControl2 - AI Kalite Kontrol Sağlam/Hatalı Dağılımı (Pie)
             // 
             chartControl2.Location = new System.Drawing.Point(20, 294);
             chartControl2.Name = "chartControl2";
+            chartControl2.PaletteName = "Office 2013";
+            // pieSeries2
+            pieSeries2.Name = "Kalite Durumu";
+            pieSeries2.SeriesID = 0;
+            pieSeries2.LegendTextPattern = "{A}";
+            pieSeries2.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
+            pieSeries2.Label.TextPattern = "{A}: {V} ({VP:P0})";
+            pieSeries2.View = pieSeriesView2;
+            chartControl2.SeriesSerializable = new DevExpress.XtraCharts.Series[] { pieSeries2 };
             chartControl2.Size = new System.Drawing.Size(395, 273);
             chartControl2.TabIndex = 8;
+            // Legend ayarları
+            chartControl2.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            chartControl2.Legend.Direction = DevExpress.XtraCharts.LegendDirection.TopToBottom;
+            chartControl2.Legend.AlignmentHorizontal = DevExpress.XtraCharts.LegendAlignmentHorizontal.RightOutside;
+            chartControl2.Legend.AlignmentVertical = DevExpress.XtraCharts.LegendAlignmentVertical.Center;
+            // Başlık
+            chartTitle2.Text = "AI Kalite Kontrol - Sağlam/Hatalı Dağılımı";
+            chartTitle2.Dock = DevExpress.XtraCharts.ChartTitleDockStyle.Top;
+            chartTitle2.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Bold);
+            chartControl2.Titles.AddRange(new DevExpress.XtraCharts.ChartTitle[] { chartTitle2 });
             // 
             // chartControl4 - En Çok Sipariş Veren Müşteriler (Yatay Bar)
             // 
@@ -265,7 +329,12 @@
             this.Load += FrmStatistics_Load;
             ((System.ComponentModel.ISupportInitialize)layoutControl1).EndInit();
             layoutControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)xyDiagram5).EndInit();
+            ((System.ComponentModel.ISupportInitialize)barSeries5).EndInit();
+            ((System.ComponentModel.ISupportInitialize)barSeriesView5).EndInit();
             ((System.ComponentModel.ISupportInitialize)chartControl5).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pieSeriesView2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pieSeries2).EndInit();
             ((System.ComponentModel.ISupportInitialize)chartControl2).EndInit();
             ((System.ComponentModel.ISupportInitialize)xyDiagram4).EndInit();
             ((System.ComponentModel.ISupportInitialize)barSeries4).EndInit();

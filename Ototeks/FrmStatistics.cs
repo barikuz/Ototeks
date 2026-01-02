@@ -3,6 +3,7 @@ using DevExpress.XtraCharts;
 using Ototeks.Business.Concrete;
 using Ototeks.DataAccess.Concrete;
 using Ototeks.Entities;
+using Ototeks.UI.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,6 +31,8 @@ namespace Ototeks.UI
                 LoadMostOrderedProductsPie();
                 LoadMostRequiredFabricsBar();
                 LoadTopCustomersBarHorizontal();
+                LoadQualityControlPassFailPie();
+                LoadDefectTypesBar();
             }
             catch (Exception ex)
             {
@@ -172,6 +175,84 @@ namespace Ototeks.UI
                 {
                     // Eğer SeriesPoint eklerken DevExpress bir "argument empty" hatası verirse, fallback göster
                     series.Points.Clear();
+                    series.Points.Add(new SeriesPoint("Veri Yok", 0));
+                }
+            }
+        }
+
+        private void LoadQualityControlPassFailPie()
+        {
+            // AI Kalite Kontrol - Sağlam/Hatalı Dağılımı
+            var qualityLogRepo = new GenericRepository<QualityLog>();
+            var logs = qualityLogRepo.GetAll();
+
+            // Sağlam (IsDefective = false) ve Hatalı (IsDefective = true) sayılarını hesapla
+            int passedCount = logs.Count(q => q.IsDefective == false);
+            int failedCount = logs.Count(q => q.IsDefective == true);
+
+            var series = chartControl2.Series["Kalite Durumu"];
+            if (series != null)
+            {
+                series.Points.Clear();
+
+                if (passedCount > 0 || failedCount > 0)
+                {
+                    // Sağlam olanlar
+                    var passedPoint = new SeriesPoint("Sağlam", passedCount);
+                    series.Points.Add(passedPoint);
+
+                    // Hatalı olanlar
+                    var failedPoint = new SeriesPoint("Hatalı", failedCount);
+                    series.Points.Add(failedPoint);
+
+                    // Renkleri manuel ayarla (yeşil: sağlam, kırmızı: hatalı)
+                    if (series.View is PieSeriesView pieView)
+                    {
+                        passedPoint.Color = System.Drawing.Color.FromArgb(92, 184, 92);  // Yeşil
+                        failedPoint.Color = System.Drawing.Color.FromArgb(217, 83, 79);  // Kırmızı
+                    }
+                }
+                else
+                {
+                    series.Points.Add(new SeriesPoint("Veri Yok", 0));
+                }
+            }
+        }
+
+        private void LoadDefectTypesBar()
+        {
+            // AI Kalite Kontrol - Hata Türleri Dağılımı
+            var qualityLogRepo = new GenericRepository<QualityLog>();
+            var logs = qualityLogRepo.GetAll(
+                q => q.IsDefective == true && q.DefectId != null,
+                "Defect"
+            );
+
+            // Hata türlerine göre grupla ve say (DefectFree olanları hariç tut)
+            var defectGroups = logs
+                .Where(q => q.Defect != null && 
+                           !string.Equals(q.Defect.DefectName, "DefectFree", StringComparison.OrdinalIgnoreCase))
+                .GroupBy(q => q.Defect!.DefectName)
+                .Select(g => new { DefectName = g.Key, Count = g.Count() })
+                .OrderByDescending(x => x.Count)
+                .ToList();
+
+            var series = chartControl5.Series["Hata Sayısı"];
+            if (series != null)
+            {
+                series.Points.Clear();
+
+                if (defectGroups.Any())
+                {
+                    foreach (var defect in defectGroups)
+                    {
+                        // Hata türü ismini Türkçe'ye çevir
+                        string displayName = EnumHelper.GetDefectTypeName(defect.DefectName);
+                        series.Points.Add(new SeriesPoint(displayName, defect.Count));
+                    }
+                }
+                else
+                {
                     series.Points.Add(new SeriesPoint("Veri Yok", 0));
                 }
             }
