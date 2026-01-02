@@ -267,19 +267,36 @@ namespace Ototeks.UI
         /// </summary>
         private void UpdateOrderWithItems(Order order, OrderStatus newStatus)
         {
+            // Eski durumu kaydet (yön belirleme için)
+            OrderStatus oldStatus = order.OrderStatus;
+            bool isMovingBackward = (int)newStatus < (int)oldStatus;
+
             // Sipariş durumunu güncelle
             UpdateOrderInDatabase(order, newStatus);
             order.OrderStatus = newStatus;
 
-            // Bu durumdan düşük aşamada olan kalemleri güncelle
-            int updatedItemCount = 0;
+            // Kalemleri güncelle
             foreach (var item in order.OrderItems)
             {
-                if ((int)item.CurrentStage < (int)newStatus && item.CurrentStage != OrderStatus.Cancelled)
+                if (item.CurrentStage == OrderStatus.Cancelled)
+                    continue;
+
+                bool shouldUpdate;
+                if (isMovingBackward)
+                {
+                    // Geri hareket: Yeni durumdan yüksek kalemleri geri al
+                    shouldUpdate = (int)item.CurrentStage > (int)newStatus;
+                }
+                else
+                {
+                    // İleri hareket: Yeni durumdan düşük aşamadaki kalemleri ileri taşı
+                    shouldUpdate = (int)item.CurrentStage < (int)newStatus;
+                }
+
+                if (shouldUpdate)
                 {
                     UpdateOrderItemInDatabase(item, newStatus);
                     item.CurrentStage = newStatus;
-                    updatedItemCount++;
                 }
             }
 
