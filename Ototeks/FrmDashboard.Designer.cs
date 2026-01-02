@@ -34,8 +34,8 @@
             DevExpress.XtraEditors.TileItemElement tileItemElement4 = new DevExpress.XtraEditors.TileItemElement();
             DevExpress.XtraEditors.TileItemElement tileItemElement5 = new DevExpress.XtraEditors.TileItemElement();
             DevExpress.XtraEditors.TileItemElement tileItemElement6 = new DevExpress.XtraEditors.TileItemElement();
-            DevExpress.XtraCharts.XYDiagram xyDiagram1 = new DevExpress.XtraCharts.XYDiagram();
-            DevExpress.XtraCharts.Series series1 = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.Series funnelSeries = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.FunnelSeriesView funnelSeriesView = new DevExpress.XtraCharts.FunnelSeriesView();
             DevExpress.XtraCharts.ChartTitle chartTitle1 = new DevExpress.XtraCharts.ChartTitle();
             tileControl1 = new DevExpress.XtraEditors.TileControl();
             tileGroup2 = new DevExpress.XtraEditors.TileGroup();
@@ -69,8 +69,8 @@
             ((System.ComponentModel.ISupportInitialize)gridControl1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)chartControl1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)xyDiagram1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)series1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)funnelSeries).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)funnelSeriesView).BeginInit();
             SuspendLayout();
             // 
             // tileControl1
@@ -276,19 +276,25 @@
             // 
             // chartControl1
             // 
-            xyDiagram1.AxisX.Label.Angle = -45;
-            xyDiagram1.AxisX.VisibleInPanesSerializable = "-1";
-            xyDiagram1.AxisY.VisibleInPanesSerializable = "-1";
-            chartControl1.Diagram = xyDiagram1;
             chartControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             chartControl1.Location = new System.Drawing.Point(0, 0);
             chartControl1.Name = "chartControl1";
-            series1.Name = "stagesBarChart";
-            series1.SeriesID = 0;
-            chartControl1.SeriesSerializable = new DevExpress.XtraCharts.Series[]
-    {
-    series1
-    };
+            chartControl1.PaletteName = "Office 2013";
+            // 
+            // funnelSeries
+            // 
+            funnelSeries.Name = "stagesFunnel";
+            funnelSeries.SeriesID = 0;
+            funnelSeries.LegendTextPattern = "{A}";
+            funnelSeries.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
+            funnelSeries.Label.TextPattern = "{A}: {V}";
+            // 
+            // funnelSeriesView
+            // 
+            funnelSeriesView.ColorEach = true;
+            funnelSeries.View = funnelSeriesView;
+            // 
+            chartControl1.SeriesSerializable = new DevExpress.XtraCharts.Series[] { funnelSeries };
             chartControl1.Size = new System.Drawing.Size(541, 516);
             chartControl1.TabIndex = 0;
             chartTitle1.DXFont = new DevExpress.Drawing.DXFont("Tahoma", 12F, DevExpress.Drawing.DXFontStyle.Bold);
@@ -317,8 +323,8 @@
             panelDeliveryAlerts.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)gridControl1).EndInit();
             ((System.ComponentModel.ISupportInitialize)gridView1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)xyDiagram1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)series1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)funnelSeries).EndInit();
+            ((System.ComponentModel.ISupportInitialize)funnelSeriesView).EndInit();
             ((System.ComponentModel.ISupportInitialize)chartControl1).EndInit();
             ResumeLayout(false);
         }

@@ -28,12 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DevExpress.XtraCharts.XYDiagram xyDiagram1 = new DevExpress.XtraCharts.XYDiagram();
-            DevExpress.XtraCharts.Series series1 = new DevExpress.XtraCharts.Series();
-            DevExpress.XtraCharts.XYDiagram xyDiagram2 = new DevExpress.XtraCharts.XYDiagram();
-            DevExpress.XtraCharts.Series series2 = new DevExpress.XtraCharts.Series();
-            DevExpress.XtraCharts.Series series3 = new DevExpress.XtraCharts.Series();
-            DevExpress.XtraCharts.PieSeriesView pieSeriesView1 = new DevExpress.XtraCharts.PieSeriesView();
+            // chartControl1 - Pie Chart (En Çok Sipariş Edilen Ürünler)
+            DevExpress.XtraCharts.Series pieSeries = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.PieSeriesView pieSeriesView = new DevExpress.XtraCharts.PieSeriesView();
+            DevExpress.XtraCharts.ChartTitle chartTitle1 = new DevExpress.XtraCharts.ChartTitle();
+
+            // chartControl3 - Bar Chart (En Çok İhtiyaç Duyulan Kumaşlar)
+            DevExpress.XtraCharts.XYDiagram xyDiagram3 = new DevExpress.XtraCharts.XYDiagram();
+            DevExpress.XtraCharts.Series barSeries3 = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.SideBySideBarSeriesView barSeriesView3 = new DevExpress.XtraCharts.SideBySideBarSeriesView();
+            DevExpress.XtraCharts.ChartTitle chartTitle3 = new DevExpress.XtraCharts.ChartTitle();
+
+            // chartControl4 - Horizontal Bar Chart (En Çok Sipariş Veren Müşteriler)
+            DevExpress.XtraCharts.XYDiagram xyDiagram4 = new DevExpress.XtraCharts.XYDiagram();
+            DevExpress.XtraCharts.Series barSeries4 = new DevExpress.XtraCharts.Series();
+            DevExpress.XtraCharts.SideBySideBarSeriesView barSeriesView4 = new DevExpress.XtraCharts.SideBySideBarSeriesView();
+            DevExpress.XtraCharts.ChartTitle chartTitle4 = new DevExpress.XtraCharts.ChartTitle();
+
             layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
             chartControl5 = new DevExpress.XtraCharts.ChartControl();
             chartControl2 = new DevExpress.XtraCharts.ChartControl();
@@ -51,14 +62,16 @@
             ((System.ComponentModel.ISupportInitialize)chartControl5).BeginInit();
             ((System.ComponentModel.ISupportInitialize)chartControl2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)chartControl4).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)xyDiagram1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)series1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)xyDiagram4).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)barSeries4).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)barSeriesView4).BeginInit();
             ((System.ComponentModel.ISupportInitialize)chartControl3).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)xyDiagram2).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)series2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)xyDiagram3).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)barSeries3).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)barSeriesView3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)chartControl1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)series3).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pieSeriesView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pieSeries).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pieSeriesView).BeginInit();
             ((System.ComponentModel.ISupportInitialize)Root).BeginInit();
             ((System.ComponentModel.ISupportInitialize)layoutControlItem1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)layoutControlItem3).BeginInit();
@@ -97,51 +110,100 @@
             chartControl2.Size = new System.Drawing.Size(395, 273);
             chartControl2.TabIndex = 8;
             // 
-            // chartControl4
+            // chartControl4 - En Çok Sipariş Veren Müşteriler (Yatay Bar)
             // 
-            xyDiagram1.AxisX.VisibleInPanesSerializable = "-1";
-            xyDiagram1.AxisY.VisibleInPanesSerializable = "-1";
-            chartControl4.Diagram = xyDiagram1;
+            xyDiagram4.AxisX.VisibleInPanesSerializable = "-1";
+            xyDiagram4.AxisX.Title.Text = "Sipariş Sayısı";
+            xyDiagram4.AxisX.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            xyDiagram4.AxisY.VisibleInPanesSerializable = "-1";
+            xyDiagram4.AxisY.Label.ResolveOverlappingOptions.AllowHide = false;
+            xyDiagram4.Rotated = true;
+            chartControl4.Diagram = xyDiagram4;
             chartControl4.Location = new System.Drawing.Point(550, 20);
             chartControl4.Name = "chartControl4";
-            series1.Name = "Series 1";
-            series1.SeriesID = 0;
-            chartControl4.SeriesSerializable = new DevExpress.XtraCharts.Series[]
-    {
-    series1
-    };
+            chartControl4.PaletteName = "Office 2013";
+            // barSeries4
+            barSeries4.Name = "Sipariş Sayısı";
+            barSeries4.SeriesID = 0;
+            barSeries4.ArgumentScaleType = DevExpress.XtraCharts.ScaleType.Qualitative;
+            barSeries4.LegendTextPattern = "{A}";
+            barSeriesView4.ColorEach = true;
+            barSeriesView4.BarWidth = 0.8;
+            barSeries4.View = barSeriesView4;
+            chartControl4.SeriesSerializable = new DevExpress.XtraCharts.Series[] { barSeries4 };
+            chartControl4.SeriesTemplate.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
             chartControl4.Size = new System.Drawing.Size(269, 266);
             chartControl4.TabIndex = 7;
+            // Legend ayarları
+            chartControl4.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            chartControl4.Legend.Direction = DevExpress.XtraCharts.LegendDirection.TopToBottom;
+            chartControl4.Legend.AlignmentHorizontal = DevExpress.XtraCharts.LegendAlignmentHorizontal.RightOutside;
+            chartControl4.Legend.AlignmentVertical = DevExpress.XtraCharts.LegendAlignmentVertical.Center;
+            // Başlık
+            chartTitle4.Text = "En Çok Sipariş Veren Müşteriler";
+            chartTitle4.Dock = DevExpress.XtraCharts.ChartTitleDockStyle.Top;
+            chartTitle4.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Bold);
+            chartControl4.Titles.AddRange(new DevExpress.XtraCharts.ChartTitle[] { chartTitle4 });
             // 
-            // chartControl3
+            // chartControl3 - En Çok İhtiyaç Duyulan Kumaşlar (Dikey Bar)
             // 
-            xyDiagram2.AxisX.VisibleInPanesSerializable = "-1";
-            xyDiagram2.AxisY.VisibleInPanesSerializable = "-1";
-            chartControl3.Diagram = xyDiagram2;
+            xyDiagram3.AxisX.VisibleInPanesSerializable = "-1";
+            xyDiagram3.AxisX.Label.ResolveOverlappingOptions.AllowHide = false;
+            xyDiagram3.AxisX.Label.Angle = -45;
+            xyDiagram3.AxisX.Label.TextPattern = "{A}";
+            xyDiagram3.AxisY.VisibleInPanesSerializable = "-1";
+            chartControl3.Diagram = xyDiagram3;
             chartControl3.Location = new System.Drawing.Point(309, 20);
             chartControl3.Name = "chartControl3";
-            series2.Name = "Series 1";
-            series2.SeriesID = 0;
-            chartControl3.SeriesSerializable = new DevExpress.XtraCharts.Series[]
-    {
-    series2
-    };
+            chartControl3.PaletteName = "Office 2013";
+            // barSeries3
+            barSeries3.Name = "Gerekli Kumaş (m)";
+            barSeries3.SeriesID = 0;
+            barSeries3.ArgumentScaleType = DevExpress.XtraCharts.ScaleType.Qualitative;
+            barSeries3.LegendTextPattern = "{A}";
+            barSeriesView3.ColorEach = true;
+            barSeriesView3.BarWidth = 0.8;
+            barSeries3.View = barSeriesView3;
+            chartControl3.SeriesSerializable = new DevExpress.XtraCharts.Series[] { barSeries3 };
+            chartControl3.SeriesTemplate.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
             chartControl3.Size = new System.Drawing.Size(233, 266);
             chartControl3.TabIndex = 6;
+            // Legend ayarları
+            chartControl3.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            chartControl3.Legend.Direction = DevExpress.XtraCharts.LegendDirection.TopToBottom;
+            chartControl3.Legend.AlignmentHorizontal = DevExpress.XtraCharts.LegendAlignmentHorizontal.RightOutside;
+            chartControl3.Legend.AlignmentVertical = DevExpress.XtraCharts.LegendAlignmentVertical.Center;
+            // Başlık
+            chartTitle3.Text = "En Çok İhtiyaç Duyulan Kumaşlar (Metre)";
+            chartTitle3.Dock = DevExpress.XtraCharts.ChartTitleDockStyle.Top;
+            chartTitle3.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Bold);
+            chartControl3.Titles.AddRange(new DevExpress.XtraCharts.ChartTitle[] { chartTitle3 });
             // 
-            // chartControl1
+            // chartControl1 - En Çok Sipariş Edilen Ürünler (Pie)
             // 
             chartControl1.Location = new System.Drawing.Point(20, 20);
             chartControl1.Name = "chartControl1";
-            series3.Name = "Series 1";
-            series3.SeriesID = 0;
-            series3.View = pieSeriesView1;
-            chartControl1.SeriesSerializable = new DevExpress.XtraCharts.Series[]
-    {
-    series3
-    };
+            chartControl1.PaletteName = "Office 2013";
+            // pieSeries
+            pieSeries.Name = "Ürünler";
+            pieSeries.SeriesID = 0;
+            pieSeries.LegendTextPattern = "{A}";
+            pieSeries.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
+            pieSeries.Label.TextPattern = "{A}: {V}";
+            pieSeries.View = pieSeriesView;
+            chartControl1.SeriesSerializable = new DevExpress.XtraCharts.Series[] { pieSeries };
             chartControl1.Size = new System.Drawing.Size(281, 266);
             chartControl1.TabIndex = 4;
+            // Legend ayarları
+            chartControl1.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
+            chartControl1.Legend.Direction = DevExpress.XtraCharts.LegendDirection.TopToBottom;
+            chartControl1.Legend.AlignmentHorizontal = DevExpress.XtraCharts.LegendAlignmentHorizontal.RightOutside;
+            chartControl1.Legend.AlignmentVertical = DevExpress.XtraCharts.LegendAlignmentVertical.Center;
+            // Başlık
+            chartTitle1.Text = "En Çok Sipariş Edilen Ürünler";
+            chartTitle1.Dock = DevExpress.XtraCharts.ChartTitleDockStyle.Top;
+            chartTitle1.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Bold);
+            chartControl1.Titles.AddRange(new DevExpress.XtraCharts.ChartTitle[] { chartTitle1 });
             // 
             // Root
             // 
@@ -200,18 +262,21 @@
             Controls.Add(layoutControl1);
             Name = "FrmStatistics";
             Text = "İstatistik";
+            this.Load += FrmStatistics_Load;
             ((System.ComponentModel.ISupportInitialize)layoutControl1).EndInit();
             layoutControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)chartControl5).EndInit();
             ((System.ComponentModel.ISupportInitialize)chartControl2).EndInit();
-            ((System.ComponentModel.ISupportInitialize)xyDiagram1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)series1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)xyDiagram4).EndInit();
+            ((System.ComponentModel.ISupportInitialize)barSeries4).EndInit();
+            ((System.ComponentModel.ISupportInitialize)barSeriesView4).EndInit();
             ((System.ComponentModel.ISupportInitialize)chartControl4).EndInit();
-            ((System.ComponentModel.ISupportInitialize)xyDiagram2).EndInit();
-            ((System.ComponentModel.ISupportInitialize)series2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)xyDiagram3).EndInit();
+            ((System.ComponentModel.ISupportInitialize)barSeries3).EndInit();
+            ((System.ComponentModel.ISupportInitialize)barSeriesView3).EndInit();
             ((System.ComponentModel.ISupportInitialize)chartControl3).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pieSeriesView1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)series3).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pieSeriesView).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pieSeries).EndInit();
             ((System.ComponentModel.ISupportInitialize)chartControl1).EndInit();
             ((System.ComponentModel.ISupportInitialize)Root).EndInit();
             ((System.ComponentModel.ISupportInitialize)layoutControlItem1).EndInit();
