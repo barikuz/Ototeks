@@ -28,6 +28,9 @@ namespace Ototeks.Business.Concrete
 
         public void Add(Order order)
         {
+            // 0. Tekrarlayan Sipariş Kalemlerini Birleştir
+            MergeDuplicateOrderItems(order);
+
             // 1. Validasyon
             CheckValidation(order);
 
@@ -58,6 +61,9 @@ namespace Ototeks.Business.Concrete
 
             if (!isStatusOnlyUpdate)
             {
+                // 0. Tekrarlayan Sipariş Kalemlerini Birleştir
+                MergeDuplicateOrderItems(order);
+
                 // 1. Validasyon (Güncelleme için order ID'si ile)
                 CheckValidation(order, order.OrderId);
 
@@ -154,6 +160,37 @@ namespace Ototeks.Business.Concrete
         }
 
         // --- YARDIMCI METOTLAR ---
+
+        /// <summary>
+        /// Aynı FabricId ve TypeId'ye sahip sipariş kalemlerini birleştirir.
+        /// Tekrarlayan kalemler tek bir kalem haline getirilir ve adetleri toplanır.
+        /// </summary>
+        private void MergeDuplicateOrderItems(Order order)
+        {
+            if (order.OrderItems == null || !order.OrderItems.Any())
+                return;
+
+            // Aynı FabricId ve TypeId'ye sahip kalemleri grupla
+            var mergedItems = order.OrderItems
+                .GroupBy(item => new { item.FabricId, item.TypeId })
+                .Select(group => new OrderItem
+                {
+                    // Grubun ilk elemanının ID'sini koru (güncelleme için)
+                    OrderItemId = group.First().OrderItemId,
+                    OrderId = group.First().OrderId,
+                    FabricId = group.Key.FabricId,
+                    TypeId = group.Key.TypeId,
+                    // Tüm adetleri topla
+                    Quantity = group.Sum(item => item.Quantity),
+                    // İlk elemanın durumunu ve işleyen kullanıcısını koru
+                    CurrentStage = group.First().CurrentStage,
+                    ProcessedByUserId = group.First().ProcessedByUserId
+                })
+                .ToList();
+
+            // Sipariş kalemlerini birleştirilmiş liste ile değiştir
+            order.OrderItems = mergedItems;
+        }
         
         private void CheckValidation(Order order, int? excludeId = null)
         {
