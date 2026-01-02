@@ -41,16 +41,17 @@
             btnProductionTrack = new DevExpress.XtraBars.BarButtonItem();
             btnDashboard = new DevExpress.XtraBars.BarButtonItem();
             btnStatistics = new DevExpress.XtraBars.BarButtonItem();
+            btnQualityControl = new DevExpress.XtraBars.BarButtonItem();
+            btnDefectedFabrics = new DevExpress.XtraBars.BarButtonItem();
             ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             ribbonPageGroup5 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             ribbonPageGroup4 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             ribbonPageGroup3 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            ribbonPageGroup6 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             documentManager1 = new DevExpress.XtraBars.Docking2010.DocumentManager(components);
             tabbedView1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(components);
-            ribbonPageGroup6 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            btnQualityControl = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)ribbonControl1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)documentManager1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)tabbedView1).BeginInit();
@@ -60,10 +61,10 @@
             // 
             ribbonControl1.EmptyAreaImageOptions.ImagePadding = new System.Windows.Forms.Padding(35, 37, 35, 37);
             ribbonControl1.ExpandCollapseItem.Id = 0;
-            ribbonControl1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl1.ExpandCollapseItem, skinRibbonGalleryBarItem1, btnYeniKumas, btnKumasListesi, btnNewOrder, btnSiparisListesi, btnNewCustomer, btnListCustomers, btnProductionTrack, btnDashboard, btnStatistics, btnQualityControl });
+            ribbonControl1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl1.ExpandCollapseItem, skinRibbonGalleryBarItem1, btnYeniKumas, btnKumasListesi, btnNewOrder, btnSiparisListesi, btnNewCustomer, btnListCustomers, btnProductionTrack, btnDashboard, btnStatistics, btnQualityControl, btnDefectedFabrics });
             ribbonControl1.Location = new System.Drawing.Point(0, 0);
             ribbonControl1.Margin = new System.Windows.Forms.Padding(4);
-            ribbonControl1.MaxItemId = 12;
+            ribbonControl1.MaxItemId = 13;
             ribbonControl1.Name = "ribbonControl1";
             ribbonControl1.OptionsMenuMinWidth = 385;
             ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] { ribbonPage1 });
@@ -159,6 +160,24 @@
             btnStatistics.Name = "btnStatistics";
             btnStatistics.ItemClick += btnStatistics_ItemClick;
             // 
+            // btnQualityControl
+            // 
+            btnQualityControl.Caption = "Kumaş Kontrol";
+            btnQualityControl.Id = 11;
+            btnQualityControl.ImageOptions.Image = UI.Properties.Resources.find_16x161;
+            btnQualityControl.ImageOptions.LargeImage = UI.Properties.Resources.find_32x321;
+            btnQualityControl.Name = "btnQualityControl";
+            btnQualityControl.ItemClick += btnQualityControl_ItemClick;
+            // 
+            // btnDefectedFabrics
+            // 
+            btnDefectedFabrics.Caption = "Hatalı Kumaşlar";
+            btnDefectedFabrics.Id = 12;
+            btnDefectedFabrics.ImageOptions.Image = UI.Properties.Resources.warning_16x16;
+            btnDefectedFabrics.ImageOptions.LargeImage = UI.Properties.Resources.warning_32x32;
+            btnDefectedFabrics.Name = "btnDefectedFabrics";
+            btnDefectedFabrics.ItemClick += btnDefectedFabrics_ItemClick;
+            // 
             // ribbonPage1
             // 
             ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] { ribbonPageGroup5, ribbonPageGroup2, ribbonPageGroup4, ribbonPageGroup1, ribbonPageGroup3, ribbonPageGroup6 });
@@ -199,27 +218,19 @@
             ribbonPageGroup3.Name = "ribbonPageGroup3";
             ribbonPageGroup3.Text = "Müşteri İşlemleri";
             // 
+            // ribbonPageGroup6
+            // 
+            ribbonPageGroup6.ItemLinks.Add(btnQualityControl);
+            ribbonPageGroup6.ItemLinks.Add(btnDefectedFabrics);
+            ribbonPageGroup6.Name = "ribbonPageGroup6";
+            ribbonPageGroup6.Text = "Kalite Kontrol";
+            // 
             // documentManager1
             // 
             documentManager1.MdiParent = this;
             documentManager1.MenuManager = ribbonControl1;
             documentManager1.View = tabbedView1;
             documentManager1.ViewCollection.AddRange(new DevExpress.XtraBars.Docking2010.Views.BaseView[] { tabbedView1 });
-            // 
-            // ribbonPageGroup6
-            // 
-            ribbonPageGroup6.ItemLinks.Add(btnQualityControl);
-            ribbonPageGroup6.Name = "ribbonPageGroup6";
-            ribbonPageGroup6.Text = "Kalite Kontrol";
-            // 
-            // btnQualityControl
-            // 
-            btnQualityControl.Caption = "Kumaş Kontrol";
-            btnQualityControl.Id = 11;
-            btnQualityControl.ImageOptions.Image = UI.Properties.Resources.find_16x161;
-            btnQualityControl.ImageOptions.LargeImage = UI.Properties.Resources.find_32x321;
-            btnQualityControl.Name = "btnQualityControl";
-            btnQualityControl.ItemClick += btnQualityControl_ItemClick;
             // 
             // Form1
             // 
@@ -266,6 +277,7 @@
         private DevExpress.XtraBars.BarButtonItem btnStatistics;
         private DevExpress.XtraBars.BarButtonItem btnQualityControl;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup6;
+        private DevExpress.XtraBars.BarButtonItem btnDefectedFabrics;
     }
 }
 

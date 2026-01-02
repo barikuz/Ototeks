@@ -130,7 +130,14 @@ namespace Ototeks
         private void btnQualityControl_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             FrmFabricQualityControl frm = new FrmFabricQualityControl();
-            frm.MdiParent = this; 
+            frm.MdiParent = this;
+            frm.Show();
+        }
+
+        private void btnDefectedFabrics_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            FrmDefectedFabricList frm = new FrmDefectedFabricList();
+            frm.MdiParent = this;
             frm.Show();
         }
     }
