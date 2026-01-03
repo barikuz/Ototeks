@@ -73,6 +73,46 @@ namespace Ototeks.UI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap colorlegend_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("colorlegend_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap colorlegend_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("colorlegend_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap colors_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("colors_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap colors_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("colors_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap find_16x16 {
             get {
                 object obj = ResourceManager.GetObject("find_16x16", resourceCulture);
@@ -137,6 +177,46 @@ namespace Ototeks.UI.Properties {
             get {
                 object obj = ResourceManager.GetObject("Refresh", resourceCulture);
                 return ((DevExpress.Utils.Svg.SvgImage)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap splittablecells_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("splittablecells_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap splittablecells_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("splittablecells_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tag_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("tag_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tag_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("tag_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

@@ -1,11 +1,6 @@
 ﻿using Ototeks.UI;
+using Ototeks.Helpers;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Ototeks
@@ -19,7 +14,6 @@ namespace Ototeks
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            // Uygulama açıldığında otomatik olarak Dashboard formunu aç
             OpenDashboard();
         }
 
@@ -37,93 +31,71 @@ namespace Ototeks
 
         private void btnStatistics_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            // İstatistikler formunu MDI child olarak aç
             FrmStatistics frm = new FrmStatistics();
             frm.MdiParent = this;
             frm.Show();
         }
 
-        // Generic helper metod - form ekleme ve liste yenileme işlemlerini tek yerde toplar
-        private void ShowAddFormWithRefresh<TAddForm, TListForm>(Func<TAddForm> createAddForm, string listFormName, Action<TListForm> refreshAction)
+        // Generic helper - Add formu açar ve işlem sonrası ilgili liste formlarını yeniler
+        private void ShowAddForm<TAddForm, TListForm>(Func<TAddForm> createAddForm)
             where TAddForm : Form, Ototeks.Interfaces.IOperationForm
-            where TListForm : class
+            where TListForm : Form
         {
-            // 1. Ekleme formunu oluştur
-            var addForm = createAddForm();
-
-            // 2. Form kapatıldığında liste formunu yenileme event'i ekle
-            addForm.OperationCompleted += (s, args) =>
+            using (var addForm = createAddForm())
             {
-                // Açık olan liste formunu bul
-                var openListForm = Application.OpenForms[listFormName] as TListForm;
-
-                // Eğer liste formu açıksa yenile
-                if (openListForm != null)
+                addForm.OperationCompleted += (s, args) =>
                 {
-                    refreshAction(openListForm);
-                }
-            };
+                    FormRefreshHelper.RefreshAllOpenForms<TListForm>();
+                };
 
-            // 3. Formu dialog olarak aç
-            addForm.ShowDialog();
+                addForm.ShowDialog();
+            }
         }
 
+        // --- KUMAŞ İŞLEMLERİ ---
         private void btnYeniKumas_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            ShowAddFormWithRefresh(
-                createAddForm: () => new FrmAddFabric(),
-                listFormName: "FrmListFabrics",
-                refreshAction: (FrmFabricsList listForm) => listForm.RefreshData()
-            );
+            ShowAddForm<FrmAddFabric, FrmFabricsList>(() => new FrmAddFabric());
         }
 
         private void btnKumasListesi_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             FrmFabricsList frm = new FrmFabricsList();
-            frm.MdiParent = this; // Bu formu ana ekranın içinde (sekme gibi) aç
+            frm.MdiParent = this;
             frm.Show();
         }
 
+        // --- SİPARİŞ İŞLEMLERİ ---
         private void btnNewOrder_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            ShowAddFormWithRefresh(
-                createAddForm: () => new FrmAddOrder(),
-                listFormName: "FrmOrderList",
-                refreshAction: (FrmOrderList listForm) => listForm.RefreshData()
-            );
+            ShowAddForm<FrmAddOrder, FrmOrderList>(() => new FrmAddOrder());
         }
 
         private void btnSiparisListesi_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             FrmOrderList frm = new FrmOrderList();
-
-            // SİHİRLİ KOD BURASI:
-            // "Bu form, şu an içinde bulunduğumuz (this) formun çocuğudur" diyoruz.
             frm.MdiParent = this;
-
             frm.Show();
+        }
+
+        // --- MÜŞTERİ İŞLEMLERİ ---
+        private void btnNewCustomer_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            ShowAddForm<FrmAddCustomer, FrmCustomerList>(() => new FrmAddCustomer());
         }
 
         private void btnListCustomers_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             FrmCustomerList frm = new FrmCustomerList();
-            frm.MdiParent = this; // Bu formu ana ekranın içinde (sekme gibi) aç
+            frm.MdiParent = this;
             frm.Show();
         }
 
-        private void btnNewCustomer_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            ShowAddFormWithRefresh(
-                createAddForm: () => new FrmAddCustomer(),
-                listFormName: "FrmCustomerList",
-                refreshAction: (FrmCustomerList listForm) => listForm.RefreshData()
-            );
-        }
-
+        // --- ÜRETİM VE KALİTE İŞLEMLERİ ---
         private void btnProductionTrack_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             FrmProductionTrack frm = new FrmProductionTrack();
-            frm.MdiParent = this; // Bu formu ana ekranın içinde (sekme gibi) aç
+            frm.MdiParent = this;
             frm.Show();
         }
 
@@ -137,6 +109,32 @@ namespace Ototeks
         private void btnDefectedFabrics_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             FrmDefectedFabricList frm = new FrmDefectedFabricList();
+            frm.MdiParent = this;
+            frm.Show();
+        }
+
+        // --- RENK İŞLEMLERİ ---
+        private void btnAddColor_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            ShowAddForm<FrmAddColor, FrmColorList>(() => new FrmAddColor());
+        }
+
+        private void btnListColors_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            FrmColorList frm = new FrmColorList();
+            frm.MdiParent = this;
+            frm.Show();
+        }
+
+        // --- ÜRÜN TİPİ İŞLEMLERİ ---
+        private void btnAddProductType_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            ShowAddForm<FrmAddProductType, FrmProductTypeList>(() => new FrmAddProductType());
+        }
+
+        private void btnListProductTypes_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            FrmProductTypeList frm = new FrmProductTypeList();
             frm.MdiParent = this;
             frm.Show();
         }

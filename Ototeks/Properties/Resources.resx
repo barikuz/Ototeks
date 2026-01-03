@@ -148,4 +148,28 @@
   <data name="warning_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\warning_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="colors_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\colors_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="colors_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\colors_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="colorlegend_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\colorlegend_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="colorlegend_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\colorlegend_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tag_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tag_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tag_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tag_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="splittablecells_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\splittablecells_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="splittablecells_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\splittablecells_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

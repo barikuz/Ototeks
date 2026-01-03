@@ -151,33 +151,28 @@ namespace Ototeks.Helpers
 
 
         // SİLME MANTIĞI
-        // deleteAction: Manager.Delete(id) gibi asıl silme işi
-        // confirmMessageFunc: Kullanıcıya gösterilecek mesajı üreten fonksiyon
         public void Delete(Action<T> deleteAction, Func<T, DialogResult> confirmMessageFunc)
         {
             var selectedEntity = _view.GetFocusedRow() as T;
             if (selectedEntity == null) return;
 
-            // Mesajı dinamik olarak oluştur (Örn: "Kumaş X silinsin mi?")
             var message = confirmMessageFunc(selectedEntity);
 
             if (message == DialogResult.Yes)
             { 
                 try
                 {
-                    deleteAction(selectedEntity); // Veritabanından sil
-                    RefreshData();                // Otomatik olarak yenile
+                    deleteAction(selectedEntity);
+                    RefreshAllSameTypeForms(); // Static helper'ı kullan
                 }
                 catch (Exception ex)
                 {
-                    // Hatayı yakala ve temiz mesaj göster (validasyon hataları gibi)
                     MessageBox.Show(ex.Message, "Hata Oluştu", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
         // DÜZENLEME MANTIĞI
-        // openEditFormAction: Formu açan metot (ID'yi alıp formu new'leyen yer)
         public void Update(Action<T> openEditFormAction)
         {
             var selectedEntity = _view.GetFocusedRow() as T;
@@ -187,23 +182,28 @@ namespace Ototeks.Helpers
         }
 
 
-        // TForm: Hem bir 'Form' olmalı (ShowDialog için), hem de 'IOperationForm' olmalı (Event için).
+        // Form açma ve otomatik yenileme
         public void ShowForm<TForm>(Func<TForm> createFormFunc)
             where TForm : Form, IOperationForm
         {
-            // 1. Formu yarat (Constructor parametresi varsa burada halledilir)
             using (var frm = createFormFunc())
             {
-                // 2. OTOMATİK ABONELİK 
-                // Helper, senin yerine event'e abone oluyor.
                 frm.OperationCompleted += (s, args) =>
                 {
-                    RefreshData(); // İşlem bitince otomatik yenile
+                    RefreshAllSameTypeForms(); // Static helper'ı kullan
                 };
 
-                // 3. Formu Aç
                 frm.ShowDialog();
             }
+        }
+
+        // Bu helper'ın bağlı olduğu form tipiyle aynı tipteki formları yenile
+        private void RefreshAllSameTypeForms()
+        {
+            var parentForm = _gridControl.FindForm();
+            if (parentForm == null) return;
+
+            FormRefreshHelper.RefreshAllOpenFormsByType(parentForm.GetType());
         }
     }
 }

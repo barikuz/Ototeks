@@ -52,6 +52,12 @@
             ribbonPageGroup6 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             documentManager1 = new DevExpress.XtraBars.Docking2010.DocumentManager(components);
             tabbedView1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(components);
+            ribbonPageGroup7 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            ribbonPageGroup8 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            btnAddColor = new DevExpress.XtraBars.BarButtonItem();
+            btnAddProductType = new DevExpress.XtraBars.BarButtonItem();
+            btnListColors = new DevExpress.XtraBars.BarButtonItem();
+            btnListProductTypes = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)ribbonControl1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)documentManager1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)tabbedView1).BeginInit();
@@ -61,16 +67,16 @@
             // 
             ribbonControl1.EmptyAreaImageOptions.ImagePadding = new System.Windows.Forms.Padding(35, 37, 35, 37);
             ribbonControl1.ExpandCollapseItem.Id = 0;
-            ribbonControl1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl1.ExpandCollapseItem, skinRibbonGalleryBarItem1, btnYeniKumas, btnKumasListesi, btnNewOrder, btnSiparisListesi, btnNewCustomer, btnListCustomers, btnProductionTrack, btnDashboard, btnStatistics, btnQualityControl, btnDefectedFabrics });
+            ribbonControl1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl1.ExpandCollapseItem, skinRibbonGalleryBarItem1, btnYeniKumas, btnKumasListesi, btnNewOrder, btnSiparisListesi, btnNewCustomer, btnListCustomers, btnProductionTrack, btnDashboard, btnStatistics, btnQualityControl, btnDefectedFabrics, btnAddColor, btnAddProductType, btnListColors, btnListProductTypes });
             ribbonControl1.Location = new System.Drawing.Point(0, 0);
             ribbonControl1.Margin = new System.Windows.Forms.Padding(4);
-            ribbonControl1.MaxItemId = 13;
+            ribbonControl1.MaxItemId = 17;
             ribbonControl1.Name = "ribbonControl1";
             ribbonControl1.OptionsMenuMinWidth = 385;
             ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] { ribbonPage1 });
             ribbonControl1.ShowApplicationButton = DevExpress.Utils.DefaultBoolean.False;
             ribbonControl1.ShowDisplayOptionsMenuButton = DevExpress.Utils.DefaultBoolean.False;
-            ribbonControl1.Size = new System.Drawing.Size(1287, 242);
+            ribbonControl1.Size = new System.Drawing.Size(1620, 242);
             ribbonControl1.ToolbarLocation = DevExpress.XtraBars.Ribbon.RibbonQuickAccessToolbarLocation.Hidden;
             // 
             // skinRibbonGalleryBarItem1
@@ -180,7 +186,7 @@
             // 
             // ribbonPage1
             // 
-            ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] { ribbonPageGroup5, ribbonPageGroup2, ribbonPageGroup4, ribbonPageGroup1, ribbonPageGroup3, ribbonPageGroup6 });
+            ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] { ribbonPageGroup5, ribbonPageGroup2, ribbonPageGroup4, ribbonPageGroup1, ribbonPageGroup3, ribbonPageGroup6, ribbonPageGroup7, ribbonPageGroup8 });
             ribbonPage1.Name = "ribbonPage1";
             ribbonPage1.Text = "İşlemler";
             // 
@@ -232,11 +238,61 @@
             documentManager1.View = tabbedView1;
             documentManager1.ViewCollection.AddRange(new DevExpress.XtraBars.Docking2010.Views.BaseView[] { tabbedView1 });
             // 
+            // ribbonPageGroup7
+            // 
+            ribbonPageGroup7.ItemLinks.Add(btnAddColor);
+            ribbonPageGroup7.ItemLinks.Add(btnListColors);
+            ribbonPageGroup7.Name = "ribbonPageGroup7";
+            ribbonPageGroup7.Text = "Renk İşlemleri";
+            // 
+            // ribbonPageGroup8
+            // 
+            ribbonPageGroup8.ItemLinks.Add(btnAddProductType);
+            ribbonPageGroup8.ItemLinks.Add(btnListProductTypes);
+            ribbonPageGroup8.Name = "ribbonPageGroup8";
+            ribbonPageGroup8.Text = "Ürün Tipi İşlemleri";
+            // 
+            // btnAddColor
+            // 
+            btnAddColor.Caption = "Yeni Renk";
+            btnAddColor.Id = 13;
+            btnAddColor.ImageOptions.Image = UI.Properties.Resources.colors_16x16;
+            btnAddColor.ImageOptions.LargeImage = UI.Properties.Resources.colors_32x32;
+            btnAddColor.Name = "btnAddColor";
+            btnAddColor.ItemClick += btnAddColor_ItemClick;
+            // 
+            // btnAddProductType
+            // 
+            btnAddProductType.Caption = "Yeni Ürün Tipi";
+            btnAddProductType.Id = 14;
+            btnAddProductType.ImageOptions.Image = UI.Properties.Resources.tag_16x16;
+            btnAddProductType.ImageOptions.LargeImage = UI.Properties.Resources.tag_32x32;
+            btnAddProductType.Name = "btnAddProductType";
+            btnAddProductType.ItemClick += btnAddProductType_ItemClick;
+            // 
+            // btnListColors
+            // 
+            btnListColors.Caption = "Renk Listesi";
+            btnListColors.Id = 15;
+            btnListColors.ImageOptions.Image = UI.Properties.Resources.colorlegend_16x16;
+            btnListColors.ImageOptions.LargeImage = UI.Properties.Resources.colorlegend_32x32;
+            btnListColors.Name = "btnListColors";
+            btnListColors.ItemClick += btnListColors_ItemClick;
+            // 
+            // btnListProductTypes
+            // 
+            btnListProductTypes.Caption = "Ürün Tipi Listesi";
+            btnListProductTypes.Id = 16;
+            btnListProductTypes.ImageOptions.Image = UI.Properties.Resources.splittablecells_16x16;
+            btnListProductTypes.ImageOptions.LargeImage = UI.Properties.Resources.splittablecells_32x32;
+            btnListProductTypes.Name = "btnListProductTypes";
+            btnListProductTypes.ItemClick += btnListProductTypes_ItemClick;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(1287, 649);
+            ClientSize = new System.Drawing.Size(1620, 649);
             Controls.Add(ribbonControl1);
             IsMdiContainer = true;
             Margin = new System.Windows.Forms.Padding(4);
@@ -278,6 +334,12 @@
         private DevExpress.XtraBars.BarButtonItem btnQualityControl;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup6;
         private DevExpress.XtraBars.BarButtonItem btnDefectedFabrics;
+        private DevExpress.XtraBars.BarButtonItem btnAddColor;
+        private DevExpress.XtraBars.BarButtonItem btnAddProductType;
+        private DevExpress.XtraBars.BarButtonItem btnListColors;
+        private DevExpress.XtraBars.BarButtonItem btnListProductTypes;
+        private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup7;
+        private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup8;
     }
 }
 
