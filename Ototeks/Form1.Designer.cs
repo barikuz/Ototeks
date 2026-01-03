@@ -42,7 +42,11 @@
             btnDashboard = new DevExpress.XtraBars.BarButtonItem();
             btnStatistics = new DevExpress.XtraBars.BarButtonItem();
             btnQualityControl = new DevExpress.XtraBars.BarButtonItem();
-            btnDefectedFabrics = new DevExpress.XtraBars.BarButtonItem();
+            btnDefectedProducts = new DevExpress.XtraBars.BarButtonItem();
+            btnAddColor = new DevExpress.XtraBars.BarButtonItem();
+            btnAddProductType = new DevExpress.XtraBars.BarButtonItem();
+            btnListColors = new DevExpress.XtraBars.BarButtonItem();
+            btnListProductTypes = new DevExpress.XtraBars.BarButtonItem();
             ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             ribbonPageGroup5 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
@@ -50,14 +54,10 @@
             ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             ribbonPageGroup3 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             ribbonPageGroup6 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            documentManager1 = new DevExpress.XtraBars.Docking2010.DocumentManager(components);
-            tabbedView1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(components);
             ribbonPageGroup7 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             ribbonPageGroup8 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            btnAddColor = new DevExpress.XtraBars.BarButtonItem();
-            btnAddProductType = new DevExpress.XtraBars.BarButtonItem();
-            btnListColors = new DevExpress.XtraBars.BarButtonItem();
-            btnListProductTypes = new DevExpress.XtraBars.BarButtonItem();
+            documentManager1 = new DevExpress.XtraBars.Docking2010.DocumentManager(components);
+            tabbedView1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(components);
             ((System.ComponentModel.ISupportInitialize)ribbonControl1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)documentManager1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)tabbedView1).BeginInit();
@@ -67,7 +67,7 @@
             // 
             ribbonControl1.EmptyAreaImageOptions.ImagePadding = new System.Windows.Forms.Padding(35, 37, 35, 37);
             ribbonControl1.ExpandCollapseItem.Id = 0;
-            ribbonControl1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl1.ExpandCollapseItem, skinRibbonGalleryBarItem1, btnYeniKumas, btnKumasListesi, btnNewOrder, btnSiparisListesi, btnNewCustomer, btnListCustomers, btnProductionTrack, btnDashboard, btnStatistics, btnQualityControl, btnDefectedFabrics, btnAddColor, btnAddProductType, btnListColors, btnListProductTypes });
+            ribbonControl1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { ribbonControl1.ExpandCollapseItem, skinRibbonGalleryBarItem1, btnYeniKumas, btnKumasListesi, btnNewOrder, btnSiparisListesi, btnNewCustomer, btnListCustomers, btnProductionTrack, btnDashboard, btnStatistics, btnQualityControl, btnDefectedProducts, btnAddColor, btnAddProductType, btnListColors, btnListProductTypes });
             ribbonControl1.Location = new System.Drawing.Point(0, 0);
             ribbonControl1.Margin = new System.Windows.Forms.Padding(4);
             ribbonControl1.MaxItemId = 17;
@@ -175,14 +175,50 @@
             btnQualityControl.Name = "btnQualityControl";
             btnQualityControl.ItemClick += btnQualityControl_ItemClick;
             // 
-            // btnDefectedFabrics
+            // btnDefectedProducts
             // 
-            btnDefectedFabrics.Caption = "Hatalı Kumaşlar";
-            btnDefectedFabrics.Id = 12;
-            btnDefectedFabrics.ImageOptions.Image = UI.Properties.Resources.warning_16x16;
-            btnDefectedFabrics.ImageOptions.LargeImage = UI.Properties.Resources.warning_32x32;
-            btnDefectedFabrics.Name = "btnDefectedFabrics";
-            btnDefectedFabrics.ItemClick += btnDefectedFabrics_ItemClick;
+            btnDefectedProducts.Caption = "Hatalı Ürünler";
+            btnDefectedProducts.Id = 12;
+            btnDefectedProducts.ImageOptions.Image = UI.Properties.Resources.warning_16x16;
+            btnDefectedProducts.ImageOptions.LargeImage = UI.Properties.Resources.warning_32x32;
+            btnDefectedProducts.Name = "btnDefectedProducts";
+            btnDefectedProducts.ItemClick += btnDefectedFabrics_ItemClick;
+            // 
+            // btnAddColor
+            // 
+            btnAddColor.Caption = "Yeni Renk";
+            btnAddColor.Id = 13;
+            btnAddColor.ImageOptions.Image = UI.Properties.Resources.colors_16x16;
+            btnAddColor.ImageOptions.LargeImage = UI.Properties.Resources.colors_32x32;
+            btnAddColor.Name = "btnAddColor";
+            btnAddColor.ItemClick += btnAddColor_ItemClick;
+            // 
+            // btnAddProductType
+            // 
+            btnAddProductType.Caption = "Yeni Ürün Tipi";
+            btnAddProductType.Id = 14;
+            btnAddProductType.ImageOptions.Image = UI.Properties.Resources.tag_16x16;
+            btnAddProductType.ImageOptions.LargeImage = UI.Properties.Resources.tag_32x32;
+            btnAddProductType.Name = "btnAddProductType";
+            btnAddProductType.ItemClick += btnAddProductType_ItemClick;
+            // 
+            // btnListColors
+            // 
+            btnListColors.Caption = "Renk Listesi";
+            btnListColors.Id = 15;
+            btnListColors.ImageOptions.Image = UI.Properties.Resources.colorlegend_16x16;
+            btnListColors.ImageOptions.LargeImage = UI.Properties.Resources.colorlegend_32x32;
+            btnListColors.Name = "btnListColors";
+            btnListColors.ItemClick += btnListColors_ItemClick;
+            // 
+            // btnListProductTypes
+            // 
+            btnListProductTypes.Caption = "Ürün Tipi Listesi";
+            btnListProductTypes.Id = 16;
+            btnListProductTypes.ImageOptions.Image = UI.Properties.Resources.splittablecells_16x16;
+            btnListProductTypes.ImageOptions.LargeImage = UI.Properties.Resources.splittablecells_32x32;
+            btnListProductTypes.Name = "btnListProductTypes";
+            btnListProductTypes.ItemClick += btnListProductTypes_ItemClick;
             // 
             // ribbonPage1
             // 
@@ -227,16 +263,9 @@
             // ribbonPageGroup6
             // 
             ribbonPageGroup6.ItemLinks.Add(btnQualityControl);
-            ribbonPageGroup6.ItemLinks.Add(btnDefectedFabrics);
+            ribbonPageGroup6.ItemLinks.Add(btnDefectedProducts);
             ribbonPageGroup6.Name = "ribbonPageGroup6";
             ribbonPageGroup6.Text = "Kalite Kontrol";
-            // 
-            // documentManager1
-            // 
-            documentManager1.MdiParent = this;
-            documentManager1.MenuManager = ribbonControl1;
-            documentManager1.View = tabbedView1;
-            documentManager1.ViewCollection.AddRange(new DevExpress.XtraBars.Docking2010.Views.BaseView[] { tabbedView1 });
             // 
             // ribbonPageGroup7
             // 
@@ -252,41 +281,12 @@
             ribbonPageGroup8.Name = "ribbonPageGroup8";
             ribbonPageGroup8.Text = "Ürün Tipi İşlemleri";
             // 
-            // btnAddColor
+            // documentManager1
             // 
-            btnAddColor.Caption = "Yeni Renk";
-            btnAddColor.Id = 13;
-            btnAddColor.ImageOptions.Image = UI.Properties.Resources.colors_16x16;
-            btnAddColor.ImageOptions.LargeImage = UI.Properties.Resources.colors_32x32;
-            btnAddColor.Name = "btnAddColor";
-            btnAddColor.ItemClick += btnAddColor_ItemClick;
-            // 
-            // btnAddProductType
-            // 
-            btnAddProductType.Caption = "Yeni Ürün Tipi";
-            btnAddProductType.Id = 14;
-            btnAddProductType.ImageOptions.Image = UI.Properties.Resources.tag_16x16;
-            btnAddProductType.ImageOptions.LargeImage = UI.Properties.Resources.tag_32x32;
-            btnAddProductType.Name = "btnAddProductType";
-            btnAddProductType.ItemClick += btnAddProductType_ItemClick;
-            // 
-            // btnListColors
-            // 
-            btnListColors.Caption = "Renk Listesi";
-            btnListColors.Id = 15;
-            btnListColors.ImageOptions.Image = UI.Properties.Resources.colorlegend_16x16;
-            btnListColors.ImageOptions.LargeImage = UI.Properties.Resources.colorlegend_32x32;
-            btnListColors.Name = "btnListColors";
-            btnListColors.ItemClick += btnListColors_ItemClick;
-            // 
-            // btnListProductTypes
-            // 
-            btnListProductTypes.Caption = "Ürün Tipi Listesi";
-            btnListProductTypes.Id = 16;
-            btnListProductTypes.ImageOptions.Image = UI.Properties.Resources.splittablecells_16x16;
-            btnListProductTypes.ImageOptions.LargeImage = UI.Properties.Resources.splittablecells_32x32;
-            btnListProductTypes.Name = "btnListProductTypes";
-            btnListProductTypes.ItemClick += btnListProductTypes_ItemClick;
+            documentManager1.MdiParent = this;
+            documentManager1.MenuManager = ribbonControl1;
+            documentManager1.View = tabbedView1;
+            documentManager1.ViewCollection.AddRange(new DevExpress.XtraBars.Docking2010.Views.BaseView[] { tabbedView1 });
             // 
             // Form1
             // 
@@ -333,7 +333,7 @@
         private DevExpress.XtraBars.BarButtonItem btnStatistics;
         private DevExpress.XtraBars.BarButtonItem btnQualityControl;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup6;
-        private DevExpress.XtraBars.BarButtonItem btnDefectedFabrics;
+        private DevExpress.XtraBars.BarButtonItem btnDefectedProducts;
         private DevExpress.XtraBars.BarButtonItem btnAddColor;
         private DevExpress.XtraBars.BarButtonItem btnAddProductType;
         private DevExpress.XtraBars.BarButtonItem btnListColors;

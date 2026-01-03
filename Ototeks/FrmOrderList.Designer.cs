@@ -33,6 +33,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmOrderList));
             gridView2 = new DevExpress.XtraGrid.Views.Grid.GridView();
             colFabricType = new DevExpress.XtraGrid.Columns.GridColumn();
+            colColor = new DevExpress.XtraGrid.Columns.GridColumn();
             colProductType = new DevExpress.XtraGrid.Columns.GridColumn();
             colQuantity = new DevExpress.XtraGrid.Columns.GridColumn();
             colCurrentStage = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -64,7 +65,7 @@
             // 
             // gridView2
             // 
-            gridView2.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { colFabricType, colProductType, colQuantity, colCurrentStage });
+            gridView2.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { colFabricType, colColor, colProductType, colQuantity, colCurrentStage });
             gridView2.GridControl = gridOrders;
             gridView2.Name = "gridView2";
             gridView2.OptionsBehavior.Editable = false;
@@ -80,6 +81,16 @@
             colFabricType.VisibleIndex = 0;
             colFabricType.Width = 94;
             // 
+            // colColor
+            // 
+            colColor.Caption = "Renk";
+            colColor.FieldName = "Fabric.Color.ColorName";
+            colColor.MinWidth = 25;
+            colColor.Name = "colColor";
+            colColor.Visible = true;
+            colColor.VisibleIndex = 1;
+            colColor.Width = 94;
+            // 
             // colProductType
             // 
             colProductType.Caption = "Ürün Türü";
@@ -87,7 +98,7 @@
             colProductType.MinWidth = 25;
             colProductType.Name = "colProductType";
             colProductType.Visible = true;
-            colProductType.VisibleIndex = 1;
+            colProductType.VisibleIndex = 2;
             colProductType.Width = 94;
             // 
             // colQuantity
@@ -97,7 +108,7 @@
             colQuantity.MinWidth = 25;
             colQuantity.Name = "colQuantity";
             colQuantity.Visible = true;
-            colQuantity.VisibleIndex = 2;
+            colQuantity.VisibleIndex = 3;
             colQuantity.Width = 94;
             // 
             // colCurrentStage
@@ -107,7 +118,7 @@
             colCurrentStage.MinWidth = 25;
             colCurrentStage.Name = "colCurrentStage";
             colCurrentStage.Visible = true;
-            colCurrentStage.VisibleIndex = 3;
+            colCurrentStage.VisibleIndex = 4;
             colCurrentStage.Width = 94;
             // 
             // gridOrders
@@ -304,6 +315,7 @@
         private DevExpress.XtraGrid.Columns.GridColumn colCustomer;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView2;
         private DevExpress.XtraGrid.Columns.GridColumn colFabricType;
+        private DevExpress.XtraGrid.Columns.GridColumn colColor;
         private DevExpress.XtraGrid.Columns.GridColumn colProductType;
         private DevExpress.XtraGrid.Columns.GridColumn colQuantity;
         private DevExpress.XtraGrid.Columns.GridColumn colCurrentStage;

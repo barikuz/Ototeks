@@ -19,7 +19,7 @@ namespace Ototeks.Business.ValidationRules
             // Kural 1: "Kumaş Kodu boş olamaz"
             RuleFor(x => x.FabricCode)
                 .NotEmpty().WithMessage("Kumaş kodu boş olamaz!")
-                .Must(arg => arg != null && arg.StartsWith("KMS")).WithMessage("Kumaş kodu KMS ile başlamalı!"); // "KMS ile başlıyor olmalı"
+                .Must(arg => arg != null && arg.StartsWith("KMS-")).WithMessage("Kumaş kodu KMS- ile başlamalı!"); // "KMS ile başlıyor olmalı"
 
             // Kural 2: "Kumaş kodu benzersiz olmalı"
             RuleFor(x => x.FabricCode)

@@ -33,6 +33,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDefectedFabricList));
             gridView2 = new DevExpress.XtraGrid.Views.Grid.GridView();
             colFabricType = new DevExpress.XtraGrid.Columns.GridColumn();
+            colColor = new DevExpress.XtraGrid.Columns.GridColumn();
             colProductType = new DevExpress.XtraGrid.Columns.GridColumn();
             colQuantity = new DevExpress.XtraGrid.Columns.GridColumn();
             colCurrentStage = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -62,7 +63,7 @@
             // 
             // gridView2
             // 
-            gridView2.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { colFabricType, colProductType, colQuantity, colCurrentStage, colDefectType, colConfidenceScore, colAnalysisDate });
+            gridView2.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { colFabricType, colColor, colProductType, colQuantity, colCurrentStage, colDefectType, colConfidenceScore, colAnalysisDate });
             gridView2.GridControl = gridControl1;
             gridView2.Name = "gridView2";
             gridView2.OptionsBehavior.Editable = false;
@@ -80,6 +81,16 @@
             colFabricType.VisibleIndex = 0;
             colFabricType.Width = 94;
             // 
+            // colColor
+            // 
+            colColor.Caption = "Renk";
+            colColor.FieldName = "ColorName";
+            colColor.MinWidth = 25;
+            colColor.Name = "colColor";
+            colColor.Visible = true;
+            colColor.VisibleIndex = 1;
+            colColor.Width = 94;
+            // 
             // colProductType
             // 
             colProductType.Caption = "Ürün Türü";
@@ -87,7 +98,7 @@
             colProductType.MinWidth = 25;
             colProductType.Name = "colProductType";
             colProductType.Visible = true;
-            colProductType.VisibleIndex = 1;
+            colProductType.VisibleIndex = 2;
             colProductType.Width = 94;
             // 
             // colQuantity
@@ -97,7 +108,7 @@
             colQuantity.MinWidth = 25;
             colQuantity.Name = "colQuantity";
             colQuantity.Visible = true;
-            colQuantity.VisibleIndex = 2;
+            colQuantity.VisibleIndex = 3;
             colQuantity.Width = 94;
             // 
             // colCurrentStage
@@ -107,7 +118,7 @@
             colCurrentStage.MinWidth = 25;
             colCurrentStage.Name = "colCurrentStage";
             colCurrentStage.Visible = true;
-            colCurrentStage.VisibleIndex = 3;
+            colCurrentStage.VisibleIndex = 4;
             colCurrentStage.Width = 94;
             // 
             // colDefectType
@@ -117,7 +128,7 @@
             colDefectType.MinWidth = 25;
             colDefectType.Name = "colDefectType";
             colDefectType.Visible = true;
-            colDefectType.VisibleIndex = 4;
+            colDefectType.VisibleIndex = 5;
             colDefectType.Width = 94;
             // 
             // colConfidenceScore
@@ -127,7 +138,7 @@
             colConfidenceScore.MinWidth = 25;
             colConfidenceScore.Name = "colConfidenceScore";
             colConfidenceScore.Visible = true;
-            colConfidenceScore.VisibleIndex = 5;
+            colConfidenceScore.VisibleIndex = 6;
             colConfidenceScore.Width = 94;
             // 
             // colAnalysisDate
@@ -137,7 +148,7 @@
             colAnalysisDate.MinWidth = 25;
             colAnalysisDate.Name = "colAnalysisDate";
             colAnalysisDate.Visible = true;
-            colAnalysisDate.VisibleIndex = 6;
+            colAnalysisDate.VisibleIndex = 7;
             colAnalysisDate.Width = 94;
             // 
             // gridControl1
@@ -304,6 +315,7 @@
         private DevExpress.XtraGrid.Columns.GridColumn colOrderStatus;
         // Detail View Columns
         private DevExpress.XtraGrid.Columns.GridColumn colFabricType;
+        private DevExpress.XtraGrid.Columns.GridColumn colColor;
         private DevExpress.XtraGrid.Columns.GridColumn colProductType;
         private DevExpress.XtraGrid.Columns.GridColumn colQuantity;
         private DevExpress.XtraGrid.Columns.GridColumn colCurrentStage;

@@ -52,6 +52,7 @@ namespace Ototeks.UI
                     "OrderItem.Order",
                     "OrderItem.Order.Customer",
                     "OrderItem.Fabric",
+                    "OrderItem.Fabric.Color",
                     "OrderItem.Type",
                     "Defect"
                 );
@@ -95,6 +96,7 @@ namespace Ototeks.UI
                             OrderItemId = item.OrderItemId,
                             QualityLogId = log.LogId, // Silme işlemi için LogId'yi de saklıyoruz
                             FabricName = item.Fabric?.FabricName ?? "-",
+                            ColorName = item.Fabric?.Color?.ColorName ?? "-",
                             TypeName = item.Type?.TypeName ?? "-",
                             Quantity = item.Quantity,
                             CurrentStage = item.CurrentStage,
@@ -331,6 +333,7 @@ namespace Ototeks.UI
         public int OrderItemId { get; set; }
         public int QualityLogId { get; set; } // Silme işlemi için QualityLog ID'si
         public string FabricName { get; set; }
+        public string ColorName { get; set; }  // Kumaş Rengi
         public string TypeName { get; set; }
         public int Quantity { get; set; }
         public OrderStatus CurrentStage { get; set; }

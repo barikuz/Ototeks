@@ -113,8 +113,9 @@ namespace Ototeks.Business.Concrete
             return _orderRepo.GetAll(null,
                 "Customer",               // 1. Müşteriyi getir
                 "OrderItems",             // 2. Kalemleri getir
-                "OrderItems.Fabric",      // 3. Kalemlerin içindeki Kumaşı da getir (İşte aradığımız bu!)
-                "OrderItems.Type"         // 4. Kalemlerin içindeki Ürün Tipini de getir
+                "OrderItems.Fabric",      // 3. Kalemlerin içindeki Kumaşı da getir
+                "OrderItems.Fabric.Color", // 4. Kumaşların Rengini getir
+                "OrderItems.Type"         // 5. Kalemlerin içindeki Ürün Tipini de getir
             );
         }
 
@@ -128,6 +129,7 @@ namespace Ototeks.Business.Concrete
                     "Customer",               // Müşteriyi getir
                     "OrderItems",             // Kalemleri getir
                     "OrderItems.Fabric",      // Kalemlerin içindeki Kumaşı getir
+                    "OrderItems.Fabric.Color", // Kumaşların Rengini getir
                     "OrderItems.Type"         // Kalemlerin içindeki Ürün Tipini getir
                 }
             );

@@ -20,6 +20,8 @@ namespace Ototeks.Business.ValidationRules
             // 1. Sipariş Numarası Kontrolü
             RuleFor(x => x.OrderNumber)
                 .NotEmpty().WithMessage("Sipariş numarası boş olamaz!")
+                .Must(arg => arg != null && arg.StartsWith("SIP-", StringComparison.OrdinalIgnoreCase))
+                    .WithMessage("Sipariş numarası 'SIP-' ile başlamalıdır!")
                 .Must(BeUniqueOrderNumber).WithMessage("Bu sipariş numarası zaten kullanılmaktadır!");
 
             // 2. Sipariş Tarihi 
