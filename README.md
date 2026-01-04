@@ -2,7 +2,7 @@
 
 **Ototeks** is a comprehensive desktop automation system designed to digitize and manage the entire lifecycle of textile production from order intake to final delivery.
 
-The system distinguishes itself with an **AI-powered Quality Control Module** that utilizes **Computer Vision (ML.NET)** to detect fabric defects (such as stains, tears, or weaving errors) automatically via camera feed or image analysis.
+The system distinguishes itself with an **AI-powered Quality Control Module** that utilizes **Computer Vision (ML.NET)** to detect fabric defects (such as stains, tears, or weaving errors) automatically via image analysis.
 
 ---
 
