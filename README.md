@@ -45,7 +45,7 @@ Since the project is built on **Database First** approach, setting up the SQL en
 
 ### 1. Database Initialization
 * The project includes a full database creation script.
-* Open `TekstilDB_Script.sql` (located in `/Database` folder) in **SQL Server Management Studio**.
+* Open `OtoteksDB_Installation__Script.sql` (located in `/DatabaseScripts` folder) in **SQL Server Management Studio**.
 * Execute the script. It will create the `OtoteksDB` and populate lookup tables (Colors, Types, etc.).
 
 ### 2. Configuration
