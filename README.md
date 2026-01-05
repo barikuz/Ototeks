@@ -23,14 +23,11 @@ You don't need to build the source code to run the application. You can download
 1.  **Download the Installer:**
     * [👉 **Click here to download Ototeks Setup (v1.0)**](https://drive.google.com/file/d/10nKvNHiSau3Vsx8u0Az62q6lAbcjkatL/view?usp=sharing)
 
-
 2.  **Run the Setup:**
     * Open the downloaded `.exe` file and follow the installation wizard instructions.
 
 3.  **Launch:**
     * Once installed, start the application from the desktop shortcut.
-
-> **Note:** The application requires a local SQL Server instance to be running. Please ensure the database is initialized using the script below.
 
 ---
 
