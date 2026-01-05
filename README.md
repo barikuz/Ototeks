@@ -16,6 +16,24 @@ The system distinguishes itself with an **AI-powered Quality Control Module** th
 
 ---
 
+## 📥 Installation (Ready-to-Use)
+
+You don't need to build the source code to run the application. You can download and install the setup file directly.
+
+1.  **Download the Installer:**
+    * [👉 **Click here to download Ototeks Setup (v1.0)**](https://drive.google.com/file/d/10nKvNHiSau3Vsx8u0Az62q6lAbcjkatL/view?usp=sharing)
+
+
+2.  **Run the Setup:**
+    * Open the downloaded `.exe` file and follow the installation wizard instructions.
+
+3.  **Launch:**
+    * Once installed, start the application from the desktop shortcut.
+
+> **Note:** The application requires a local SQL Server instance to be running. Please ensure the database is initialized using the script below.
+
+---
+
 ## 🛠️ Technology Stack
 
 * **Platform:** .NET 8.0 (Desktop)
@@ -39,9 +57,9 @@ The solution follows a strict **Separation of Concerns** principle with 4 distin
 
 ---
 
-## ⚙️ Quick Setup
+## ⚙️ Developer Setup (Source Code)
 
-Since the project is built on **Database First** approach, setting up the SQL environment is the only requirement.
+If you want to modify or build the project from source, follow these steps:
 
 ### 1. Database Initialization
 * The project includes a full database creation script.
@@ -57,7 +75,8 @@ Since the project is built on **Database First** approach, setting up the SQL en
 * Set **Ototeks.UI** as the Startup Project.
 * Press **Run**.
 
-## 🚧 Project Status
+---
 
-**Work in Progress:** This project is currently under active development.
+## ✅ Project Status
 
+**Completed:** The project has been successfully developed, tested, and the v1.0 release is ready.
