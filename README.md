@@ -36,7 +36,7 @@ You don't need to build the source code to run the application. You can download
 * **Platform:** .NET 8.0 (Desktop)
 * **Language:** C#
 * **Architecture:** N-Tier Architecture (Layered)
-* **Database:** Microsoft SQLite
+* **Database:** SQLite
 * **ORM:** Entity Framework Core (Database First approach)
 * **UI Library:** DevExpress WinForms (Ribbon Interface)
 * **Artificial Intelligence:** ML.NET (Machine Learning for .NET)
