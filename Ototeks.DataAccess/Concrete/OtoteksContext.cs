@@ -51,8 +51,8 @@ public partial class OtoteksContext : DbContext
             // 3. İçindeki 'OtoteksConn' anahtarını al
             var connectionString = configuration.GetConnectionString("OtoteksConn");
 
-            // 4. Bağlantıyı kur
-            optionsBuilder.UseSqlServer(connectionString);
+            // 4. SQLite bağlantısını kur
+            optionsBuilder.UseSqlite(connectionString);
         }
     }
 
@@ -60,9 +60,9 @@ public partial class OtoteksContext : DbContext
     {
         modelBuilder.Entity<Color>(entity =>
         {
-            entity.HasKey(e => e.ColorId).HasName("PK__Colors__8DA7676D72717B9C");
+            entity.HasKey(e => e.ColorId);
 
-            entity.HasIndex(e => e.ColorName, "UQ__Colors__C71A5A7BC5AE552F").IsUnique();
+            entity.HasIndex(e => e.ColorName).IsUnique();
 
             entity.Property(e => e.ColorId).HasColumnName("ColorID");
             entity.Property(e => e.ColorName).HasMaxLength(50);
@@ -70,7 +70,7 @@ public partial class OtoteksContext : DbContext
 
         modelBuilder.Entity<Customer>(entity =>
         {
-            entity.HasKey(e => e.CustomerId).HasName("PK__Customer__A4AE64B8C7D0F125");
+            entity.HasKey(e => e.CustomerId);
 
             entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
             entity.Property(e => e.Address).HasMaxLength(250);
@@ -81,9 +81,9 @@ public partial class OtoteksContext : DbContext
 
         modelBuilder.Entity<DefectType>(entity =>
         {
-            entity.HasKey(e => e.DefectId).HasName("PK__DefectTy__144A37FC4AEEC627");
+            entity.HasKey(e => e.DefectId);
 
-            entity.HasIndex(e => e.DefectName, "UQ__DefectTy__9409D72A7C0EE8CC").IsUnique();
+            entity.HasIndex(e => e.DefectName).IsUnique();
 
             entity.Property(e => e.DefectId).HasColumnName("DefectID");
             entity.Property(e => e.DefectName).HasMaxLength(50);
@@ -91,9 +91,9 @@ public partial class OtoteksContext : DbContext
 
         modelBuilder.Entity<Fabric>(entity =>
         {
-            entity.HasKey(e => e.FabricId).HasName("PK__Fabrics__3B1819CC9726A356");
+            entity.HasKey(e => e.FabricId);
 
-            entity.HasIndex(e => e.FabricCode, "UQ__Fabrics__46E0325C57F6A26F").IsUnique();
+            entity.HasIndex(e => e.FabricCode).IsUnique();
 
             entity.Property(e => e.FabricId).HasColumnName("FabricID");
             entity.Property(e => e.ColorId).HasColumnName("ColorID");
@@ -101,25 +101,24 @@ public partial class OtoteksContext : DbContext
             entity.Property(e => e.FabricName).HasMaxLength(100);
             entity.Property(e => e.StockQuantity)
                 .HasDefaultValue(0m)
-                .HasColumnType("decimal(10, 2)");
+                .HasColumnType("REAL");
 
             entity.HasOne(d => d.Color).WithMany(p => p.Fabrics)
                 .HasForeignKey(d => d.ColorId)
-                .HasConstraintName("FK__Fabrics__ColorID__59063A47");
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.OrderId).HasName("PK__Orders__C3905BAF1F7C6222");
+            entity.HasKey(e => e.OrderId);
 
-            entity.HasIndex(e => e.OrderNumber, "UQ__Orders__CAC5E74398F5B81C").IsUnique();
+            entity.HasIndex(e => e.OrderNumber).IsUnique();
 
             entity.Property(e => e.OrderId).HasColumnName("OrderID");
             entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
-            entity.Property(e => e.DueDate).HasColumnType("datetime");
+            entity.Property(e => e.DueDate).HasColumnType("TEXT");
             entity.Property(e => e.OrderDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
+                .HasColumnType("TEXT");
             entity.Property(e => e.OrderNumber).HasMaxLength(20);
             entity.Property(e => e.OrderStatus)
                 .HasDefaultValue(OrderStatus.Pending)
@@ -127,12 +126,12 @@ public partial class OtoteksContext : DbContext
 
             entity.HasOne(d => d.Customer).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.CustomerId)
-                .HasConstraintName("FK__Orders__Customer__5DCAEF64");
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<OrderItem>(entity =>
         {
-            entity.HasKey(e => e.OrderItemId).HasName("PK__OrderIte__57ED06A1395F2741");
+            entity.HasKey(e => e.OrderItemId);
 
             entity.Property(e => e.OrderItemId).HasColumnName("OrderItemID");
             entity.Property(e => e.CurrentStage)
@@ -145,61 +144,60 @@ public partial class OtoteksContext : DbContext
 
             entity.HasOne(d => d.Fabric).WithMany(p => p.OrderItems)
                 .HasForeignKey(d => d.FabricId)
-                .HasConstraintName("FK__OrderItem__Fabri__6383C8BA");
+                .OnDelete(DeleteBehavior.SetNull);
 
             entity.HasOne(d => d.Order).WithMany(p => p.OrderItems)
                 .HasForeignKey(d => d.OrderId)
-                .HasConstraintName("FK__OrderItem__Order__628FA481");
+                .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(d => d.ProcessedByUser).WithMany(p => p.OrderItems)
                 .HasForeignKey(d => d.ProcessedByUserId)
-                .HasConstraintName("FK__OrderItem__Proce__66603565");
+                .OnDelete(DeleteBehavior.SetNull);
 
             entity.HasOne(d => d.Type).WithMany(p => p.OrderItems)
                 .HasForeignKey(d => d.TypeId)
-                .HasConstraintName("FK__OrderItem__TypeI__6477ECF3");
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<ProductType>(entity =>
         {
-            entity.HasKey(e => e.TypeId).HasName("PK__ProductT__516F03953125B8B9");
+            entity.HasKey(e => e.TypeId);
 
-            entity.HasIndex(e => e.TypeName, "UQ__ProductT__D4E7DFA8BA321818").IsUnique();
+            entity.HasIndex(e => e.TypeName).IsUnique();
 
             entity.Property(e => e.TypeId).HasColumnName("TypeID");
             entity.Property(e => e.TypeName).HasMaxLength(50);
             entity.Property(e => e.RequiredFabricAmount)
                 .HasDefaultValue(0m)
-                .HasColumnType("decimal(10, 2)");
+                .HasColumnType("REAL");
         });
 
         modelBuilder.Entity<QualityLog>(entity =>
         {
-            entity.HasKey(e => e.LogId).HasName("PK__QualityL__5E5499A86E79C6F8");
+            entity.HasKey(e => e.LogId);
 
             entity.Property(e => e.LogId).HasColumnName("LogID");
             entity.Property(e => e.DefectId).HasColumnName("DefectID");
             entity.Property(e => e.ImagePath).HasMaxLength(500);
             entity.Property(e => e.InspectionDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
+                .HasColumnType("TEXT");
             entity.Property(e => e.OperatorNote).HasMaxLength(200);
             entity.Property(e => e.OrderItemId).HasColumnName("OrderItemID");
 
             entity.HasOne(d => d.Defect).WithMany(p => p.QualityLogs)
                 .HasForeignKey(d => d.DefectId)
-                .HasConstraintName("FK__QualityLo__Defec__6B24EA82");
+                .OnDelete(DeleteBehavior.SetNull);
 
             entity.HasOne(d => d.OrderItem).WithMany(p => p.QualityLogs)
                 .HasForeignKey(d => d.OrderItemId)
-                .HasConstraintName("FK__QualityLo__Order__693CA210");
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC0B4E0F88");
+            entity.HasKey(e => e.UserId);
 
-            entity.HasIndex(e => e.Username, "UQ__Users__536C85E4A40874B6").IsUnique();
+            entity.HasIndex(e => e.Username).IsUnique();
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.Property(e => e.FullName).HasMaxLength(100);
