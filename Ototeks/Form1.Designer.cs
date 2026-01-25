@@ -299,7 +299,7 @@
             Name = "Form1";
             Ribbon = ribbonControl1;
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            Text = "Ototeks";
+            Text = "Ototechstil";
             WindowState = System.Windows.Forms.FormWindowState.Maximized;
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)ribbonControl1).EndInit();

@@ -1,6 +1,6 @@
-# 🏭 Ototeks - Smart Textile Production Automation
+# 🏭 Ototechstil - Smart Textile Production Automation
 
-**Ototeks** is a comprehensive desktop automation system designed to digitize and manage the entire lifecycle of textile production from order intake to final delivery.
+**Ototechstil** is a comprehensive desktop automation system designed to digitize and manage the entire lifecycle of textile production from order intake to final delivery.
 
 The system distinguishes itself with an **AI-powered Quality Control Module** that utilizes **Computer Vision (ML.NET)** to detect fabric defects (such as stains, tears, or weaving errors) automatically via image analysis.
 
@@ -21,7 +21,7 @@ The system distinguishes itself with an **AI-powered Quality Control Module** th
 You don't need to build the source code to run the application. You can download and install the setup file directly.
 
 1.  **Download the Installer:**
-    * [👉 **Click here to download Ototeks Setup (v1.0)**](https://drive.google.com/file/d/10nKvNHiSau3Vsx8u0Az62q6lAbcjkatL/view?usp=sharing)
+    * [👉 **Click here to download Ototechstil Setup (v1.0)**](https://drive.google.com/file/d/10nKvNHiSau3Vsx8u0Az62q6lAbcjkatL/view?usp=sharing)
 
 2.  **Run the Setup:**
     * Open the downloaded `.exe` file and follow the installation wizard instructions.
@@ -58,16 +58,7 @@ The solution follows a strict **Separation of Concerns** principle with 4 distin
 
 If you want to modify or build the project from source, follow these steps:
 
-### 1. Database Initialization
-* The project includes a full database creation script.
-* Open `OtoteksDB_Installation__Script.sql` (located in `/DatabaseScripts` folder) in **SQL Server Management Studio**.
-* Execute the script. It will create the `OtoteksDB` and populate lookup tables (Colors, Types, etc.).
-
-### 2. Configuration
-* Navigate to `Ototeks (UI)` folder and open `appsettings.json`.
-* Ensure the **Server** parameter matches your local SQL Server instance name (e.g., `.\SQLEXPRESS` or `LOCALHOST`).
-
-### 3. Build
+### 1. Build
 * Open the solution in **Visual Studio 2022**.
 * Set **Ototeks.UI** as the Startup Project.
 * Press **Run**.

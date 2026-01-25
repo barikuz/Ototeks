@@ -5,6 +5,10 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>Ototeks.ico</ApplicationIcon>
+    <AssemblyName>OtoTechstil</AssemblyName>
+    <Title>OtoTechstil Otomasyon Sistemi</Title>
+    <Company>Engin Saçan</Company>
+    <Description>Tekstil Üretim ve Kalite Takip Sistemi</Description>
   </PropertyGroup>
 
   <ItemGroup>
