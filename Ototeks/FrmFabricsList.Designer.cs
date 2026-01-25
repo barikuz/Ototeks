@@ -38,9 +38,9 @@
             colStockQuantity = new DevExpress.XtraGrid.Columns.GridColumn();
             colColor = new DevExpress.XtraGrid.Columns.GridColumn();
             sagTikMenu = new DevExpress.XtraBars.PopupMenu(components);
+            btnUpdate = new DevExpress.XtraBars.BarButtonItem();
             btnDelete = new DevExpress.XtraBars.BarButtonItem();
             btnAdd = new DevExpress.XtraBars.BarButtonItem();
-            btnUpdate = new DevExpress.XtraBars.BarButtonItem();
             barManager1 = new DevExpress.XtraBars.BarManager(components);
             barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
@@ -57,10 +57,10 @@
             // 
             gridControl1.DataSource = bindingSource1;
             gridControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            gridControl1.Location = new System.Drawing.Point(32, 32);
+            gridControl1.Location = new System.Drawing.Point(0, 0);
             gridControl1.MainView = gridView1;
             gridControl1.Name = "gridControl1";
-            gridControl1.Size = new System.Drawing.Size(787, 548);
+            gridControl1.Size = new System.Drawing.Size(851, 612);
             gridControl1.TabIndex = 0;
             gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gridView1 });
             // 
@@ -123,6 +123,14 @@
             sagTikMenu.Manager = barManager1;
             sagTikMenu.Name = "sagTikMenu";
             // 
+            // btnUpdate
+            // 
+            btnUpdate.Caption = "Güncelle";
+            btnUpdate.Id = 2;
+            btnUpdate.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("btnUpdate.ImageOptions.SvgImage");
+            btnUpdate.Name = "btnUpdate";
+            btnUpdate.ItemClick += btnUpdate_ItemClick;
+            // 
             // btnDelete
             // 
             btnDelete.Caption = "Sil";
@@ -139,14 +147,6 @@
             btnAdd.Name = "btnAdd";
             btnAdd.ItemClick += btnAdd_ItemClick;
             // 
-            // btnUpdate
-            // 
-            btnUpdate.Caption = "Güncelle";
-            btnUpdate.Id = 2;
-            btnUpdate.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("btnUpdate.ImageOptions.SvgImage");
-            btnUpdate.Name = "btnUpdate";
-            btnUpdate.ItemClick += btnUpdate_ItemClick;
-            // 
             // barManager1
             // 
             barManager1.DockControls.Add(barDockControlTop);
@@ -161,35 +161,35 @@
             // 
             barDockControlTop.CausesValidation = false;
             barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
-            barDockControlTop.Location = new System.Drawing.Point(32, 32);
+            barDockControlTop.Location = new System.Drawing.Point(0, 0);
             barDockControlTop.Manager = barManager1;
-            barDockControlTop.Size = new System.Drawing.Size(787, 0);
+            barDockControlTop.Size = new System.Drawing.Size(851, 0);
             // 
             // barDockControlBottom
             // 
             barDockControlBottom.CausesValidation = false;
             barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            barDockControlBottom.Location = new System.Drawing.Point(32, 580);
+            barDockControlBottom.Location = new System.Drawing.Point(0, 612);
             barDockControlBottom.Manager = barManager1;
-            barDockControlBottom.Size = new System.Drawing.Size(787, 0);
+            barDockControlBottom.Size = new System.Drawing.Size(851, 0);
             // 
             // barDockControlLeft
             // 
             barDockControlLeft.CausesValidation = false;
             barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
-            barDockControlLeft.Location = new System.Drawing.Point(32, 32);
+            barDockControlLeft.Location = new System.Drawing.Point(0, 0);
             barDockControlLeft.Manager = barManager1;
-            barDockControlLeft.Size = new System.Drawing.Size(0, 548);
+            barDockControlLeft.Size = new System.Drawing.Size(0, 612);
             // 
             // barDockControlRight
             // 
             barDockControlRight.CausesValidation = false;
             barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-            barDockControlRight.Location = new System.Drawing.Point(819, 32);
+            barDockControlRight.Location = new System.Drawing.Point(851, 0);
             barDockControlRight.Manager = barManager1;
-            barDockControlRight.Size = new System.Drawing.Size(0, 548);
+            barDockControlRight.Size = new System.Drawing.Size(0, 612);
             // 
-            // FrmListFabrics
+            // FrmFabricsList
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -200,8 +200,7 @@
             Controls.Add(barDockControlBottom);
             Controls.Add(barDockControlTop);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            Name = "FrmListFabrics";
-            Padding = new System.Windows.Forms.Padding(32);
+            Name = "FrmFabricsList";
             Text = "Kumaş Listesi";
             WindowState = System.Windows.Forms.FormWindowState.Maximized;
             Load += FrmListFabrics_Load;
