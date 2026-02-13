@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ototeks.Entities;
 
@@ -14,6 +15,9 @@ public partial class Fabric
     public int? ColorId { get; set; }
 
     public decimal? StockQuantity { get; set; }
+
+    [NotMapped]
+    public string DisplayName => $"{FabricCode} - {FabricName}";
 
     public virtual Color? Color { get; set; }
 

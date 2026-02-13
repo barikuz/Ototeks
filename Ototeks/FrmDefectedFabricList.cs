@@ -97,7 +97,7 @@ namespace Ototeks.UI
                         {
                             OrderItemId = item.OrderItemId,
                             QualityLogId = log.LogId, // Also store LogId for delete operation
-                            FabricName = item.Fabric?.FabricName ?? "-",
+                            FabricName = item.Fabric != null ? $"{item.Fabric.FabricCode} - {item.Fabric.FabricName}" : "-",
                             ColorName = item.Fabric?.Color?.ColorName ?? "-",
                             TypeName = item.Type?.TypeName ?? "-",
                             Quantity = item.Quantity,

@@ -180,8 +180,8 @@ namespace Ototeks.UI
             //
             repoFabric.AutoHeight = false;
             repoFabric.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
-            repoFabric.Columns.AddRange(new DevExpress.XtraEditors.Controls.LookUpColumnInfo[] { new DevExpress.XtraEditors.Controls.LookUpColumnInfo("FabricName", "Fabric Name") });
-            repoFabric.DisplayMember = "FabricName";
+            repoFabric.Columns.AddRange(new DevExpress.XtraEditors.Controls.LookUpColumnInfo[] { new DevExpress.XtraEditors.Controls.LookUpColumnInfo("FabricCode", "Code"), new DevExpress.XtraEditors.Controls.LookUpColumnInfo("FabricName", "Fabric Name") });
+            repoFabric.DisplayMember = "DisplayName";
             repoFabric.Name = "repoFabric";
             repoFabric.NullText = "Select a fabric...";
             repoFabric.ValueMember = "FabricId";

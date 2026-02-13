@@ -122,8 +122,16 @@ namespace Ototeks.UI
         {
             _uiHelper.HandlePopupMenuShowing(e);
 
-            // Update the "Cancel" / "Reactivate" button based on selected order
-            UpdateCancelButtonState();
+            if (e.HitInfo.InRow)
+            {
+                // Update the "Cancel" / "Reactivate" button based on selected order
+                UpdateCancelButtonState();
+                btnCancel.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+            }
+            else
+            {
+                btnCancel.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+            }
         }
 
         /// <summary>

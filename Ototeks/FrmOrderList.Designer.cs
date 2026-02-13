@@ -74,7 +74,7 @@ namespace Ototeks.UI
             // colFabricType
             //
             colFabricType.Caption = "Fabric Type";
-            colFabricType.FieldName = "Fabric.FabricName";
+            colFabricType.FieldName = "Fabric.DisplayName";
             colFabricType.MinWidth = 25;
             colFabricType.Name = "colFabricType";
             colFabricType.Visible = true;
