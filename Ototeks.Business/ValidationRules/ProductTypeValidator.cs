@@ -16,53 +16,53 @@ namespace Ototeks.Business.ValidationRules
             _productTypeRepo = productTypeRepo;
             _currentTypeId = currentTypeId;
 
-            // Kural 1: "Ürün tipi adý boþ olamaz"
+            // Rule 1: Product type name cannot be empty
             RuleFor(x => x.TypeName)
-                .NotEmpty().WithMessage("Ürün tipi adý boþ olamaz!")
-                .MinimumLength(2).WithMessage("Ürün tipi adý en az 2 karakter olmalýdýr!");
+                .NotEmpty().WithMessage("Product type name cannot be empty!")
+                .MinimumLength(2).WithMessage("Product type name must be at least 2 characters!");
 
-            // Kural 2: "Ürün tipi adý benzersiz olmalý"
+            // Rule 2: Product type name must be unique
             RuleFor(x => x.TypeName)
-                .Must(BeUniqueName).WithMessage("Bu ürün tipi adý zaten sistemde kayýtlý!");
+                .Must(BeUniqueName).WithMessage("This product type name is already registered in the system!");
 
-            // Kural 3: "Gerekli kumaþ miktarý 0'dan büyük olmalý"
+            // Rule 3: Required fabric amount must be greater than 0
             RuleFor(x => x.RequiredFabricAmount)
-                .GreaterThan(0).WithMessage("Gerekli kumaþ miktarý 0'dan büyük olmalýdýr!");
+                .GreaterThan(0).WithMessage("Required fabric amount must be greater than 0!");
         }
 
-        // Benzersizlik Kontrolü
+        // Uniqueness check
         private bool BeUniqueName(string typeName)
         {
             if (string.IsNullOrEmpty(typeName))
                 return true;
 
             var dbList = _productTypeRepo.GetAll();
-            var existingType = dbList.FirstOrDefault(x => 
+            var existingType = dbList.FirstOrDefault(x =>
                 x.TypeName != null && x.TypeName.Equals(typeName, StringComparison.OrdinalIgnoreCase));
-            
+
             if (existingType == null)
             {
-                return true; // Yok, benzersiz
+                return true; // Not found, unique
             }
-            
-            // Güncelleme modundaysak ve bulunan kayýt ayný kayýtsa sorun yok
+
+            // If updating and the found record is the same record, it's fine
             if (_currentTypeId.HasValue && existingType.TypeId == _currentTypeId.Value)
             {
                 return true;
             }
-            
-            return false; // Baþka kayýtta var
+
+            return false; // Exists in another record
         }
 
-        // Silme Kontrolü Metodu
+        // Deletion validation
         public void ValidateForDeletion(ProductType productType)
         {
-            // Bu ürün tipinin sipariþ kalemlerinde kullanýlýp kullanýlmadýðýný kontrol et
+            // Check if this product type is used in any order items
             var typeWithOrderItems = _productTypeRepo.GetById(pt => pt.TypeId == productType.TypeId, "OrderItems");
-            
+
             if (typeWithOrderItems?.OrderItems != null && typeWithOrderItems.OrderItems.Any())
             {
-                throw new Exception($"'{productType.TypeName}' ürün tipi silinemez! Bu ürün tipi {typeWithOrderItems.OrderItems.Count} adet sipariþ kaleminde kullanýlmaktadýr.");
+                throw new Exception($"Product type '{productType.TypeName}' cannot be deleted! It is used in {typeWithOrderItems.OrderItems.Count} order item(s).");
             }
         }
     }

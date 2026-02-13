@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Ototeks.DataAccess.Abstract;
 using Ototeks.DataAccess.Concrete;
 using Ototeks.Entities;
@@ -10,90 +10,89 @@ namespace Ototeks.Business.ValidationRules
     public class OrderValidator : AbstractValidator<Order>
     {
         private readonly IGenericRepository<Order> _orderRepository;
-        private readonly int? _currentOrderId; // Güncellenen kaydın ID'si
+        private readonly int? _currentOrderId; // ID of the record being updated
 
         public OrderValidator(IGenericRepository<Order> orderRepository, int? currentOrderId = null)
         {
             _orderRepository = orderRepository;
             _currentOrderId = currentOrderId;
 
-            // 1. Sipariş Numarası Kontrolü
+            // 1. Order Number Validation
             RuleFor(x => x.OrderNumber)
-                .NotEmpty().WithMessage("Sipariş numarası boş olamaz!")
-                .Must(arg => arg != null && arg.StartsWith("SIP-", StringComparison.OrdinalIgnoreCase))
-                    .WithMessage("Sipariş numarası 'SIP-' ile başlamalıdır!")
-                .Must(BeUniqueOrderNumber).WithMessage("Bu sipariş numarası zaten kullanılmaktadır!");
+                .NotEmpty().WithMessage("Order number cannot be empty!")
+                .Must(arg => arg != null && arg.StartsWith("ORD-", StringComparison.OrdinalIgnoreCase))
+                    .WithMessage("Order number must start with 'ORD-'!")
+                .Must(BeUniqueOrderNumber).WithMessage("This order number is already in use!");
 
-            // 2. Sipariş Tarihi 
+            // 2. Order Date Validation
             RuleFor(x => x.OrderDate)
-                .NotNull().WithMessage("Lütfen bir sipariş tarihi seçiniz!")
+                .NotNull().WithMessage("Please select an order date!")
                 .Must(date => date.Value != default(DateTime))
-                .WithMessage("Lütfen geçerli bir sipariş tarihi seçiniz!");
+                .WithMessage("Please select a valid order date!");
 
-            // 3. Müşteri Seçimi Kontrolü
-            // (CustomerID int olduğu için 0'dan büyük olmalı)
+            // 3. Customer Selection Validation
+            // CustomerID must be greater than 0 since it is an int
             RuleFor(x => x.CustomerId)
-                .GreaterThan(0).WithMessage("Lütfen bir müşteri seçiniz!");
+                .GreaterThan(0).WithMessage("Please select a customer!");
 
-            // 4. Liste Boş Olamaz Kontrolü (Ana Liste Kontrolü)
+            // 4. Order Items List Validation
             RuleFor(x => x.OrderItems)
-                .NotNull().WithMessage("Liste boş olamaz!")
+                .NotNull().WithMessage("Order items list cannot be empty!")
                 .Must(items => items.Count > 0)
-                .WithMessage("Siparişe en az bir ürün eklemelisiniz!");
+                .WithMessage("You must add at least one item to the order!");
 
-            // 5. DETAYLI LİSTE KONTROLÜ
-            // Listenin içindeki HER BİR elemanı tek tek gezer ve kontrol eder.
+            // 5. Detailed Item Validation
+            // Iterates through each item in the list and validates individually using ChildRules,
+            // which scopes validation rules for each item under the parent order's validation context.
             RuleForEach(x => x.OrderItems).ChildRules(items =>
             {
-                // Ürün Tipi Kontrolü (nullable int için doğru kontrol)
+                // Product Type Validation (correct check for nullable int)
                 items.RuleFor(x => x.TypeId)
-                     .NotNull().WithMessage("Listede 'Ürün Tipi' seçilmemiş satırlar var!");
+                     .NotNull().WithMessage("There are rows with no 'Product Type' selected!");
 
-                // Kumaş Kontrolü (nullable int için doğru kontrol)
+                // Fabric Validation (correct check for nullable int)
                 items.RuleFor(x => x.FabricId)
-                     .NotNull().WithMessage(item => $"'{GetProductTypeName(item)}' için 'Kumaş Türü' seçilmemiş!");
+                     .NotNull().WithMessage(item => $"'Fabric Type' is not selected for '{GetProductTypeName(item)}'!");
 
-                // Adet Kontrolü
+                // Quantity Validation
                 items.RuleFor(x => x.Quantity)
                      .GreaterThan(0)
-                     .WithMessage(item => $"'{GetProductTypeName(item)}' için ADET girmelisiniz!");
+                     .WithMessage(item => $"You must enter a QUANTITY for '{GetProductTypeName(item)}'!");
             });
         }
 
-        // Ürün tipi adını getiren yardımcı metot
+        // Helper method to retrieve the product type name
         private string GetProductTypeName(OrderItem item)
         {
-            // TypeId'den ProductType'ı çek
             if (item.TypeId.HasValue)
             {
                 var productTypeRepo = new GenericRepository<ProductType>();
                 var productType = productTypeRepo.GetById(item.TypeId.Value);
-                return productType?.TypeName ?? "Bilinmeyen Ürün";
+                return productType?.TypeName ?? "Unknown Product";
             }
 
-            return "Seçilmemiş";
+            return "Not Selected";
         }
 
-        // Sipariş numarası benzersizlik kontrolü
+        // Order number uniqueness check
         private bool BeUniqueOrderNumber(Order order, string orderNumber)
         {
-            // Veritabanından aynı numaraya sahip sipariş var mı kontrol et
             var existingOrders = _orderRepository.GetAll();
-            var existingOrder = existingOrders.FirstOrDefault(x => 
+            var existingOrder = existingOrders.FirstOrDefault(x =>
                 x.OrderNumber.Equals(orderNumber, StringComparison.OrdinalIgnoreCase));
 
             if (existingOrder == null)
             {
-                return true; // Numara yok, benzersiz
+                return true; // Not found, unique
             }
 
-            // Eğer güncelleme modundaysak ve bulunan kayıt aynı kayıtsa sorun yok
+            // If updating and the found record is the same record, it's fine
             if (_currentOrderId.HasValue && existingOrder.OrderId == _currentOrderId.Value)
             {
-                return true; // Aynı kayıt, sorun yok
+                return true; // Same record, no conflict
             }
 
-            return false; // Başka kayıtta var, benzersiz değil
+            return false; // Exists in another record, not unique
         }
     }
 }

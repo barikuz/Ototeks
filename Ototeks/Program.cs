@@ -7,7 +7,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using Ototeks.UI.Helpers;
 using Ototeks.DataAccess.Concrete;
 
 namespace Ototeks
@@ -23,43 +22,40 @@ namespace Ototeks
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             
-            // Veritabanını başlat (yoksa oluştur)
+            // Initialize the database (create if it doesn't exist)
             InitializeDatabase();
-            
-            // 1. Grid Tercümanı
-            DevExpress.XtraGrid.Localization.GridLocalizer.Active = new TurkishGridLocalizer();
 
             DevExpress.LookAndFeel.UserLookAndFeel.Default.SetSkinStyle("WXI");
             Application.Run(new Form1());
         }
 
         /// <summary>
-        /// SQLite veritabanını başlatır. Veritabanı dosyası yoksa oluşturur.
+        /// Initializes the SQLite database. Creates the database file if it doesn't exist.
         /// </summary>
         private static void InitializeDatabase()
         {
             try
             {
                 using var context = new OtoteksContext();
-                // Veritabanını ve tabloları oluştur (yoksa)
+                // Create database and tables (if they don't exist)
                 context.Database.EnsureCreated();
                 
-                // Varsayılan verileri ekle (eğer yoksa)
+                // Add default data (if it doesn't exist)
                 SeedDefaultData(context);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Veritabanı başlatılırken hata oluştu:\n{ex.Message}", 
-                    "Veritabanı Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error initializing database:\n{ex.Message}",
+                    "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         /// <summary>
-        /// Varsayılan verileri ekler (hata türleri, vb.)
+        /// Adds default seed data (defect types, etc.)
         /// </summary>
         private static void SeedDefaultData(OtoteksContext context)
         {
-            // Varsayılan hata türlerini ekle
+            // Add default defect types
             if (!context.DefectTypes.Any())
             {
                 context.DefectTypes.AddRange(

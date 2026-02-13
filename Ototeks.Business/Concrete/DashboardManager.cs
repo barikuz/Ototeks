@@ -23,7 +23,7 @@ namespace Ototeks.Business.Concrete
         }
 
         /// <summary>
-        /// Bekleyen sipariþ sayýsýný getirir (Sadece OrderStatus.Pending olanlar)
+        /// Returns the count of orders with Pending status.
         /// </summary>
         public int GetPendingOrderCount()
         {
@@ -32,8 +32,8 @@ namespace Ototeks.Business.Concrete
         }
 
         /// <summary>
-        /// Kritik stok seviyesindeki kumaþ sayýsýný getirir
-        /// Varsayýlan eþik: 50 metre
+        /// Returns the count of fabrics below the critical stock threshold.
+        /// Default threshold: 50 meters.
         /// </summary>
         public int GetCriticalStockCount(decimal threshold = 50)
         {
@@ -42,13 +42,13 @@ namespace Ototeks.Business.Concrete
         }
 
         /// <summary>
-        /// Sipariþ vermiþ tekil müþteri sayýsýný getirir
+        /// Returns the number of distinct customers who have placed orders.
         /// </summary>
         public int GetCustomerWithOrdersCount()
         {
             var orders = _orderRepo.GetAll();
-            
-            // Benzersiz müþteri ID'lerini say (CustomerId null olmayanlar)
+
+            // Count unique customer IDs, excluding nulls
             return orders
                 .Where(o => o.CustomerId.HasValue)
                 .Select(o => o.CustomerId.Value)
@@ -57,7 +57,10 @@ namespace Ototeks.Business.Concrete
         }
 
         /// <summary>
-        /// En çok sipariþ edilen ürün tiplerini getirir
+        /// Returns the most ordered product types ranked by total quantity.
+        /// Groups all order items by their product type name, sums the quantities for each group,
+        /// sorts them in descending order, and returns the top N results as a dictionary
+        /// mapping product type name to total ordered quantity.
         /// </summary>
         public Dictionary<string, int> GetTopOrderedProducts(int topCount = 5)
         {
@@ -69,7 +72,7 @@ namespace Ototeks.Business.Concrete
                 .Select(g => new { ProductName = g.Key, TotalQuantity = g.Sum(oi => oi.Quantity) })
                 .OrderByDescending(x => x.TotalQuantity)
                 .Take(topCount)
-                .ToDictionary(x => x.ProductName ?? "Bilinmiyor", x => x.TotalQuantity);
+                .ToDictionary(x => x.ProductName ?? "Unknown", x => x.TotalQuantity);
 
             return topProducts;
         }

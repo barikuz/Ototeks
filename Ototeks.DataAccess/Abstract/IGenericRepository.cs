@@ -1,27 +1,23 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace Ototeks.DataAccess.Abstract
 {
-    // <T> demek: Bana hangi tabloyu (Sınıfı) gönderirsen onun için çalışırım demek.
-    // where T : class demek: T yerine sadece bir Class (Tablo) gelebilir, int/string gelemez demek.
+    // Generic repository interface: works with any entity class T.
+    // "where T : class" ensures only reference types (entity classes) can be used, not value types.
     public interface IGenericRepository<T> where T : class
     {
-        // Ekleme
         void Add(T entity);
 
-        // Silme
         void Delete(T entity);
 
-        // Güncelleme
         void Update(T entity);
 
-        // Tek bir kayıt getir (ID'ye göre)
+        // Retrieve a single record by its primary key
         T GetById(int id);
 
         T GetById(Expression<Func<T, bool>> filter, params string[] includeProperties);
 
-        // Hepsini listele
         List<T> GetAll();
 
         List<T> GetAll(Expression<Func<T, bool>> filter = null, params string[] includeProperties);

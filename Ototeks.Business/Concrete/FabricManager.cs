@@ -21,23 +21,15 @@ namespace Ototeks.Business.Concrete
 
         public void Add(Fabric fabric)
         {
-            // 1. Veriyi Standartlaştır
             FormatData(fabric);
-
-            // 2. Validasyon
             CheckValidation(fabric);
-
-            // 3. Kuralları geçtiyse Repository'e gönder
             _fabricRepo.Add(fabric);
         }
 
         public void Delete(Fabric fabric)
         {
-            // 1. Validasyon
             var validator = new FabricValidator(_fabricRepo);
             validator.ValidateForDeletion(fabric);
-
-            // 2. Validasyon geçtiyse güvenle sil
             _fabricRepo.Delete(fabric);
         }
 
@@ -53,19 +45,13 @@ namespace Ototeks.Business.Concrete
 
         public void Update(Fabric fabric)
         {
-            // 1. Veriyi Standartlaştır
             FormatData(fabric);
-
-            // 2. Validasyon (Güncelleme için fabric ID'si ile)
             CheckValidation(fabric, fabric.FabricId);
-
-            // 3. Kuralları geçtiyse Repository'e gönder
             _fabricRepo.Update(fabric);
         }
 
-        // --- YARDIMCI METOTLAR ---
-        
-        // Validasyon Metodu
+        // --- HELPER METHODS ---
+
         private void CheckValidation(Fabric fabric, int? excludeId = null)
         {
             var validator = new FabricValidator(_fabricRepo, excludeId);
@@ -73,12 +59,10 @@ namespace Ototeks.Business.Concrete
 
             if (!result.IsValid)
             {
-                // İlk hatayı fırlat
                 throw new Exception(result.Errors[0].ErrorMessage);
             }
         }
 
-        // Veriyi Temizle
         private static void FormatData(Fabric fabric)
         {
             fabric.FabricCode = fabric.FabricCode?.Trim().ToUpper();

@@ -5,26 +5,26 @@ namespace Ototeks.Business.Abstract
     public interface IDashboardService
     {
         /// <summary>
-        /// Bekleyen sipariþ sayýsýný getirir (Pending, Cutting, Sewing, Ironing, QualityControl durumundakiler)
+        /// Gets the count of pending orders (in Pending, Cutting, Sewing, Ironing, or QualityControl status)
         /// </summary>
         int GetPendingOrderCount();
 
         /// <summary>
-        /// Kritik stok seviyesindeki kumaþ sayýsýný getirir
+        /// Gets the count of fabrics at critical stock level
         /// </summary>
-        /// <param name="threshold">Kritik stok eþiði (varsayýlan: 50 metre)</param>
+        /// <param name="threshold">Critical stock threshold (default: 50 meters)</param>
         int GetCriticalStockCount(decimal threshold = 50);
 
         /// <summary>
-        /// Sipariþ vermiþ toplam müþteri sayýsýný getirir (tekil müþteriler)
+        /// Gets the total count of unique customers who have placed orders
         /// </summary>
         int GetCustomerWithOrdersCount();
 
         /// <summary>
-        /// En çok sipariþ edilen ürün tiplerini getirir
+        /// Gets the most ordered product types
         /// </summary>
-        /// <param name="topCount">Kaç ürün getirileceði</param>
-        /// <returns>Ürün tipi adý ve toplam sipariþ adedi</returns>
+        /// <param name="topCount">Number of products to retrieve</param>
+        /// <returns>Product type name and total order quantity pairs</returns>
         Dictionary<string, int> GetTopOrderedProducts(int topCount = 5);
     }
 }

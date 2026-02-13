@@ -6,37 +6,37 @@ namespace Ototeks.Business.Abstract
     public interface IStockService
     {
         /// <summary>
-        /// Belirtilen sipariþ kalemleri için gerekli kumaþ miktarýný hesaplar
+        /// Calculates the required fabric amounts for the given order items
         /// </summary>
-        /// <param name="orderItems">Sipariþ kalemleri</param>
-        /// <returns>Kumaþ ID'si ve gerekli miktar çiftleri</returns>
+        /// <param name="orderItems">Order items</param>
+        /// <returns>Fabric ID and required amount pairs</returns>
         Dictionary<int, decimal> CalculateRequiredFabricAmounts(ICollection<OrderItem> orderItems);
 
         /// <summary>
-        /// Belirtilen kumaþ için yeterli stok olup olmadýðýný kontrol eder
+        /// Checks whether sufficient stock is available for the given fabric
         /// </summary>
-        /// <param name="fabricId">Kumaþ ID'si</param>
-        /// <param name="requiredAmount">Gerekli miktar</param>
-        /// <returns>Yeterli stok var mý?</returns>
+        /// <param name="fabricId">Fabric ID</param>
+        /// <param name="requiredAmount">Required amount</param>
+        /// <returns>True if sufficient stock is available</returns>
         bool HasSufficientStock(int fabricId, decimal requiredAmount);
 
         /// <summary>
-        /// Sipariþ için tüm kumaþlarýn stokunu kontrol eder
+        /// Checks stock availability for all fabrics in the order
         /// </summary>
-        /// <param name="orderItems">Sipariþ kalemleri</param>
-        /// <returns>Stok yetersizlikleri (kumaþ adý ve yetersizlik miktarlarý)</returns>
+        /// <param name="orderItems">Order items</param>
+        /// <returns>Stock shortages (fabric name and shortage amount pairs)</returns>
         Dictionary<string, decimal> CheckStockAvailability(ICollection<OrderItem> orderItems);
 
         /// <summary>
-        /// Sipariþ onaylandýktan sonra kumaþ stoklarýndan gerekli miktarlarý düþer
+        /// Deducts the required amounts from fabric stocks after order confirmation
         /// </summary>
-        /// <param name="orderItems">Sipariþ kalemleri</param>
+        /// <param name="orderItems">Order items</param>
         void DeductStockFromFabrics(ICollection<OrderItem> orderItems);
 
         /// <summary>
-        /// Ýptal edilen sipariþ için stoklarý geri ekler
+        /// Restores stock for cancelled order items
         /// </summary>
-        /// <param name="orderItems">Ýptal edilen sipariþ kalemleri</param>
+        /// <param name="orderItems">Cancelled order items</param>
         void RestoreStockToFabrics(ICollection<OrderItem> orderItems);
     }
 }

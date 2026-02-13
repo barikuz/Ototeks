@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 
-namespace Ototeks.Interfaces // veya Interfaces
+namespace Ototeks.Interfaces
 {
-    // Bu arayüzü uygulayan her Form, mutlaka "OperationCompleted" olayına sahip olmak zorundadır.
+    // Any Form implementing this interface must have an "OperationCompleted" event.
     public interface IOperationForm
     {
-        event EventHandler OperationCompleted; // Eski adıyla: IslemYapildi
+        event EventHandler OperationCompleted;
     }
 }

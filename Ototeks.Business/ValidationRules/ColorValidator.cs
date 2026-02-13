@@ -16,49 +16,49 @@ namespace Ototeks.Business.ValidationRules
             _colorRepo = colorRepo;
             _currentColorId = currentColorId;
 
-            // Kural 1: "Renk adý boþ olamaz"
+            // Rule 1: Color name cannot be empty
             RuleFor(x => x.ColorName)
-                .NotEmpty().WithMessage("Renk adý boþ olamaz!")
-                .MinimumLength(2).WithMessage("Renk adý en az 2 karakter olmalýdýr!");
+                .NotEmpty().WithMessage("Color name cannot be empty!")
+                .MinimumLength(2).WithMessage("Color name must be at least 2 characters!");
 
-            // Kural 2: "Renk adý benzersiz olmalý"
+            // Rule 2: Color name must be unique
             RuleFor(x => x.ColorName)
-                .Must(BeUniqueName).WithMessage("Bu renk adý zaten sistemde kayýtlý!");
+                .Must(BeUniqueName).WithMessage("This color name is already registered in the system!");
         }
 
-        // Benzersizlik Kontrolü
+        // Uniqueness check
         private bool BeUniqueName(string colorName)
         {
             if (string.IsNullOrEmpty(colorName))
                 return true;
 
             var dbList = _colorRepo.GetAll();
-            var existingColor = dbList.FirstOrDefault(x => 
+            var existingColor = dbList.FirstOrDefault(x =>
                 x.ColorName != null && x.ColorName.Equals(colorName, StringComparison.OrdinalIgnoreCase));
-            
+
             if (existingColor == null)
             {
-                return true; // Yok, benzersiz
+                return true; // Not found, unique
             }
-            
-            // Güncelleme modundaysak ve bulunan kayýt ayný kayýtsa sorun yok
+
+            // If updating and the found record is the same record, it's fine
             if (_currentColorId.HasValue && existingColor.ColorId == _currentColorId.Value)
             {
                 return true;
             }
-            
-            return false; // Baþka kayýtta var
+
+            return false; // Exists in another record
         }
 
-        // Silme Kontrolü Metodu
+        // Deletion validation
         public void ValidateForDeletion(Color color)
         {
-            // Bu rengin kumaþlarda kullanýlýp kullanýlmadýðýný kontrol et
+            // Check if this color is used in any fabrics
             var colorWithFabrics = _colorRepo.GetById(c => c.ColorId == color.ColorId, "Fabrics");
-            
+
             if (colorWithFabrics?.Fabrics != null && colorWithFabrics.Fabrics.Any())
             {
-                throw new Exception($"'{color.ColorName}' rengi silinemez! Bu renk {colorWithFabrics.Fabrics.Count} adet kumaþta kullanýlmaktadýr.");
+                throw new Exception($"Color '{color.ColorName}' cannot be deleted! It is used in {colorWithFabrics.Fabrics.Count} fabric(s).");
             }
         }
     }

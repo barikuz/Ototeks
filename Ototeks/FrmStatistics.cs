@@ -36,7 +36,7 @@ namespace Ototeks.UI
             }
             catch (Exception ex)
             {
-                XtraMessageBox.Show($"İstatistikler yüklenirken hata oluştu: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                XtraMessageBox.Show($"Error loading statistics: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -51,7 +51,7 @@ namespace Ototeks.UI
 
         private void LoadMostOrderedProductsPie()
         {
-            // En çok sipariş edilen ürünler (Ürün Tipi bazında adet)
+            // Most ordered products (by Product Type count)
             var orderItemRepo = new GenericRepository<OrderItem>();
             var items = orderItemRepo.GetAll(null, "Type");
 
@@ -63,8 +63,8 @@ namespace Ototeks.UI
                 .Take(8)
                 .ToList();
 
-            // Görsel ayarlar Designer'da tanımlı, sadece veri ekleme
-            var series = chartControl1.Series["Ürünler"];
+            // Visual settings defined in Designer, only adding data
+            var series = chartControl1.Series["Products"];
             if (series != null)
             {
                 series.Points.Clear();
@@ -76,15 +76,15 @@ namespace Ototeks.UI
 
                 if (!productGroups.Any())
                 {
-                    series.Points.Add(new SeriesPoint("Veri Yok", 0));
+                    series.Points.Add(new SeriesPoint("No Data", 0));
                 }
             }
         }
 
         private void LoadMostRequiredFabricsBar()
         {
-            // En çok ihtiyaç duyulan kumaşlar
-            // Gereken miktar = OrderItem.Quantity * ProductType.RequiredFabricAmount
+            // Most required fabrics
+            // Required amount = OrderItem.Quantity * ProductType.RequiredFabricAmount
             var orderItemRepo = new GenericRepository<OrderItem>();
             var items = orderItemRepo.GetAll(null, "Type", "Fabric");
 
@@ -102,8 +102,8 @@ namespace Ototeks.UI
                 .Take(8)
                 .ToList();
 
-            // Görsel ayarlar Designer'da tanımlı, sadece veri ekleme
-            var series = chartControl3.Series["Gerekli Kumaş (m)"];
+            // Visual settings defined in Designer, only adding data
+            var series = chartControl3.Series["Required Fabric (m)"];
             if (series != null)
             {
                 series.Points.Clear();
@@ -125,21 +125,21 @@ namespace Ototeks.UI
                         ? code
                         : (string.IsNullOrWhiteSpace(code) ? name : $"{code} - {name}");
 
-                    displayName = string.IsNullOrWhiteSpace(displayName) ? "Bilinmeyen Kumaş" : displayName;
+                    displayName = string.IsNullOrWhiteSpace(displayName) ? "Unknown Fabric" : displayName;
 
                     series.Points.Add(new SeriesPoint(displayName, Convert.ToDouble(f.Required)));
                 }
 
                 if (!fabricNeeds.Any())
                 {
-                    series.Points.Add(new SeriesPoint("Veri Yok", 0));
+                    series.Points.Add(new SeriesPoint("No Data", 0));
                 }
             }
         }
 
         private void LoadTopCustomersBarHorizontal()
         {
-            // En çok sipariş veren müşteriler (sipariş adedi bazında)
+            // Top customers (by order count)
             var orderRepo = new GenericRepository<Order>();
             var orders = orderRepo.GetAll(null, "Customer");
 
@@ -151,8 +151,8 @@ namespace Ototeks.UI
                 .Take(10)
                 .ToList();
 
-            // Görsel ayarlar Designer'da tanımlı, sadece veri ekleme
-            var series = chartControl4.Series["Sipariş Sayısı"];
+            // Visual settings defined in Designer, only adding data
+            var series = chartControl4.Series["Order Count"];
             if (series != null)
             {
                 series.Points.Clear();
@@ -162,82 +162,82 @@ namespace Ototeks.UI
                     foreach (var c in customerGroups)
                     {
                         // SeriesPoint argument must not be null or empty - provide fallback
-                        var label = string.IsNullOrWhiteSpace(c.Name) ? $"Müşteri {c.Id}" : c.Name.Trim();
+                        var label = string.IsNullOrWhiteSpace(c.Name) ? $"Customer {c.Id}" : c.Name.Trim();
                         series.Points.Add(new SeriesPoint(label, c.Count));
                     }
 
                     if (!customerGroups.Any())
                     {
-                        series.Points.Add(new SeriesPoint("Veri Yok", 0));
+                        series.Points.Add(new SeriesPoint("No Data", 0));
                     }
                 }
                 catch (ArgumentException)
                 {
-                    // Eğer SeriesPoint eklerken DevExpress bir "argument empty" hatası verirse, fallback göster
+                    // If DevExpress throws an "argument empty" error when adding SeriesPoint, show fallback
                     series.Points.Clear();
-                    series.Points.Add(new SeriesPoint("Veri Yok", 0));
+                    series.Points.Add(new SeriesPoint("No Data", 0));
                 }
             }
         }
 
         private void LoadQualityControlPassFailPie()
         {
-            // AI Kalite Kontrol - Sağlam/Hatalı Dağılımı
+            // AI Quality Control - Pass/Fail Distribution
             var qualityLogRepo = new GenericRepository<QualityLog>();
             var logs = qualityLogRepo.GetAll();
 
-            // Sağlam (IsDefective = false) ve Hatalı (IsDefective = true) sayılarını hesapla
+            // Calculate passed (IsDefective = false) and defective (IsDefective = true) counts
             int passedCount = logs.Count(q => q.IsDefective == false);
             int failedCount = logs.Count(q => q.IsDefective == true);
 
-            var series = chartControl2.Series["Kalite Durumu"];
+            var series = chartControl2.Series["Quality Status"];
             if (series != null)
             {
                 series.Points.Clear();
 
                 if (passedCount > 0 || failedCount > 0)
                 {
-                    // Sağlam olanlar
-                    var passedPoint = new SeriesPoint("Sağlam", passedCount);
+                    // Passed items
+                    var passedPoint = new SeriesPoint("Passed", passedCount);
                     series.Points.Add(passedPoint);
 
-                    // Hatalı olanlar
-                    var failedPoint = new SeriesPoint("Hatalı", failedCount);
+                    // Defective items
+                    var failedPoint = new SeriesPoint("Defective", failedCount);
                     series.Points.Add(failedPoint);
 
-                    // Renkleri manuel ayarla (yeşil: sağlam, kırmızı: hatalı)
+                    // Set colors manually (green: passed, red: defective)
                     if (series.View is PieSeriesView pieView)
                     {
-                        passedPoint.Color = System.Drawing.Color.FromArgb(92, 184, 92);  // Yeşil
-                        failedPoint.Color = System.Drawing.Color.FromArgb(217, 83, 79);  // Kırmızı
+                        passedPoint.Color = System.Drawing.Color.FromArgb(92, 184, 92);  // Green
+                        failedPoint.Color = System.Drawing.Color.FromArgb(217, 83, 79);  // Red
                     }
                 }
                 else
                 {
-                    series.Points.Add(new SeriesPoint("Veri Yok", 0));
+                    series.Points.Add(new SeriesPoint("No Data", 0));
                 }
             }
         }
 
         private void LoadDefectTypesBar()
         {
-            // AI Kalite Kontrol - Hata Türleri Dağılımı
+            // AI Quality Control - Defect Type Distribution
             var qualityLogRepo = new GenericRepository<QualityLog>();
             var logs = qualityLogRepo.GetAll(
                 q => q.IsDefective == true && q.DefectId != null,
                 "Defect"
             );
 
-            // Hata türlerine göre grupla ve say (DefectFree olanları hariç tut)
+            // Group by defect type and count (exclude DefectFree entries)
             var defectGroups = logs
-                .Where(q => q.Defect != null && 
+                .Where(q => q.Defect != null &&
                            !string.Equals(q.Defect.DefectName, "DefectFree", StringComparison.OrdinalIgnoreCase))
                 .GroupBy(q => q.Defect!.DefectName)
                 .Select(g => new { DefectName = g.Key, Count = g.Count() })
                 .OrderByDescending(x => x.Count)
                 .ToList();
 
-            var series = chartControl5.Series["Hata Sayısı"];
+            var series = chartControl5.Series["Defect Count"];
             if (series != null)
             {
                 series.Points.Clear();
@@ -246,14 +246,14 @@ namespace Ototeks.UI
                 {
                     foreach (var defect in defectGroups)
                     {
-                        // Hata türü ismini Türkçe'ye çevir
+                        // Get display name for defect type
                         string displayName = EnumHelper.GetDefectTypeName(defect.DefectName);
                         series.Points.Add(new SeriesPoint(displayName, defect.Count));
                     }
                 }
                 else
                 {
-                    series.Points.Add(new SeriesPoint("Veri Yok", 0));
+                    series.Points.Add(new SeriesPoint("No Data", 0));
                 }
             }
         }

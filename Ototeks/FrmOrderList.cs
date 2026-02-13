@@ -1,4 +1,4 @@
-﻿using DevExpress.Images;
+using DevExpress.Images;
 using DevExpress.XtraEditors;
 using DevExpress.XtraGrid.Views.Grid;
 using Ototeks.Business.Concrete;
@@ -24,7 +24,7 @@ namespace Ototeks.UI
         private GenericRepository<Order> _repo;
         private ListFormHelper<Order> _uiHelper;
 
-        // Filtreleme için
+        // For filtering
         private bool _showOnlyPending = false;
 
         public FrmOrderList()
@@ -34,16 +34,16 @@ namespace Ototeks.UI
         }
 
         /// <summary>
-        /// Filtrelenmiş sipariş listesi için constructor
+        /// Constructor for filtered order list
         /// </summary>
-        /// <param name="showOnlyPending">True ise sadece bekleyen siparişleri gösterir</param>
+        /// <param name="showOnlyPending">If true, shows only pending orders</param>
         public FrmOrderList(bool showOnlyPending) : this()
         {
             _showOnlyPending = showOnlyPending;
-            
+
             if (_showOnlyPending)
             {
-                this.Text = "Bekleyen Siparişler";
+                this.Text = "Pending Orders";
             }
         }
 
@@ -51,30 +51,30 @@ namespace Ototeks.UI
         {
             _uiHelper = new ListFormHelper<Order>(
                 gridView1,
-                sagTikMenu,
+                contextMenu,
                 btnAdd,
                 btnUpdate,
                 btnDelete);
 
-            // Data provider'ı set et
+            // Set the data provider
             _uiHelper.SetDataProvider(GetOrderData);
         }
 
         private List<Order> GetOrderData()
         {
-            // 1. Manager'ı Oluştur (Her çağrıda yeni instance)
+            // 1. Create Manager (New instance per call)
             _repo = new GenericRepository<Order>();
             _manager = new OrderManager(_repo);
 
-            // 2. Verileri Çek (Include ile dolu dolu geliyor)
+            // 2. Fetch data (fully loaded with Include)
             var orders = _manager.GetAll();
 
-            // 3. Filtre uygula
+            // 3. Apply filter
             if (_showOnlyPending)
             {
                 orders = orders
-                    .Where(o => o.OrderStatus == OrderStatus.Pending) // Sadece "Sipariş Alındı" durumundakiler
-                    .OrderBy(o => o.DueDate ?? DateTime.MaxValue) // Teslim tarihi en yakın olan üstte (null olanlar en sonda)
+                    .Where(o => o.OrderStatus == OrderStatus.Pending) // Only those with "Pending" status
+                    .OrderBy(o => o.DueDate ?? DateTime.MaxValue) // Nearest due date on top (nulls at the bottom)
                     .ToList();
             }
 
@@ -89,14 +89,14 @@ namespace Ototeks.UI
 
         private void SetupGrid()
         {
-            // Grid'e Master-Detail özelliği ver. İlişki adı 'OrderItems' olsun. 
-            // Listeyi bulmak için de siparişin içindeki .OrderItems özelliğine bak.
+            // Enable Master-Detail on the grid. The relation name is 'OrderItems'.
+            // To find the list, look at the .OrderItems property of the order.
             gridView1.ActivateMasterDetail<Order>("OrderItems", order => order.OrderItems);
         }
 
         private void gridView1_CustomColumnDisplayText(object sender, DevExpress.XtraGrid.Views.Base.CustomColumnDisplayTextEventArgs e)
         {
-            // Ana tablodaki OrderStatus kolonunu Türkçe göster
+            // Display the OrderStatus column in the main table
             if (e.Column.FieldName == "OrderStatus" && e.Value is OrderStatus status)
             {
                 e.DisplayText = EnumHelper.GetOrderStatusName(status);
@@ -105,7 +105,7 @@ namespace Ototeks.UI
 
         private void gridView2_CustomColumnDisplayText(object sender, DevExpress.XtraGrid.Views.Base.CustomColumnDisplayTextEventArgs e)
         {
-            // Alt tablodaki CurrentStage kolonunu Türkçe göster
+            // Display the CurrentStage column in the detail table
             if (e.Column.FieldName == "CurrentStage" && e.Value is OrderStatus status)
             {
                 e.DisplayText = EnumHelper.GetOrderStatusName(status);
@@ -120,45 +120,45 @@ namespace Ototeks.UI
         private void gridView1_PopupMenuShowing(object sender, DevExpress.XtraGrid.Views.Grid.PopupMenuShowingEventArgs e)
         {
             _uiHelper.HandlePopupMenuShowing(e);
-            
-            // Seçili siparişe göre "İptal Et" / "Yeniden İşleme Al" butonunu güncelle
+
+            // Update the "Cancel" / "Reactivate" button based on selected order
             UpdateCancelButtonState();
         }
 
         /// <summary>
-        /// Seçili siparişin durumuna göre btnCancel butonunun metnini ve ikonunu günceller
+        /// Updates the text and icon of the btnCancel button based on the selected order's status
         /// </summary>
         private void UpdateCancelButtonState()
         {
             var selectedOrder = gridView1.GetFocusedRow() as Order;
-            
+
             if (selectedOrder == null)
                 return;
 
             if (selectedOrder.OrderStatus == OrderStatus.Cancelled)
             {
-                btnCancel.Caption = "Yeniden İşleme Al";
-                // Resources içine kaydettiğin ismi direkt çağır
+                btnCancel.Caption = "Reactivate";
+                // Call the name saved in Resources directly
 
                 btnCancel.ImageOptions.SvgImage = Properties.Resources.Refresh;
             }
             else
             {
-                btnCancel.Caption = "İptal Et";
-                // Resources içine kaydettiğin ismi direkt çağır
+                btnCancel.Caption = "Cancel";
+                // Call the name saved in Resources directly
                 btnCancel.ImageOptions.SvgImage = Properties.Resources.Cancel;
 
             }
         }
 
-        // --- SİL BUTONU KODU ---
+        // --- DELETE BUTTON CODE ---
         private void btnDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             _uiHelper.Delete(
                 deleteAction: (order) => _manager.Delete(order),
                 confirmMessageFunc: (order) => MessageBox.Show(
-                    $"'{order.OrderNumber}' numaralı siparişi silmek istediğinize emin misiniz?",
-                    "Silme Onayı",
+                    $"Are you sure you want to delete order '{order.OrderNumber}'?",
+                    "Delete Confirmation",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning)
             );
@@ -190,24 +190,24 @@ namespace Ototeks.UI
 
         private void btnCancel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            // Seçili satırı al
+            // Get the selected row
             var selectedOrder = gridView1.GetFocusedRow() as Order;
 
             if (selectedOrder == null)
             {
-                XtraMessageBox.Show("Lütfen bir sipariş seçin.",
-                    "Uyarı",
+                XtraMessageBox.Show("Please select an order.",
+                    "Warning",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
                 return;
             }
 
-            // İptal edilmiş sipariş için "Yeniden İşleme Al" işlemi
+            // "Reactivate" operation for cancelled order
             if (selectedOrder.OrderStatus == OrderStatus.Cancelled)
             {
                 ReactivateOrder(selectedOrder);
             }
-            // Normal sipariş için "İptal Et" işlemi
+            // "Cancel" operation for normal order
             else
             {
                 CancelOrder(selectedOrder);
@@ -215,14 +215,14 @@ namespace Ototeks.UI
         }
 
         /// <summary>
-        /// Siparişi iptal eder
+        /// Cancels the order
         /// </summary>
         private void CancelOrder(Order selectedOrder)
         {
-            // Kullanıcıdan onay al
+            // Get confirmation from user
             var result = XtraMessageBox.Show(
-                $"'{selectedOrder.OrderNumber}' numaralı siparişi iptal etmek istediğinize emin misiniz?",
-                "İptal Onayı",
+                $"Are you sure you want to cancel order '{selectedOrder.OrderNumber}'?",
+                "Cancel Confirmation",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
 
@@ -231,7 +231,7 @@ namespace Ototeks.UI
 
             try
             {
-                // Sipariş durumunu Cancelled olarak güncelle
+                // Update order status to Cancelled
                 var orderToUpdate = new Order
                 {
                     OrderId = selectedOrder.OrderId,
@@ -244,32 +244,32 @@ namespace Ototeks.UI
 
                 _manager.Update(orderToUpdate);
 
-                XtraMessageBox.Show("Sipariş başarıyla iptal edildi.",
-                    "Başarılı",
+                XtraMessageBox.Show("Order cancelled successfully.",
+                    "Success",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
 
-                // Listeyi yenile
+                // Refresh the list
                 RefreshData();
             }
             catch (Exception ex)
             {
-                XtraMessageBox.Show($"Sipariş iptal edilirken hata oluştu: {ex.Message}",
-                    "Hata",
+                XtraMessageBox.Show($"An error occurred while cancelling the order: {ex.Message}",
+                    "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
         }
 
         /// <summary>
-        /// İptal edilmiş siparişi yeniden işleme alır (Pending durumuna getirir)
+        /// Reactivates a cancelled order (sets it to Pending status)
         /// </summary>
         private void ReactivateOrder(Order selectedOrder)
         {
-            // Kullanıcıdan onay al
+            // Get confirmation from user
             var result = XtraMessageBox.Show(
-                $"'{selectedOrder.OrderNumber}' numaralı siparişi yeniden işleme almak istediğinize emin misiniz?\n\nSipariş durumu 'Sipariş Alındı' olarak güncellenecektir.",
-                "Yeniden İşleme Al",
+                $"Are you sure you want to reactivate order '{selectedOrder.OrderNumber}'?\n\nThe order status will be updated to 'Pending'.",
+                "Reactivate",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
 
@@ -282,38 +282,38 @@ namespace Ototeks.UI
                 var orderToUpdate = _manager.GetById(selectedOrder.OrderId);
                 if (orderToUpdate == null)
                 {
-                    XtraMessageBox.Show("Sipariş bulunamadı.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    XtraMessageBox.Show("Order not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                // Sipariş durumunu Pending olarak güncelle
+                // Update order status to Pending
                 orderToUpdate.OrderStatus = OrderStatus.Pending;
 
-                // Tüm OrderItem'ların CurrentStage'ini de başa (Pending) al
+                // Reset all OrderItems' CurrentStage to Pending
                 if (orderToUpdate.OrderItems != null)
                 {
                     foreach (var item in orderToUpdate.OrderItems)
                     {
                         item.CurrentStage = OrderStatus.Pending;
-                        // Eğer gerekiyorsa işleyen kullanıcı bilgisi sıfırlanabilir
+                        // The processing user info can be reset if needed
                         // item.ProcessedByUserId = null;
                     }
                 }
 
                 _manager.Update(orderToUpdate);
 
-                XtraMessageBox.Show("Sipariş yeniden işleme alındı.",
-                    "Başarılı",
+                XtraMessageBox.Show("Order reactivated successfully.",
+                    "Success",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
 
-                // Listeyi yenile
+                // Refresh the list
                 RefreshData();
             }
             catch (Exception ex)
             {
-                XtraMessageBox.Show($"Sipariş yeniden işleme alınırken hata oluştu: {ex.Message}",
-                    "Hata",
+                XtraMessageBox.Show($"An error occurred while reactivating the order: {ex.Message}",
+                    "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }

@@ -30,28 +30,28 @@
         {
             tablePanel1 = new DevExpress.Utils.Layout.TablePanel();
             stackPanel1 = new DevExpress.Utils.Layout.StackPanel();
-            lblBaslik = new DevExpress.XtraEditors.LabelControl();
-            lblKumasKodu = new DevExpress.XtraEditors.LabelControl();
-            txtKumasKodu = new DevExpress.XtraEditors.TextEdit();
-            lblKumasAdi = new DevExpress.XtraEditors.LabelControl();
-            txtKumasAdi = new DevExpress.XtraEditors.TextEdit();
-            lblRenk = new DevExpress.XtraEditors.LabelControl();
-            cmbRenk = new DevExpress.XtraEditors.ComboBoxEdit();
-            lblStok = new DevExpress.XtraEditors.LabelControl();
-            txtStok = new DevExpress.XtraEditors.TextEdit();
-            btnKaydet = new DevExpress.XtraEditors.SimpleButton();
+            lblTitle = new DevExpress.XtraEditors.LabelControl();
+            lblFabricCode = new DevExpress.XtraEditors.LabelControl();
+            txtFabricCode = new DevExpress.XtraEditors.TextEdit();
+            lblFabricName = new DevExpress.XtraEditors.LabelControl();
+            txtFabricName = new DevExpress.XtraEditors.TextEdit();
+            lblColor = new DevExpress.XtraEditors.LabelControl();
+            cmbColor = new DevExpress.XtraEditors.ComboBoxEdit();
+            lblStock = new DevExpress.XtraEditors.LabelControl();
+            txtStock = new DevExpress.XtraEditors.TextEdit();
+            btnSave = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)tablePanel1).BeginInit();
             tablePanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)stackPanel1).BeginInit();
             stackPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)txtKumasKodu.Properties).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)txtKumasAdi.Properties).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)cmbRenk.Properties).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)txtStok.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)txtFabricCode.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)txtFabricName.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)cmbColor.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)txtStock.Properties).BeginInit();
             SuspendLayout();
-            // 
+            //
             // tablePanel1
-            // 
+            //
             tablePanel1.Columns.AddRange(new DevExpress.Utils.Layout.TablePanelColumn[] { new DevExpress.Utils.Layout.TablePanelColumn(DevExpress.Utils.Layout.TablePanelEntityStyle.Relative, 48.2F), new DevExpress.Utils.Layout.TablePanelColumn(DevExpress.Utils.Layout.TablePanelEntityStyle.AutoSize, 50F), new DevExpress.Utils.Layout.TablePanelColumn(DevExpress.Utils.Layout.TablePanelEntityStyle.Relative, 51.8F) });
             tablePanel1.Controls.Add(stackPanel1);
             tablePanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -61,21 +61,21 @@
             tablePanel1.Size = new System.Drawing.Size(599, 702);
             tablePanel1.TabIndex = 0;
             tablePanel1.UseSkinIndents = true;
-            // 
+            //
             // stackPanel1
-            // 
+            //
             stackPanel1.AutoSize = true;
             tablePanel1.SetColumn(stackPanel1, 1);
-            stackPanel1.Controls.Add(lblBaslik);
-            stackPanel1.Controls.Add(lblKumasKodu);
-            stackPanel1.Controls.Add(txtKumasKodu);
-            stackPanel1.Controls.Add(lblKumasAdi);
-            stackPanel1.Controls.Add(txtKumasAdi);
-            stackPanel1.Controls.Add(lblRenk);
-            stackPanel1.Controls.Add(cmbRenk);
-            stackPanel1.Controls.Add(lblStok);
-            stackPanel1.Controls.Add(txtStok);
-            stackPanel1.Controls.Add(btnKaydet);
+            stackPanel1.Controls.Add(lblTitle);
+            stackPanel1.Controls.Add(lblFabricCode);
+            stackPanel1.Controls.Add(txtFabricCode);
+            stackPanel1.Controls.Add(lblFabricName);
+            stackPanel1.Controls.Add(txtFabricName);
+            stackPanel1.Controls.Add(lblColor);
+            stackPanel1.Controls.Add(cmbColor);
+            stackPanel1.Controls.Add(lblStock);
+            stackPanel1.Controls.Add(txtStock);
+            stackPanel1.Controls.Add(btnSave);
             stackPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             stackPanel1.LayoutDirection = DevExpress.Utils.Layout.StackPanelLayoutDirection.TopDown;
             stackPanel1.Location = new System.Drawing.Point(126, 54);
@@ -85,155 +85,155 @@
             stackPanel1.Size = new System.Drawing.Size(340, 594);
             stackPanel1.TabIndex = 1;
             stackPanel1.UseSkinIndents = true;
-            // 
-            // lblBaslik
-            // 
-            lblBaslik.Anchor = System.Windows.Forms.AnchorStyles.None;
-            lblBaslik.Appearance.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 162);
-            lblBaslik.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
-            lblBaslik.Appearance.Options.UseFont = true;
-            lblBaslik.Appearance.Options.UseForeColor = true;
-            lblBaslik.Location = new System.Drawing.Point(21, 19);
-            lblBaslik.Margin = new System.Windows.Forms.Padding(3, 3, 3, 32);
-            lblBaslik.Name = "lblBaslik";
-            lblBaslik.Size = new System.Drawing.Size(298, 37);
-            lblBaslik.TabIndex = 0;
-            lblBaslik.Text = "Yeni Kumaş Tanımlama";
-            // 
-            // lblKumasKodu
-            // 
-            lblKumasKodu.Anchor = System.Windows.Forms.AnchorStyles.None;
-            lblKumasKodu.Appearance.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold);
-            lblKumasKodu.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
-            lblKumasKodu.Appearance.Options.UseFont = true;
-            lblKumasKodu.Appearance.Options.UseForeColor = true;
-            lblKumasKodu.Appearance.Options.UseTextOptions = true;
-            lblKumasKodu.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
-            lblKumasKodu.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Vertical;
-            lblKumasKodu.Location = new System.Drawing.Point(20, 92);
-            lblKumasKodu.Name = "lblKumasKodu";
-            lblKumasKodu.Padding = new System.Windows.Forms.Padding(2);
-            lblKumasKodu.Size = new System.Drawing.Size(300, 29);
-            lblKumasKodu.TabIndex = 1;
-            lblKumasKodu.Text = "Kumaş Kodu:";
-            // 
-            // txtKumasKodu
-            // 
-            txtKumasKodu.Anchor = System.Windows.Forms.AnchorStyles.None;
-            txtKumasKodu.Location = new System.Drawing.Point(20, 128);
-            txtKumasKodu.Margin = new System.Windows.Forms.Padding(3, 3, 3, 24);
-            txtKumasKodu.Name = "txtKumasKodu";
-            txtKumasKodu.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 10.8F);
-            txtKumasKodu.Properties.Appearance.Options.UseFont = true;
-            txtKumasKodu.Size = new System.Drawing.Size(300, 44);
-            txtKumasKodu.TabIndex = 2;
-            // 
-            // lblKumasAdi
-            // 
-            lblKumasAdi.Anchor = System.Windows.Forms.AnchorStyles.None;
-            lblKumasAdi.Appearance.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold);
-            lblKumasAdi.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
-            lblKumasAdi.Appearance.Options.UseFont = true;
-            lblKumasAdi.Appearance.Options.UseForeColor = true;
-            lblKumasAdi.Appearance.Options.UseTextOptions = true;
-            lblKumasAdi.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
-            lblKumasAdi.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Vertical;
-            lblKumasAdi.Location = new System.Drawing.Point(20, 200);
-            lblKumasAdi.Name = "lblKumasAdi";
-            lblKumasAdi.Padding = new System.Windows.Forms.Padding(2);
-            lblKumasAdi.Size = new System.Drawing.Size(300, 29);
-            lblKumasAdi.TabIndex = 3;
-            lblKumasAdi.Text = "Kumaş Adı:";
-            // 
-            // txtKumasAdi
-            // 
-            txtKumasAdi.Anchor = System.Windows.Forms.AnchorStyles.None;
-            txtKumasAdi.Location = new System.Drawing.Point(20, 236);
-            txtKumasAdi.Margin = new System.Windows.Forms.Padding(3, 3, 3, 24);
-            txtKumasAdi.Name = "txtKumasAdi";
-            txtKumasAdi.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 10.8F);
-            txtKumasAdi.Properties.Appearance.Options.UseFont = true;
-            txtKumasAdi.Size = new System.Drawing.Size(300, 44);
-            txtKumasAdi.TabIndex = 4;
-            // 
-            // lblRenk
-            // 
-            lblRenk.Anchor = System.Windows.Forms.AnchorStyles.None;
-            lblRenk.Appearance.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold);
-            lblRenk.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
-            lblRenk.Appearance.Options.UseFont = true;
-            lblRenk.Appearance.Options.UseForeColor = true;
-            lblRenk.Appearance.Options.UseTextOptions = true;
-            lblRenk.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
-            lblRenk.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Vertical;
-            lblRenk.Location = new System.Drawing.Point(20, 308);
-            lblRenk.Name = "lblRenk";
-            lblRenk.Padding = new System.Windows.Forms.Padding(2);
-            lblRenk.Size = new System.Drawing.Size(300, 29);
-            lblRenk.TabIndex = 5;
-            lblRenk.Text = "Renk:";
-            // 
-            // cmbRenk
-            // 
-            cmbRenk.Anchor = System.Windows.Forms.AnchorStyles.None;
-            cmbRenk.Location = new System.Drawing.Point(20, 344);
-            cmbRenk.Margin = new System.Windows.Forms.Padding(3, 3, 3, 24);
-            cmbRenk.Name = "cmbRenk";
-            cmbRenk.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 10.8F);
-            cmbRenk.Properties.Appearance.Options.UseFont = true;
-            cmbRenk.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
-            cmbRenk.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
-            cmbRenk.Size = new System.Drawing.Size(300, 44);
-            cmbRenk.TabIndex = 6;
-            // 
-            // lblStok
-            // 
-            lblStok.Anchor = System.Windows.Forms.AnchorStyles.None;
-            lblStok.Appearance.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold);
-            lblStok.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
-            lblStok.Appearance.Options.UseFont = true;
-            lblStok.Appearance.Options.UseForeColor = true;
-            lblStok.Appearance.Options.UseTextOptions = true;
-            lblStok.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
-            lblStok.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Vertical;
-            lblStok.Location = new System.Drawing.Point(20, 416);
-            lblStok.Name = "lblStok";
-            lblStok.Padding = new System.Windows.Forms.Padding(2);
-            lblStok.Size = new System.Drawing.Size(300, 29);
-            lblStok.TabIndex = 7;
-            lblStok.Text = "Stok Miktarı:";
-            // 
-            // txtStok
-            // 
-            txtStok.Anchor = System.Windows.Forms.AnchorStyles.None;
-            txtStok.Location = new System.Drawing.Point(20, 452);
-            txtStok.Margin = new System.Windows.Forms.Padding(3, 3, 3, 32);
-            txtStok.Name = "txtStok";
-            txtStok.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 10.8F);
-            txtStok.Properties.Appearance.Options.UseFont = true;
-            txtStok.Properties.MaskSettings.Set("MaskManagerType", typeof(DevExpress.Data.Mask.NumericMaskManager));
-            txtStok.Properties.MaskSettings.Set("MaskManagerSignature", "allowNull=False");
-            txtStok.Properties.MaskSettings.Set("mask", "f2");
-            txtStok.Size = new System.Drawing.Size(300, 44);
-            txtStok.TabIndex = 8;
-            // 
-            // btnKaydet
-            // 
-            btnKaydet.Anchor = System.Windows.Forms.AnchorStyles.None;
-            btnKaydet.Appearance.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 162);
-            btnKaydet.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
-            btnKaydet.Appearance.Options.UseFont = true;
-            btnKaydet.Appearance.Options.UseForeColor = true;
-            btnKaydet.Location = new System.Drawing.Point(111, 532);
-            btnKaydet.Name = "btnKaydet";
-            btnKaydet.Size = new System.Drawing.Size(118, 42);
-            btnKaydet.TabIndex = 9;
-            btnKaydet.Text = "Kaydet";
-            btnKaydet.Click += btnKaydet_Click;
-            // 
+            //
+            // lblTitle
+            //
+            lblTitle.Anchor = System.Windows.Forms.AnchorStyles.None;
+            lblTitle.Appearance.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 162);
+            lblTitle.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
+            lblTitle.Appearance.Options.UseFont = true;
+            lblTitle.Appearance.Options.UseForeColor = true;
+            lblTitle.Location = new System.Drawing.Point(21, 19);
+            lblTitle.Margin = new System.Windows.Forms.Padding(3, 3, 3, 32);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new System.Drawing.Size(298, 37);
+            lblTitle.TabIndex = 0;
+            lblTitle.Text = "Add New Fabric";
+            //
+            // lblFabricCode
+            //
+            lblFabricCode.Anchor = System.Windows.Forms.AnchorStyles.None;
+            lblFabricCode.Appearance.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold);
+            lblFabricCode.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
+            lblFabricCode.Appearance.Options.UseFont = true;
+            lblFabricCode.Appearance.Options.UseForeColor = true;
+            lblFabricCode.Appearance.Options.UseTextOptions = true;
+            lblFabricCode.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            lblFabricCode.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Vertical;
+            lblFabricCode.Location = new System.Drawing.Point(20, 92);
+            lblFabricCode.Name = "lblFabricCode";
+            lblFabricCode.Padding = new System.Windows.Forms.Padding(2);
+            lblFabricCode.Size = new System.Drawing.Size(300, 29);
+            lblFabricCode.TabIndex = 1;
+            lblFabricCode.Text = "Fabric Code:";
+            //
+            // txtFabricCode
+            //
+            txtFabricCode.Anchor = System.Windows.Forms.AnchorStyles.None;
+            txtFabricCode.Location = new System.Drawing.Point(20, 128);
+            txtFabricCode.Margin = new System.Windows.Forms.Padding(3, 3, 3, 24);
+            txtFabricCode.Name = "txtFabricCode";
+            txtFabricCode.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 10.8F);
+            txtFabricCode.Properties.Appearance.Options.UseFont = true;
+            txtFabricCode.Size = new System.Drawing.Size(300, 44);
+            txtFabricCode.TabIndex = 2;
+            //
+            // lblFabricName
+            //
+            lblFabricName.Anchor = System.Windows.Forms.AnchorStyles.None;
+            lblFabricName.Appearance.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold);
+            lblFabricName.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
+            lblFabricName.Appearance.Options.UseFont = true;
+            lblFabricName.Appearance.Options.UseForeColor = true;
+            lblFabricName.Appearance.Options.UseTextOptions = true;
+            lblFabricName.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            lblFabricName.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Vertical;
+            lblFabricName.Location = new System.Drawing.Point(20, 200);
+            lblFabricName.Name = "lblFabricName";
+            lblFabricName.Padding = new System.Windows.Forms.Padding(2);
+            lblFabricName.Size = new System.Drawing.Size(300, 29);
+            lblFabricName.TabIndex = 3;
+            lblFabricName.Text = "Fabric Name:";
+            //
+            // txtFabricName
+            //
+            txtFabricName.Anchor = System.Windows.Forms.AnchorStyles.None;
+            txtFabricName.Location = new System.Drawing.Point(20, 236);
+            txtFabricName.Margin = new System.Windows.Forms.Padding(3, 3, 3, 24);
+            txtFabricName.Name = "txtFabricName";
+            txtFabricName.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 10.8F);
+            txtFabricName.Properties.Appearance.Options.UseFont = true;
+            txtFabricName.Size = new System.Drawing.Size(300, 44);
+            txtFabricName.TabIndex = 4;
+            //
+            // lblColor
+            //
+            lblColor.Anchor = System.Windows.Forms.AnchorStyles.None;
+            lblColor.Appearance.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold);
+            lblColor.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
+            lblColor.Appearance.Options.UseFont = true;
+            lblColor.Appearance.Options.UseForeColor = true;
+            lblColor.Appearance.Options.UseTextOptions = true;
+            lblColor.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            lblColor.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Vertical;
+            lblColor.Location = new System.Drawing.Point(20, 308);
+            lblColor.Name = "lblColor";
+            lblColor.Padding = new System.Windows.Forms.Padding(2);
+            lblColor.Size = new System.Drawing.Size(300, 29);
+            lblColor.TabIndex = 5;
+            lblColor.Text = "Color:";
+            //
+            // cmbColor
+            //
+            cmbColor.Anchor = System.Windows.Forms.AnchorStyles.None;
+            cmbColor.Location = new System.Drawing.Point(20, 344);
+            cmbColor.Margin = new System.Windows.Forms.Padding(3, 3, 3, 24);
+            cmbColor.Name = "cmbColor";
+            cmbColor.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 10.8F);
+            cmbColor.Properties.Appearance.Options.UseFont = true;
+            cmbColor.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] { new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo) });
+            cmbColor.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
+            cmbColor.Size = new System.Drawing.Size(300, 44);
+            cmbColor.TabIndex = 6;
+            //
+            // lblStock
+            //
+            lblStock.Anchor = System.Windows.Forms.AnchorStyles.None;
+            lblStock.Appearance.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold);
+            lblStock.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
+            lblStock.Appearance.Options.UseFont = true;
+            lblStock.Appearance.Options.UseForeColor = true;
+            lblStock.Appearance.Options.UseTextOptions = true;
+            lblStock.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            lblStock.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Vertical;
+            lblStock.Location = new System.Drawing.Point(20, 416);
+            lblStock.Name = "lblStock";
+            lblStock.Padding = new System.Windows.Forms.Padding(2);
+            lblStock.Size = new System.Drawing.Size(300, 29);
+            lblStock.TabIndex = 7;
+            lblStock.Text = "Stock Quantity:";
+            //
+            // txtStock
+            //
+            txtStock.Anchor = System.Windows.Forms.AnchorStyles.None;
+            txtStock.Location = new System.Drawing.Point(20, 452);
+            txtStock.Margin = new System.Windows.Forms.Padding(3, 3, 3, 32);
+            txtStock.Name = "txtStock";
+            txtStock.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 10.8F);
+            txtStock.Properties.Appearance.Options.UseFont = true;
+            txtStock.Properties.MaskSettings.Set("MaskManagerType", typeof(DevExpress.Data.Mask.NumericMaskManager));
+            txtStock.Properties.MaskSettings.Set("MaskManagerSignature", "allowNull=False");
+            txtStock.Properties.MaskSettings.Set("mask", "f2");
+            txtStock.Size = new System.Drawing.Size(300, 44);
+            txtStock.TabIndex = 8;
+            //
+            // btnSave
+            //
+            btnSave.Anchor = System.Windows.Forms.AnchorStyles.None;
+            btnSave.Appearance.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 162);
+            btnSave.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
+            btnSave.Appearance.Options.UseFont = true;
+            btnSave.Appearance.Options.UseForeColor = true;
+            btnSave.Location = new System.Drawing.Point(111, 532);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new System.Drawing.Size(118, 42);
+            btnSave.TabIndex = 9;
+            btnSave.Text = "Save";
+            btnSave.Click += btnSave_Click;
+            //
             // FrmAddFabric
-            // 
-            AcceptButton = btnKaydet;
+            //
+            AcceptButton = btnSave;
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(599, 702);
@@ -242,17 +242,17 @@
             MaximizeBox = false;
             Name = "FrmAddFabric";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            Text = "Yeni Kumaş";
+            Text = "New Fabric";
             ((System.ComponentModel.ISupportInitialize)tablePanel1).EndInit();
             tablePanel1.ResumeLayout(false);
             tablePanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)stackPanel1).EndInit();
             stackPanel1.ResumeLayout(false);
             stackPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)txtKumasKodu.Properties).EndInit();
-            ((System.ComponentModel.ISupportInitialize)txtKumasAdi.Properties).EndInit();
-            ((System.ComponentModel.ISupportInitialize)cmbRenk.Properties).EndInit();
-            ((System.ComponentModel.ISupportInitialize)txtStok.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)txtFabricCode.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)txtFabricName.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)cmbColor.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)txtStock.Properties).EndInit();
             ResumeLayout(false);
         }
 
@@ -260,15 +260,15 @@
 
         private DevExpress.Utils.Layout.TablePanel tablePanel1;
         private DevExpress.Utils.Layout.StackPanel stackPanel1;
-        private DevExpress.XtraEditors.LabelControl lblBaslik;
-        private DevExpress.XtraEditors.LabelControl lblKumasKodu;
-        private DevExpress.XtraEditors.TextEdit txtKumasKodu;
-        private DevExpress.XtraEditors.LabelControl lblKumasAdi;
-        private DevExpress.XtraEditors.TextEdit txtKumasAdi;
-        private DevExpress.XtraEditors.LabelControl lblRenk;
-        private DevExpress.XtraEditors.ComboBoxEdit cmbRenk;
-        private DevExpress.XtraEditors.LabelControl lblStok;
-        private DevExpress.XtraEditors.TextEdit txtStok;
-        private DevExpress.XtraEditors.SimpleButton btnKaydet;
+        private DevExpress.XtraEditors.LabelControl lblTitle;
+        private DevExpress.XtraEditors.LabelControl lblFabricCode;
+        private DevExpress.XtraEditors.TextEdit txtFabricCode;
+        private DevExpress.XtraEditors.LabelControl lblFabricName;
+        private DevExpress.XtraEditors.TextEdit txtFabricName;
+        private DevExpress.XtraEditors.LabelControl lblColor;
+        private DevExpress.XtraEditors.ComboBoxEdit cmbColor;
+        private DevExpress.XtraEditors.LabelControl lblStock;
+        private DevExpress.XtraEditors.TextEdit txtStock;
+        private DevExpress.XtraEditors.SimpleButton btnSave;
     }
 }

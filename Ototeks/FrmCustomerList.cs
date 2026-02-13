@@ -1,4 +1,4 @@
-﻿using DevExpress.XtraEditors;
+using DevExpress.XtraEditors;
 using DevExpress.XtraGrid.Views.Grid;
 using Ototeks.Business.Concrete;
 using Ototeks.DataAccess.Concrete;
@@ -23,7 +23,7 @@ namespace Ototeks.UI
         private GenericRepository<Customer> _repo;
         private ListFormHelper<Customer> _uiHelper;
 
-        // Filtreleme için
+        // For filtering
         private bool _showOnlyWithOrders = false;
 
         public FrmCustomerList()
@@ -33,16 +33,16 @@ namespace Ototeks.UI
         }
 
         /// <summary>
-        /// Filtrelenmiş müşteri listesi için constructor
+        /// Constructor for filtered customer list
         /// </summary>
-        /// <param name="showOnlyWithOrders">True ise sadece sipariş veren müşterileri gösterir</param>
+        /// <param name="showOnlyWithOrders">If true, shows only customers with orders</param>
         public FrmCustomerList(bool showOnlyWithOrders) : this()
         {
             _showOnlyWithOrders = showOnlyWithOrders;
-            
+
             if (_showOnlyWithOrders)
             {
-                this.Text = "Sipariş Veren Müşteriler";
+                this.Text = "Customers with Orders";
             }
         }
 
@@ -50,28 +50,28 @@ namespace Ototeks.UI
         {
             _uiHelper = new ListFormHelper<Customer>(
                 gridView1,
-                sagTikMenu,
+                contextMenu,
                 btnAdd,
                 btnUpdate,
                 btnDelete);
 
-            // Data provider'ı set et
+            // Set the data provider
             _uiHelper.SetDataProvider(GetCustomerData);
         }
 
         private List<Customer> GetCustomerData()
         {
-            // 1. Manager'ı Oluştur (Her çağrıda yeni instance)
+            // 1. Create Manager (New instance per call)
             _repo = new GenericRepository<Customer>();
             _manager = new CustomerManager(_repo);
 
-            // 2. Verileri Çek
+            // 2. Fetch data
             var customers = _manager.GetAll();
 
-            // 3. Filtre uygula - Sipariş veren müşteriler
+            // 3. Apply filter - Customers with orders
             if (_showOnlyWithOrders)
             {
-                // Sipariş tablosundan müşteri ID'lerini al
+                // Get customer IDs from the orders table
                 var orderRepo = new GenericRepository<Order>();
                 var orders = orderRepo.GetAll();
                 var customerIdsWithOrders = orders
@@ -101,14 +101,14 @@ namespace Ototeks.UI
             _uiHelper.HandlePopupMenuShowing(e);
         }
 
-        // --- SİL BUTONU KODU ---
+        // --- DELETE BUTTON CODE ---
         private void btnDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             _uiHelper.Delete(
                 deleteAction: (customer) => _manager.Delete(customer),
                 confirmMessageFunc: (customer) => MessageBox.Show(
-                    $"'{customer.CustomerName}' isimli müşteriyi silmek istediğinize emin misiniz?",
-                    "Silme Onayı",
+                    $"Are you sure you want to delete the customer '{customer.CustomerName}'?",
+                    "Delete Confirmation",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning)
             );

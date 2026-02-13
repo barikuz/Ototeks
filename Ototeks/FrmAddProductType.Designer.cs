@@ -30,22 +30,22 @@ namespace Ototeks.UI
         {
             tablePanel1 = new DevExpress.Utils.Layout.TablePanel();
             stackPanel1 = new DevExpress.Utils.Layout.StackPanel();
-            lblBaslik = new DevExpress.XtraEditors.LabelControl();
-            lblUrunTipiAdi = new DevExpress.XtraEditors.LabelControl();
-            txtUrunTipiAdi = new DevExpress.XtraEditors.TextEdit();
-            lblGerekliKumasMiktari = new DevExpress.XtraEditors.LabelControl();
-            txtGerekliKumasMiktari = new DevExpress.XtraEditors.TextEdit();
-            btnKaydet = new DevExpress.XtraEditors.SimpleButton();
+            lblTitle = new DevExpress.XtraEditors.LabelControl();
+            lblProductTypeName = new DevExpress.XtraEditors.LabelControl();
+            txtProductTypeName = new DevExpress.XtraEditors.TextEdit();
+            lblRequiredFabricAmount = new DevExpress.XtraEditors.LabelControl();
+            txtRequiredFabricAmount = new DevExpress.XtraEditors.TextEdit();
+            btnSave = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)tablePanel1).BeginInit();
             tablePanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)stackPanel1).BeginInit();
             stackPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)txtUrunTipiAdi.Properties).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)txtGerekliKumasMiktari.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)txtProductTypeName.Properties).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)txtRequiredFabricAmount.Properties).BeginInit();
             SuspendLayout();
-            // 
+            //
             // tablePanel1
-            // 
+            //
             tablePanel1.Columns.AddRange(new DevExpress.Utils.Layout.TablePanelColumn[] { new DevExpress.Utils.Layout.TablePanelColumn(DevExpress.Utils.Layout.TablePanelEntityStyle.Relative, 48.2F), new DevExpress.Utils.Layout.TablePanelColumn(DevExpress.Utils.Layout.TablePanelEntityStyle.AutoSize, 50F), new DevExpress.Utils.Layout.TablePanelColumn(DevExpress.Utils.Layout.TablePanelEntityStyle.Relative, 51.8F) });
             tablePanel1.Controls.Add(stackPanel1);
             tablePanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -55,17 +55,17 @@ namespace Ototeks.UI
             tablePanel1.Size = new System.Drawing.Size(500, 400);
             tablePanel1.TabIndex = 0;
             tablePanel1.UseSkinIndents = true;
-            // 
+            //
             // stackPanel1
-            // 
+            //
             stackPanel1.AutoSize = true;
             tablePanel1.SetColumn(stackPanel1, 1);
-            stackPanel1.Controls.Add(lblBaslik);
-            stackPanel1.Controls.Add(lblUrunTipiAdi);
-            stackPanel1.Controls.Add(txtUrunTipiAdi);
-            stackPanel1.Controls.Add(lblGerekliKumasMiktari);
-            stackPanel1.Controls.Add(txtGerekliKumasMiktari);
-            stackPanel1.Controls.Add(btnKaydet);
+            stackPanel1.Controls.Add(lblTitle);
+            stackPanel1.Controls.Add(lblProductTypeName);
+            stackPanel1.Controls.Add(txtProductTypeName);
+            stackPanel1.Controls.Add(lblRequiredFabricAmount);
+            stackPanel1.Controls.Add(txtRequiredFabricAmount);
+            stackPanel1.Controls.Add(btnSave);
             stackPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             stackPanel1.LayoutDirection = DevExpress.Utils.Layout.StackPanelLayoutDirection.TopDown;
             stackPanel1.Location = new System.Drawing.Point(72, 50);
@@ -75,97 +75,97 @@ namespace Ototeks.UI
             stackPanel1.Size = new System.Drawing.Size(340, 300);
             stackPanel1.TabIndex = 1;
             stackPanel1.UseSkinIndents = true;
-            // 
-            // lblBaslik
-            // 
-            lblBaslik.Anchor = System.Windows.Forms.AnchorStyles.None;
-            lblBaslik.Appearance.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 162);
-            lblBaslik.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
-            lblBaslik.Appearance.Options.UseFont = true;
-            lblBaslik.Appearance.Options.UseForeColor = true;
-            lblBaslik.Location = new System.Drawing.Point(28, 19);
-            lblBaslik.Margin = new System.Windows.Forms.Padding(3, 3, 3, 24);
-            lblBaslik.Name = "lblBaslik";
-            lblBaslik.Size = new System.Drawing.Size(284, 37);
-            lblBaslik.TabIndex = 0;
-            lblBaslik.Text = "Yeni Ürün Tipi Ekleme";
-            // 
-            // lblUrunTipiAdi
-            // 
-            lblUrunTipiAdi.Anchor = System.Windows.Forms.AnchorStyles.None;
-            lblUrunTipiAdi.Appearance.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold);
-            lblUrunTipiAdi.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
-            lblUrunTipiAdi.Appearance.Options.UseFont = true;
-            lblUrunTipiAdi.Appearance.Options.UseForeColor = true;
-            lblUrunTipiAdi.Appearance.Options.UseTextOptions = true;
-            lblUrunTipiAdi.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
-            lblUrunTipiAdi.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Vertical;
-            lblUrunTipiAdi.Location = new System.Drawing.Point(20, 84);
-            lblUrunTipiAdi.Name = "lblUrunTipiAdi";
-            lblUrunTipiAdi.Padding = new System.Windows.Forms.Padding(2);
-            lblUrunTipiAdi.Size = new System.Drawing.Size(300, 29);
-            lblUrunTipiAdi.TabIndex = 1;
-            lblUrunTipiAdi.Text = "Ürün Tipi Adý:";
-            // 
-            // txtUrunTipiAdi
-            // 
-            txtUrunTipiAdi.Anchor = System.Windows.Forms.AnchorStyles.None;
-            txtUrunTipiAdi.Location = new System.Drawing.Point(20, 120);
-            txtUrunTipiAdi.Margin = new System.Windows.Forms.Padding(3, 3, 3, 16);
-            txtUrunTipiAdi.Name = "txtUrunTipiAdi";
-            txtUrunTipiAdi.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 10.8F);
-            txtUrunTipiAdi.Properties.Appearance.Options.UseFont = true;
-            txtUrunTipiAdi.Size = new System.Drawing.Size(300, 44);
-            txtUrunTipiAdi.TabIndex = 2;
-            // 
-            // lblGerekliKumasMiktari
-            // 
-            lblGerekliKumasMiktari.Anchor = System.Windows.Forms.AnchorStyles.None;
-            lblGerekliKumasMiktari.Appearance.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold);
-            lblGerekliKumasMiktari.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
-            lblGerekliKumasMiktari.Appearance.Options.UseFont = true;
-            lblGerekliKumasMiktari.Appearance.Options.UseForeColor = true;
-            lblGerekliKumasMiktari.Appearance.Options.UseTextOptions = true;
-            lblGerekliKumasMiktari.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
-            lblGerekliKumasMiktari.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Vertical;
-            lblGerekliKumasMiktari.Location = new System.Drawing.Point(20, 184);
-            lblGerekliKumasMiktari.Name = "lblGerekliKumasMiktari";
-            lblGerekliKumasMiktari.Padding = new System.Windows.Forms.Padding(2);
-            lblGerekliKumasMiktari.Size = new System.Drawing.Size(300, 29);
-            lblGerekliKumasMiktari.TabIndex = 3;
-            lblGerekliKumasMiktari.Text = "Gerekli Kumaþ Miktarý (metre):";
-            // 
-            // txtGerekliKumasMiktari
-            // 
-            txtGerekliKumasMiktari.Anchor = System.Windows.Forms.AnchorStyles.None;
-            txtGerekliKumasMiktari.Location = new System.Drawing.Point(20, 220);
-            txtGerekliKumasMiktari.Margin = new System.Windows.Forms.Padding(3, 3, 3, 24);
-            txtGerekliKumasMiktari.Name = "txtGerekliKumasMiktari";
-            txtGerekliKumasMiktari.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 10.8F);
-            txtGerekliKumasMiktari.Properties.Appearance.Options.UseFont = true;
-            txtGerekliKumasMiktari.Properties.MaskSettings.Set("MaskManagerType", typeof(DevExpress.Data.Mask.NumericMaskManager));
-            txtGerekliKumasMiktari.Properties.MaskSettings.Set("MaskManagerSignature", "allowNull=False");
-            txtGerekliKumasMiktari.Properties.MaskSettings.Set("mask", "f2");
-            txtGerekliKumasMiktari.Size = new System.Drawing.Size(300, 44);
-            txtGerekliKumasMiktari.TabIndex = 4;
-            // 
-            // btnKaydet
-            // 
-            btnKaydet.Anchor = System.Windows.Forms.AnchorStyles.None;
-            btnKaydet.Appearance.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 162);
-            btnKaydet.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
-            btnKaydet.Appearance.Options.UseFont = true;
-            btnKaydet.Appearance.Options.UseForeColor = true;
-            btnKaydet.Location = new System.Drawing.Point(111, 292);
-            btnKaydet.Name = "btnKaydet";
-            btnKaydet.Size = new System.Drawing.Size(118, 42);
-            btnKaydet.TabIndex = 5;
-            btnKaydet.Text = "Kaydet";
-            btnKaydet.Click += btnKaydet_Click;
-            // 
+            //
+            // lblTitle
+            //
+            lblTitle.Anchor = System.Windows.Forms.AnchorStyles.None;
+            lblTitle.Appearance.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 162);
+            lblTitle.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
+            lblTitle.Appearance.Options.UseFont = true;
+            lblTitle.Appearance.Options.UseForeColor = true;
+            lblTitle.Location = new System.Drawing.Point(28, 19);
+            lblTitle.Margin = new System.Windows.Forms.Padding(3, 3, 3, 24);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new System.Drawing.Size(284, 37);
+            lblTitle.TabIndex = 0;
+            lblTitle.Text = "Add New Product Type";
+            //
+            // lblProductTypeName
+            //
+            lblProductTypeName.Anchor = System.Windows.Forms.AnchorStyles.None;
+            lblProductTypeName.Appearance.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold);
+            lblProductTypeName.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
+            lblProductTypeName.Appearance.Options.UseFont = true;
+            lblProductTypeName.Appearance.Options.UseForeColor = true;
+            lblProductTypeName.Appearance.Options.UseTextOptions = true;
+            lblProductTypeName.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            lblProductTypeName.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Vertical;
+            lblProductTypeName.Location = new System.Drawing.Point(20, 84);
+            lblProductTypeName.Name = "lblProductTypeName";
+            lblProductTypeName.Padding = new System.Windows.Forms.Padding(2);
+            lblProductTypeName.Size = new System.Drawing.Size(300, 29);
+            lblProductTypeName.TabIndex = 1;
+            lblProductTypeName.Text = "Product Type Name:";
+            //
+            // txtProductTypeName
+            //
+            txtProductTypeName.Anchor = System.Windows.Forms.AnchorStyles.None;
+            txtProductTypeName.Location = new System.Drawing.Point(20, 120);
+            txtProductTypeName.Margin = new System.Windows.Forms.Padding(3, 3, 3, 16);
+            txtProductTypeName.Name = "txtProductTypeName";
+            txtProductTypeName.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 10.8F);
+            txtProductTypeName.Properties.Appearance.Options.UseFont = true;
+            txtProductTypeName.Size = new System.Drawing.Size(300, 44);
+            txtProductTypeName.TabIndex = 2;
+            //
+            // lblRequiredFabricAmount
+            //
+            lblRequiredFabricAmount.Anchor = System.Windows.Forms.AnchorStyles.None;
+            lblRequiredFabricAmount.Appearance.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold);
+            lblRequiredFabricAmount.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
+            lblRequiredFabricAmount.Appearance.Options.UseFont = true;
+            lblRequiredFabricAmount.Appearance.Options.UseForeColor = true;
+            lblRequiredFabricAmount.Appearance.Options.UseTextOptions = true;
+            lblRequiredFabricAmount.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            lblRequiredFabricAmount.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Vertical;
+            lblRequiredFabricAmount.Location = new System.Drawing.Point(20, 184);
+            lblRequiredFabricAmount.Name = "lblRequiredFabricAmount";
+            lblRequiredFabricAmount.Padding = new System.Windows.Forms.Padding(2);
+            lblRequiredFabricAmount.Size = new System.Drawing.Size(300, 29);
+            lblRequiredFabricAmount.TabIndex = 3;
+            lblRequiredFabricAmount.Text = "Required Fabric Amount (meters):";
+            //
+            // txtRequiredFabricAmount
+            //
+            txtRequiredFabricAmount.Anchor = System.Windows.Forms.AnchorStyles.None;
+            txtRequiredFabricAmount.Location = new System.Drawing.Point(20, 220);
+            txtRequiredFabricAmount.Margin = new System.Windows.Forms.Padding(3, 3, 3, 24);
+            txtRequiredFabricAmount.Name = "txtRequiredFabricAmount";
+            txtRequiredFabricAmount.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 10.8F);
+            txtRequiredFabricAmount.Properties.Appearance.Options.UseFont = true;
+            txtRequiredFabricAmount.Properties.MaskSettings.Set("MaskManagerType", typeof(DevExpress.Data.Mask.NumericMaskManager));
+            txtRequiredFabricAmount.Properties.MaskSettings.Set("MaskManagerSignature", "allowNull=False");
+            txtRequiredFabricAmount.Properties.MaskSettings.Set("mask", "f2");
+            txtRequiredFabricAmount.Size = new System.Drawing.Size(300, 44);
+            txtRequiredFabricAmount.TabIndex = 4;
+            //
+            // btnSave
+            //
+            btnSave.Anchor = System.Windows.Forms.AnchorStyles.None;
+            btnSave.Appearance.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 162);
+            btnSave.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
+            btnSave.Appearance.Options.UseFont = true;
+            btnSave.Appearance.Options.UseForeColor = true;
+            btnSave.Location = new System.Drawing.Point(111, 292);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new System.Drawing.Size(118, 42);
+            btnSave.TabIndex = 5;
+            btnSave.Text = "Save";
+            btnSave.Click += btnSave_Click;
+            //
             // FrmAddProductType
-            // 
-            AcceptButton = btnKaydet;
+            //
+            AcceptButton = btnSave;
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(500, 400);
@@ -174,15 +174,15 @@ namespace Ototeks.UI
             MaximizeBox = false;
             Name = "FrmAddProductType";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            Text = "Yeni Ürün Tipi";
+            Text = "New Product Type";
             ((System.ComponentModel.ISupportInitialize)tablePanel1).EndInit();
             tablePanel1.ResumeLayout(false);
             tablePanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)stackPanel1).EndInit();
             stackPanel1.ResumeLayout(false);
             stackPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)txtUrunTipiAdi.Properties).EndInit();
-            ((System.ComponentModel.ISupportInitialize)txtGerekliKumasMiktari.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)txtProductTypeName.Properties).EndInit();
+            ((System.ComponentModel.ISupportInitialize)txtRequiredFabricAmount.Properties).EndInit();
             ResumeLayout(false);
         }
 
@@ -190,11 +190,11 @@ namespace Ototeks.UI
 
         private DevExpress.Utils.Layout.TablePanel tablePanel1;
         private DevExpress.Utils.Layout.StackPanel stackPanel1;
-        private DevExpress.XtraEditors.LabelControl lblBaslik;
-        private DevExpress.XtraEditors.LabelControl lblUrunTipiAdi;
-        private DevExpress.XtraEditors.TextEdit txtUrunTipiAdi;
-        private DevExpress.XtraEditors.LabelControl lblGerekliKumasMiktari;
-        private DevExpress.XtraEditors.TextEdit txtGerekliKumasMiktari;
-        private DevExpress.XtraEditors.SimpleButton btnKaydet;
+        private DevExpress.XtraEditors.LabelControl lblTitle;
+        private DevExpress.XtraEditors.LabelControl lblProductTypeName;
+        private DevExpress.XtraEditors.TextEdit txtProductTypeName;
+        private DevExpress.XtraEditors.LabelControl lblRequiredFabricAmount;
+        private DevExpress.XtraEditors.TextEdit txtRequiredFabricAmount;
+        private DevExpress.XtraEditors.SimpleButton btnSave;
     }
 }

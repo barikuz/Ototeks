@@ -10,7 +10,7 @@ using System.Linq;
 namespace Ototeks.Business.Concrete
 {
     /// <summary>
-    /// Kalite kontrol iþlemlerini yöneten manager sýnýfý
+    /// Manager class that handles quality control operations.
     /// </summary>
     public class QualityControlManager : IQualityControlService
     {
@@ -26,34 +26,29 @@ namespace Ototeks.Business.Concrete
         }
 
         /// <summary>
-        /// Kumaþ görüntüsünü ML modeli ile analiz eder
+        /// Analyzes a fabric image using the ML model for defect detection.
         /// </summary>
         public QualityAnalysisResult AnalyzeFabricImage(string imagePath)
         {
             if (string.IsNullOrEmpty(imagePath) || !File.Exists(imagePath))
             {
-                throw new ArgumentException("Geçerli bir görüntü dosyasý seçilmelidir.");
+                throw new ArgumentException("A valid image file must be selected.");
             }
 
             try
             {
-                // Görüntüyü byte array olarak oku
                 byte[] imageBytes = File.ReadAllBytes(imagePath);
 
-                // Model input oluþtur
                 var input = new FabricDefectModel.ModelInput
                 {
                     ImageSource = imageBytes
                 };
 
-                // Model ile tahmin yap
                 var prediction = FabricDefectModel.Predict(input);
 
-                // Tüm etiketlerin skorlarýný al
                 var allScores = FabricDefectModel.GetSortedScoresWithLabels(prediction);
                 var topResult = allScores.First();
 
-                // Sonucu oluþtur
                 var result = new QualityAnalysisResult
                 {
                     DefectType = prediction.PredictedLabel,
@@ -65,12 +60,12 @@ namespace Ototeks.Business.Concrete
             }
             catch (Exception ex)
             {
-                throw new Exception($"Görüntü analizi sýrasýnda hata oluþtu: {ex.Message}", ex);
+                throw new Exception($"An error occurred during image analysis: {ex.Message}", ex);
             }
         }
 
         /// <summary>
-        /// Kalite kontrol kaydý ekler
+        /// Adds a quality control log entry.
         /// </summary>
         public void AddQualityLog(QualityLog qualityLog)
         {
@@ -78,16 +73,15 @@ namespace Ototeks.Business.Concrete
                 throw new ArgumentNullException(nameof(qualityLog));
 
             if (qualityLog.OrderItemId == null || qualityLog.OrderItemId <= 0)
-                throw new ArgumentException("Geçerli bir sipariþ kalemi seçilmelidir.");
+                throw new ArgumentException("A valid order item must be selected.");
 
-            // Varsayýlan deðerleri ayarla
             qualityLog.InspectionDate ??= DateTime.Now;
 
             _qualityLogRepo.Add(qualityLog);
         }
 
         /// <summary>
-        /// Tüm hata tiplerini getirir
+        /// Returns all defect types.
         /// </summary>
         public List<DefectType> GetAllDefectTypes()
         {
@@ -95,7 +89,7 @@ namespace Ototeks.Business.Concrete
         }
 
         /// <summary>
-        /// Hata adýna göre DefectType getirir
+        /// Returns a DefectType by its name (case-insensitive).
         /// </summary>
         public DefectType GetDefectTypeByName(string defectName)
         {
@@ -103,14 +97,13 @@ namespace Ototeks.Business.Concrete
                 return null;
 
             var defectTypes = _defectTypeRepo.GetAll();
-            
-            // Büyük/küçük harf duyarsýz arama
-            return defectTypes.FirstOrDefault(d => 
+
+            return defectTypes.FirstOrDefault(d =>
                 d.DefectName.Equals(defectName, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
-        /// Etiketin "iyi/hatasýz" anlamýna gelip gelmediðini kontrol eder
+        /// Checks whether the label indicates a defect-free result.
         /// </summary>
         private bool IsGoodLabel(string label)
         {

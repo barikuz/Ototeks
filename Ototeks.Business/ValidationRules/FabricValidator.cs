@@ -1,76 +1,74 @@
-﻿using FluentValidation; // Kütüphaneyi çağır
+using FluentValidation;
 using Ototeks.Entities;
 using Ototeks.DataAccess.Abstract;
 using System.Linq;
 
 namespace Ototeks.Business.ValidationRules
 {
-    // AbstractValidator sınıfından miras alıyoruz
     public class FabricValidator : AbstractValidator<Fabric>
     {
         private readonly IGenericRepository<Fabric> _fabricRepo;
-        private readonly int? _currentFabricId; // Güncellenen kaydın ID'si
+        private readonly int? _currentFabricId; // ID of the record being updated
 
         public FabricValidator(IGenericRepository<Fabric> fabricRepo, int? currentFabricId = null)
         {
             _fabricRepo = fabricRepo;
             _currentFabricId = currentFabricId;
 
-            // Kural 1: "Kumaş Kodu boş olamaz"
+            // Rule 1: Fabric code cannot be empty and must start with "FAB-"
             RuleFor(x => x.FabricCode)
-                .NotEmpty().WithMessage("Kumaş kodu boş olamaz!")
-                .Must(arg => arg != null && arg.StartsWith("KMS-")).WithMessage("Kumaş kodu KMS- ile başlamalı!"); // "KMS ile başlıyor olmalı"
+                .NotEmpty().WithMessage("Fabric code cannot be empty!")
+                .Must(arg => arg != null && arg.StartsWith("FAB-")).WithMessage("Fabric code must start with FAB-!");
 
-            // Kural 2: "Kumaş kodu benzersiz olmalı"
+            // Rule 2: Fabric code must be unique
             RuleFor(x => x.FabricCode)
-                .Must(BeUniqueCode).WithMessage("Bu kumaş kodu zaten sistemde kayıtlı!");
+                .Must(BeUniqueCode).WithMessage("This fabric code is already registered in the system!");
 
-            // Kural 3: "Kumaş Adı boş olamaz"
+            // Rule 3: Fabric name cannot be empty
             RuleFor(x => x.FabricName)
-                .NotEmpty().WithMessage("Kumaş adı boş olamaz!")
-                .MinimumLength(3).WithMessage("Kumaş adı en az 3 karakter olmalıdır.");
+                .NotEmpty().WithMessage("Fabric name cannot be empty!")
+                .MinimumLength(3).WithMessage("Fabric name must be at least 3 characters.");
 
-            // Kural 4: "Renk seçilmeli"
+            // Rule 4: Color must be selected
             RuleFor(x => x.ColorId)
-                .NotNull().WithMessage("Renk seçimi yapılmalıdır!")
-                .GreaterThan(0).WithMessage("Geçerli bir renk seçilmelidir!");
+                .NotNull().WithMessage("A color must be selected!")
+                .GreaterThan(0).WithMessage("A valid color must be selected!");
 
-            // Kural 5: "Stok miktarı 0'dan büyük olmalı"
+            // Rule 5: Stock quantity must be greater than 0
             RuleFor(x => x.StockQuantity)
-                .NotNull().WithMessage("Stok miktarı boş olamaz!")
-                .GreaterThan(0).WithMessage("Stok miktarı 0'dan büyük olmalıdır!");
+                .NotNull().WithMessage("Stock quantity cannot be empty!")
+                .GreaterThan(0).WithMessage("Stock quantity must be greater than 0!");
         }
 
-        // Özel Kontrol Metodu - Benzersizlik Kontrolü
+        // Uniqueness check for fabric code
         private bool BeUniqueCode(string fabricCode)
         {
-            // Veritabanına bak: Bu koddan başka var mı?
             var dbList = _fabricRepo.GetAll();
             var existingFabric = dbList.FirstOrDefault(x => x.FabricCode == fabricCode);
-            
+
             if (existingFabric == null)
             {
-                return true; // Kod yok, benzersiz
+                return true; // Not found, unique
             }
-            
-            // Eğer güncelleme modundaysak ve bulunan kayıt aynı kayıtsa sorun yok
+
+            // If updating and the found record is the same record, it's fine
             if (_currentFabricId.HasValue && existingFabric.FabricId == _currentFabricId.Value)
             {
-                return true; // Aynı kayıt, sorun yok
+                return true; // Same record, no conflict
             }
-            
-            return false; // Başka kayıtta var, benzersiz değil
+
+            return false; // Exists in another record, not unique
         }
 
-        // Silme Kontrolü Metodu
+        // Deletion validation
         public void ValidateForDeletion(Fabric fabric)
         {
-            // Bu kumaşın sipariş kalemlerinde kullanılıp kullanılmadığını kontrol et
+            // Check if this fabric is used in any order items
             var fabricWithOrders = _fabricRepo.GetById(f => f.FabricId == fabric.FabricId, "OrderItems");
-            
+
             if (fabricWithOrders?.OrderItems != null && fabricWithOrders.OrderItems.Any())
             {
-                throw new System.Exception($"'{fabric.FabricCode}' kodlu kumaş silinemez! Bu kumaş {fabricWithOrders.OrderItems.Count} adet sipariş kaleminde kullanılmaktadır.");
+                throw new System.Exception($"Fabric '{fabric.FabricCode}' cannot be deleted! It is used in {fabricWithOrders.OrderItems.Count} order item(s).");
             }
         }
     }

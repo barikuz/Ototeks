@@ -1,4 +1,4 @@
-﻿using DevExpress.XtraEditors;
+using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Repository;
 using Ototeks.Business.Concrete;
 using Ototeks.DataAccess.Concrete;
@@ -18,12 +18,12 @@ namespace Ototeks.UI
 {
     public partial class FrmAddOrder : DevExpress.XtraEditors.XtraForm, IOperationForm
     {
-        // Bu, formun dışarıya göndereceği sinyaldir
+        // This is the signal that the form will send to the outside
         public event EventHandler OperationCompleted;
 
         private BindingList<OrderItem> _orderItems;
-        private int _guncellenecekId = 0; // 0 ise Ekleme Modu, >0 ise Güncelleme Modu
-        private OrderStatus _mevcutSiparisDurumu = OrderStatus.Pending; // Mevcut sipariş durumunu sakla
+        private int _recordIdToUpdate = 0; // 0 means Add Mode, >0 means Update Mode
+        private OrderStatus _currentOrderStatus = OrderStatus.Pending; // Store the current order status
 
         public FrmAddOrder()
         {
@@ -35,20 +35,20 @@ namespace Ototeks.UI
         {
             InitializeComponent();
             _orderItems = new BindingList<OrderItem>();
-            _guncellenecekId = id; // Hangi kaydı düzenleyeceğimizi not ettik.
+            _recordIdToUpdate = id; // Note which record we will edit.
 
-            // Formun başlığını değiştir ki kullanıcı anlasın
-            this.Text = "Sipariş Güncelle";
-            btnKaydet.Text = "Güncelle";
+            // Change the form title so the user understands
+            this.Text = "Update Order";
+            btnSave.Text = "Update";
         }
 
         private void FrmAddOrder_Load(object sender, EventArgs e)
         {
-            // Önce dropdown'ları ve temel ayarları yükle
+            // First load the dropdowns and basic settings
             LoadData();
-            
-            // Sonra güncelleme modundaysa sipariş verilerini yükle
-            if (_guncellenecekId > 0)
+
+            // Then load order data if in update mode
+            if (_recordIdToUpdate > 0)
             {
                 LoadOrderData();
             }
@@ -58,25 +58,25 @@ namespace Ototeks.UI
         {
             try
             {
-                // Veritabanından o id'li siparişi bul
+                // Find the order with that id from the database
                 var repo = new GenericRepository<Order>();
                 var manager = new OrderManager(repo);
-                var order = manager.GetById(_guncellenecekId);
+                var order = manager.GetById(_recordIdToUpdate);
 
                 if (order != null)
                 {
-                    // Mevcut sipariş durumunu sakla
-                    _mevcutSiparisDurumu = order.OrderStatus;
+                    // Store the current order status
+                    _currentOrderStatus = order.OrderStatus;
 
-                    // Form kutularını doldur
-                    txtSiparisNo.Text = order.OrderNumber;
-                    dateTarih.DateTime = order.OrderDate ?? DateTime.Now;
-                    lkpMusteri.EditValue = order.CustomerId;
+                    // Fill the form fields
+                    txtOrderNo.Text = order.OrderNumber;
+                    dateOrderDate.DateTime = order.OrderDate ?? DateTime.Now;
+                    lkpCustomer.EditValue = order.CustomerId;
 
-                    // OrderItems'ları temizle ve yeniden yükle
+                    // Clear and reload OrderItems
                     _orderItems.Clear();
-                    
-                    // OrderItems'ları da yükle
+
+                    // Load OrderItems as well
                     if (order.OrderItems != null && order.OrderItems.Any())
                     {
                         foreach (var item in order.OrderItems)
@@ -88,95 +88,95 @@ namespace Ototeks.UI
             }
             catch (Exception ex)
             {
-                XtraMessageBox.Show($"Sipariş verileri yüklenirken hata oluştu: {ex.Message}", 
-                    "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                XtraMessageBox.Show($"An error occurred while loading order data: {ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void LoadData()
         {
-            // --- 1. Müşterileri (Customers) LookUpEdit'e Doldur ---
+            // --- 1. Fill the Customers LookUpEdit ---
             var customerRepo = new GenericRepository<Customer>();
             var customerManager = new CustomerManager(customerRepo);
 
-            // Veritabanından çek ve kutuya ata
-            lkpMusteri.Properties.DataSource = customerManager.GetAll();
+            // Fetch from database and assign to the control
+            lkpCustomer.Properties.DataSource = customerManager.GetAll();
 
-            // --- 2. Tarihi (Date) Bugüne Ayarla ---
-            if (_guncellenecekId == 0) // Sadece yeni sipariş için
+            // --- 2. Set the Date to Today ---
+            if (_recordIdToUpdate == 0) // Only for new orders
             {
-                dateTarih.DateTime = DateTime.Now;
+                dateOrderDate.DateTime = DateTime.Now;
             }
 
-            // --- 3. Grid (Sepet) Ayarları ---
-            // Grid'i oluşturduğumuz BindingList'e bağlıyoruz.
-            // Artık _orderItems'a ne eklersek ekranda görünecek.
-            gridSiparisKalemleri.DataSource = _orderItems;
+            // --- 3. Grid (Cart) Settings ---
+            // Bind the grid to the BindingList we created.
+            // Whatever we add to _orderItems will now appear on screen.
+            gridOrderItems.DataSource = _orderItems;
 
-            // --- C. ÜRÜN TİPİ DROPDOWN ---
+            // --- C. PRODUCT TYPE DROPDOWN ---
             var productTypeRepo = new GenericRepository<ProductType>();
             var productTypeManager = new ProductTypeManager(productTypeRepo);
 
-            // Designer'da oluşturduğun repository 
+            // Repository created in the Designer
             repoProductType.DataSource = productTypeManager.GetAll();
 
-            // --- D. KUMAŞ DROPDOWN ---
+            // --- D. FABRIC DROPDOWN ---
             var fabricRepo = new GenericRepository<Fabric>();
             var fabricManager = new FabricManager(fabricRepo);
 
-            // Designer'da oluşturduğun repository
+            // Repository created in the Designer
             repoFabric.DataSource = fabricManager.GetAll();
         }
 
-        private void btnKaydet_Click(object sender, EventArgs e)
+        private void btnSave_Click(object sender, EventArgs e)
         {
             try
             {
-                // SENARYO 1: YENİ KAYIT (ID = 0)
-                if (_guncellenecekId == 0)
+                // SCENARIO 1: NEW RECORD (ID = 0)
+                if (_recordIdToUpdate == 0)
                 {
-                    // 1. ADIM: Nesneyi Hazırla
+                    // STEP 1: Prepare the object
                     Order newOrder = CreateOrderFromUI();
 
-                    // 2. ADIM: Stok Kontrolü Yap ve Kullanıcıya Göster
+                    // STEP 2: Validate stock and show result to the user
                     ShowStockValidationResult(newOrder.OrderItems);
 
-                    // 3. ADIM: İşi Bitir
+                    // STEP 3: Complete the operation
                     var orderManager = new OrderManager(new GenericRepository<Order>());
                     orderManager.Add(newOrder);
 
-                    // 4. ADIM: Kullanıcıya Haber Ver
-                    XtraMessageBox.Show("Sipariş başarıyla sisteme eklendi ve kumaş stokları güncellendi!", "Başarılı", 
+                    // STEP 4: Notify the user
+                    XtraMessageBox.Show("Order has been successfully added and fabric stocks have been updated!", "Success",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Form kutularını temizle
+                    // Clear the form fields
                     ClearForm();
                 }
-                // SENARYO 2: GÜNCELLEME (ID > 0)
+                // SCENARIO 2: UPDATE (ID > 0)
                 else
                 {
-                    // Güncellenecek siparişi UI'dan oluştur (ID'sini set et)
-                    Order guncellenecekOrder = CreateOrderFromUI();
-                    guncellenecekOrder.OrderId = _guncellenecekId;
+                    // Create the order to update from the UI (set its ID)
+                    Order orderToUpdate = CreateOrderFromUI();
+                    orderToUpdate.OrderId = _recordIdToUpdate;
 
-                    // Stok kontrolü yap
-                    ShowStockValidationResult(guncellenecekOrder.OrderItems);
+                    // Validate stock
+                    ShowStockValidationResult(orderToUpdate.OrderItems);
 
-                    // Manager'a "Bunu güncelle" de
+                    // Tell the Manager to update this
                     var orderManager = new OrderManager(new GenericRepository<Order>());
-                    orderManager.Update(guncellenecekOrder);
+                    orderManager.Update(orderToUpdate);
 
-                    XtraMessageBox.Show("Sipariş güncellendi ve kumaş stokları yeniden hesaplandı!", "Başarılı", 
+                    XtraMessageBox.Show("Order has been updated and fabric stocks have been recalculated!", "Success",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Close(); // Güncelleme bitince formu kapatmak daha mantıklıdır.
+                    this.Close(); // It makes more sense to close the form after updating.
                 }
 
-                // Anne Forma Sinyal Gönder (Yenilesin)
+                // Send signal to the parent form (to refresh)
                 OperationCompleted?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
-                // Hataları yakala ve göster
+                // Catch and display errors
                 ShowErrorMessage(ex);
             }
         }
@@ -185,23 +185,23 @@ namespace Ototeks.UI
         {
             Order order = new Order();
 
-            // 1. Basit Atamalar
-            order.OrderNumber = txtSiparisNo.Text;
-            order.OrderDate = dateTarih.DateTime;
-            
-            // Güncelleme modundaysa mevcut durumu koru, yeni kayıtta Pending yap
-            order.OrderStatus = _guncellenecekId > 0 ? _mevcutSiparisDurumu : OrderStatus.Pending;
+            // 1. Simple Assignments
+            order.OrderNumber = txtOrderNo.Text;
+            order.OrderDate = dateOrderDate.DateTime;
 
-            // "Müşteri seçili değilse 0 ata, seçiliyse ID'yi al"
-            order.CustomerId = lkpMusteri.EditValue != null ? (int)lkpMusteri.EditValue : 0;
+            // If in update mode, preserve the current status; for new records, set to Pending
+            order.OrderStatus = _recordIdToUpdate > 0 ? _currentOrderStatus : OrderStatus.Pending;
 
-            // 3. İlişkili Veri (Sepet) - OrderItem ID'lerini koru
+            // "If no customer is selected assign 0, otherwise get the ID"
+            order.CustomerId = lkpCustomer.EditValue != null ? (int)lkpCustomer.EditValue : 0;
+
+            // 3. Related Data (Cart) - Preserve OrderItem IDs
             order.OrderItems = new List<OrderItem>();
             foreach (var item in _orderItems)
             {
                 var orderItem = new OrderItem
                 {
-                    OrderItemId = item.OrderItemId, // Mevcut ID'yi koru (güncelleme için)
+                    OrderItemId = item.OrderItemId, // Preserve existing ID (for updates)
                     OrderId = item.OrderId,
                     FabricId = item.FabricId,
                     TypeId = item.TypeId,
@@ -217,15 +217,15 @@ namespace Ototeks.UI
 
         private void ClearForm()
         {
-            txtSiparisNo.Text = "";
-            dateTarih.DateTime = DateTime.Now;
-            lkpMusteri.EditValue = null;
+            txtOrderNo.Text = "";
+            dateOrderDate.DateTime = DateTime.Now;
+            lkpCustomer.EditValue = null;
             _orderItems.Clear();
         }
 
         private void ShowErrorMessage(Exception ex)
         {
-            XtraMessageBox.Show(ex.Message, "Hata Oluştu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            XtraMessageBox.Show(ex.Message, "An Error Occurred", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void ShowStockValidationResult(ICollection<OrderItem> orderItems)
@@ -233,37 +233,37 @@ namespace Ototeks.UI
             try
             {
                 var orderManager = new OrderManager(new GenericRepository<Order>());
-                
-                // Gerekli kumaş miktarlarını hesapla
+
+                // Calculate required fabric amounts
                 var requiredFabrics = orderManager.CalculateRequiredFabrics(orderItems);
-                
+
                 if (requiredFabrics.Any())
                 {
                     var message = new StringBuilder();
-                    message.AppendLine("Bu sipariş için gerekli kumaş miktarları:");
+                    message.AppendLine("Required fabric amounts for this order:");
                     message.AppendLine();
-                    
+
                     foreach (var fabric in requiredFabrics)
                     {
-                        message.AppendLine($"• {fabric.Key}: {fabric.Value:F2} metre");
+                        message.AppendLine($"* {fabric.Key}: {fabric.Value:F2} meters");
                     }
-                    
+
                     message.AppendLine();
-                    message.AppendLine("Devam etmek istiyor musunuz?");
-                    
-                    var result = XtraMessageBox.Show(message.ToString(), "Stok Bilgisi", 
+                    message.AppendLine("Do you want to continue?");
+
+                    var result = XtraMessageBox.Show(message.ToString(), "Stock Information",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                    
+
                     if (result == DialogResult.No)
                     {
-                        throw new Exception("Sipariş işlemi kullanıcı tarafından iptal edildi.");
+                        throw new Exception("Order operation was cancelled by the user.");
                     }
                 }
             }
             catch (Exception ex)
             {
-                // Stok kontrolü hatalarını yakala ve göster
-                throw; // Hatayı yukarı fırlat ki ana catch bloğu yakalasın
+                // Catch stock validation errors and rethrow so the main catch block handles them
+                throw;
             }
         }
 

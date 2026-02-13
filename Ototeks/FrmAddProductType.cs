@@ -10,10 +10,10 @@ namespace Ototeks.UI
 {
     public partial class FrmAddProductType : DevExpress.XtraEditors.XtraForm, IOperationForm
     {
-        // Bu, formun dýþarýya göndereceði sinyaldir
+        // This is the signal that the form will send outward
         public event EventHandler OperationCompleted;
 
-        private int _guncellenecekId = 0; // 0 ise Ekleme Modu, >0 ise Güncelleme Modu
+        private int _recordIdToUpdate = 0; // 0 = Add Mode, >0 = Update Mode
 
         public FrmAddProductType()
         {
@@ -23,90 +23,90 @@ namespace Ototeks.UI
         public FrmAddProductType(int id)
         {
             InitializeComponent();
-            _guncellenecekId = id; // Hangi kaydý düzenleyeceðimizi not ettik.
+            _recordIdToUpdate = id; // Note which record we will edit.
 
-            // Formun baþlýðýný deðiþtir ki kullanýcý anlasýn
-            this.Text = "Ürün Tipi Güncelle";
-            lblBaslik.Text = "Ürün Tipi Güncelleme";
-            btnKaydet.Text = "Güncelle";
+            // Change the form title so the user understands
+            this.Text = "Update Product Type";
+            lblTitle.Text = "Update Product Type";
+            btnSave.Text = "Update";
 
-            getData(); // Kutularý doldur
+            LoadRecordData(); // Fill the fields
         }
 
-        void getData()
+        void LoadRecordData()
         {
-            // Veritabanýndan o id'li ürün tipini bul
+            // Find the product type with this id from the database
             var repo = new GenericRepository<ProductType>();
             var manager = new ProductTypeManager(repo);
-            var productType = manager.GetById(_guncellenecekId);
+            var productType = manager.GetById(_recordIdToUpdate);
 
             if (productType != null)
             {
-                // Kutularý doldur
-                txtUrunTipiAdi.Text = productType.TypeName;
-                txtGerekliKumasMiktari.Text = productType.RequiredFabricAmount.ToString("F2");
+                // Fill the fields
+                txtProductTypeName.Text = productType.TypeName;
+                txtRequiredFabricAmount.Text = productType.RequiredFabricAmount.ToString("F2");
             }
         }
 
-        private void btnKaydet_Click(object sender, EventArgs e)
+        private void btnSave_Click(object sender, EventArgs e)
         {
-            // 1. ADIM: Baðlantýlarý Hazýrla
+            // STEP 1: Prepare connections
             var repo = new GenericRepository<ProductType>();
             var manager = new ProductTypeManager(repo);
 
             try
             {
-                // Gerekli kumaþ miktarýný al
-                decimal gerekliMiktar = 0;
-                decimal.TryParse(txtGerekliKumasMiktari.Text, out gerekliMiktar);
+                // Get the required fabric amount
+                decimal requiredAmount = 0;
+                decimal.TryParse(txtRequiredFabricAmount.Text, out requiredAmount);
 
-                // SENARYO 1: YENÝ KAYIT (ID = 0)
-                if (_guncellenecekId == 0)
+                // SCENARIO 1: NEW RECORD (ID = 0)
+                if (_recordIdToUpdate == 0)
                 {
-                    // Nesneyi Oluþtur
-                    var yeniUrunTipi = new ProductType
+                    // Create the object
+                    var newProductType = new ProductType
                     {
-                        TypeName = txtUrunTipiAdi.Text.Trim(),
-                        RequiredFabricAmount = gerekliMiktar
+                        TypeName = txtProductTypeName.Text.Trim(),
+                        RequiredFabricAmount = requiredAmount
                     };
 
-                    // Manager'a gönder (Oradaki kurallarý kontrol etsin)
-                    manager.Add(yeniUrunTipi);
+                    // Send to Manager (let it check the rules there)
+                    manager.Add(newProductType);
 
-                    // Baþarýlýysa mesaj ver
-                    XtraMessageBox.Show("Ürün tipi baþarýyla sisteme eklendi!", "Tebrikler", 
+                    // Show success message
+                    XtraMessageBox.Show("Product type has been successfully added to the system!", "Success",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Kutularý temizle ki yeni kayýt girebilelim
-                    txtUrunTipiAdi.Text = "";
-                    txtGerekliKumasMiktari.Text = "";
-                    txtUrunTipiAdi.Focus(); // Ýmleci tekrar ilk kutuya koy
+                    // Clear the fields so we can enter a new record
+                    txtProductTypeName.Text = "";
+                    txtRequiredFabricAmount.Text = "";
+                    txtProductTypeName.Focus(); // Move cursor back to the first field
                 }
-                // SENARYO 2: GÜNCELLEME (ID > 0)
+                // SCENARIO 2: UPDATE (ID > 0)
                 else
                 {
-                    // Önce veritabanýndaki orijinal kaydý çek
-                    var guncellenecekUrunTipi = manager.GetById(_guncellenecekId);
+                    // First fetch the original record from the database
+                    var productTypeToUpdate = manager.GetById(_recordIdToUpdate);
 
-                    // Ekrandaki yeni bilgileri üzerine yaz
-                    guncellenecekUrunTipi.TypeName = txtUrunTipiAdi.Text.Trim();
-                    guncellenecekUrunTipi.RequiredFabricAmount = gerekliMiktar;
+                    // Overwrite with the new information from the screen
+                    productTypeToUpdate.TypeName = txtProductTypeName.Text.Trim();
+                    productTypeToUpdate.RequiredFabricAmount = requiredAmount;
 
-                    // Manager'a "Bunu güncelle" de
-                    manager.Update(guncellenecekUrunTipi);
+                    // Tell the Manager to "update this"
+                    manager.Update(productTypeToUpdate);
 
-                    XtraMessageBox.Show("Ürün tipi güncellendi!", "Baþarýlý", 
+                    XtraMessageBox.Show("Product type has been updated!", "Success",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Close(); // Güncelleme bitince formu kapatmak daha mantýklýdýr.
+                    this.Close(); // It makes more sense to close the form after updating.
                 }
 
-                // Anne Forma Sinyal Gönder (Yenilesin)
+                // Send signal to the parent form (to refresh)
                 OperationCompleted?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
-                // Hatayý burada yakalayýp kullanýcýya gösteriyoruz.
-                XtraMessageBox.Show(ex.Message, "Hata Oluþtu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Catch the error here and show it to the user.
+                XtraMessageBox.Show(ex.Message, "Error Occurred", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

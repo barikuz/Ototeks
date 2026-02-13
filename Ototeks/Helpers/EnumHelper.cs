@@ -5,70 +5,70 @@ using System.Collections.Generic;
 namespace Ototeks.UI.Helpers
 {
     /// <summary>
-    /// Enum deðerlerini kullanýcý dostu metinlere dönüþtürmek için yardýmcý sýnýf
+    /// Helper class for converting enum values to user-friendly text
     /// </summary>
     public static class EnumHelper
     {
         /// <summary>
-        /// Kumaþ hata türleri için Ýngilizce-Türkçe eþleþtirme sözlüðü
+        /// Dictionary mapping fabric defect type keys to their display names
         /// </summary>
         private static readonly Dictionary<string, string> DefectTypeTranslations = new(StringComparer.OrdinalIgnoreCase)
         {
-            { "DefectFree", "Hatasýz" },
-            { "Hole", "Delik" },
-            { "Stain", "Leke" },
-            { "WeavingError", "Dokuma Hatasý" },
-            { "BrokenStitch", "Kopuk Dikiþ" },
+            { "DefectFree", "Defect Free" },
+            { "Hole", "Hole" },
+            { "Stain", "Stain" },
+            { "WeavingError", "Weaving Error" },
+            { "BrokenStitch", "Broken Stitch" },
         };
 
         /// <summary>
-        /// OrderStatus enum deðerini Türkçe aþama ismini döndürür
+        /// Returns the display name for a given OrderStatus enum value
         /// </summary>
-        /// <param name="status">OrderStatus enum deðeri</param>
-        /// <returns>Aþama ismi (Türkçe)</returns>
+        /// <param name="status">OrderStatus enum value</param>
+        /// <returns>Display name of the order status</returns>
         public static string GetOrderStatusName(OrderStatus status)
         {
             return status switch
             {
-                OrderStatus.Pending => "Sipariþ Alýndý",
-                OrderStatus.Cutting => "Kesimhane",
-                OrderStatus.Sewing => "Dikim Atölyesi",
-                OrderStatus.Ironing => "Ütü & Paket",
-                OrderStatus.QualityControl => "Kalite Kontrol",
-                OrderStatus.Completed => "Tamamlandý",
-                OrderStatus.Cancelled => "Ýptal Edildi",
-                _ => "Bilinmeyen"
+                OrderStatus.Pending => "Order Received",
+                OrderStatus.Cutting => "Cutting",
+                OrderStatus.Sewing => "Sewing",
+                OrderStatus.Ironing => "Ironing & Packaging",
+                OrderStatus.QualityControl => "Quality Control",
+                OrderStatus.Completed => "Completed",
+                OrderStatus.Cancelled => "Cancelled",
+                _ => "Unknown"
             };
         }
 
         /// <summary>
-        /// Hata türü ismini Türkçe'ye çevirir
+        /// Returns the display name for a given defect type key
         /// </summary>
-        /// <param name="defectType">Ýngilizce hata türü ismi</param>
-        /// <returns>Türkçe hata türü ismi</returns>
+        /// <param name="defectType">Defect type key</param>
+        /// <returns>Display name of the defect type</returns>
         public static string GetDefectTypeName(string defectType)
         {
             if (string.IsNullOrEmpty(defectType))
                 return "-";
 
-            // Sözlükte varsa çeviriyi döndür
+            // If found in the dictionary, return the translated name
             if (DefectTypeTranslations.TryGetValue(defectType, out string translation))
                 return translation;
 
-            // Sözlükte yoksa orijinal deðeri döndür
+            // If not found in the dictionary, return the original value
             return defectType;
         }
 
         /// <summary>
-        /// Hata türünün "hatasýz/iyi" anlamýna gelip gelmediðini kontrol eder
+        /// Checks whether the given defect type means "defect-free / good quality"
         /// </summary>
-        /// <param name="defectType">Hata türü ismi</param>
-        /// <returns>Hatasýz ise true</returns>
+        /// <param name="defectType">Defect type name</param>
+        /// <returns>True if defect-free</returns>
         public static bool IsDefectFree(string defectType)
         {
             if (string.IsNullOrEmpty(defectType))
                 return false;
-            
+
             return defectType == "DefectFree";
         }
     }

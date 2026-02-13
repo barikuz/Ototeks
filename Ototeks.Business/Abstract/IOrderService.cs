@@ -1,32 +1,33 @@
-﻿using Ototeks.Entities;
+using Ototeks.Entities;
 using System.Collections.Generic;
 
 namespace Ototeks.Business.Abstract
 {
     public interface IOrderService
     {
-        // Standart İşlemler
+        // Standard Operations
         void Add(Order order);
         void Update(Order order);
         void Delete(Order order);
 
-        // Listeleme
+        // Listing
         List<Order> GetAll();
         Order GetById(int id);
 
-        // Stok Kontrolü İşlemleri
+        // Stock Control Operations
+
         /// <summary>
-        /// Sipariş vermeden önce stok durumunu kontrol eder
+        /// Checks stock availability before placing an order
         /// </summary>
-        /// <param name="orderItems">Kontrol edilecek sipariş kalemleri</param>
-        /// <returns>Stok yetersizliği var mı?</returns>
+        /// <param name="orderItems">Order items to check</param>
+        /// <returns>Fabric name and shortage amount pairs (empty if sufficient)</returns>
         Dictionary<string, decimal> CheckOrderStockAvailability(ICollection<OrderItem> orderItems);
 
         /// <summary>
-        /// Belirtilen sipariş kalemleri için gerekli kumaş miktarlarını hesaplar
+        /// Calculates the required fabric amounts for the given order items
         /// </summary>
-        /// <param name="orderItems">Sipariş kalemleri</param>
-        /// <returns>Kumaş adı ve gerekli miktar çiftleri</returns>
+        /// <param name="orderItems">Order items</param>
+        /// <returns>Fabric name and required amount pairs</returns>
         Dictionary<string, decimal> CalculateRequiredFabrics(ICollection<OrderItem> orderItems);
     }
 }

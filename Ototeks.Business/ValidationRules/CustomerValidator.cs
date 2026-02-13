@@ -9,77 +9,76 @@ namespace Ototeks.Business.ValidationRules
     public class CustomerValidator : AbstractValidator<Customer>
     {
         private readonly IGenericRepository<Customer> _customerRepo;
-        private readonly int? _currentCustomerId; // Güncellenen kaydýn ID'si
+        private readonly int? _currentCustomerId; // ID of the record being updated
 
         public CustomerValidator(IGenericRepository<Customer> customerRepo, int? currentCustomerId = null)
         {
             _customerRepo = customerRepo;
             _currentCustomerId = currentCustomerId;
 
-            // Kural 1: "Müþteri adý boþ olamaz ve benzersizlik kontrolü"
+            // Rule 1: Customer name cannot be empty and must be unique
             RuleFor(x => x.CustomerName)
-                .NotEmpty().WithMessage("Müþteri adý boþ olamaz!")
+                .NotEmpty().WithMessage("Customer name cannot be empty!")
                 .Must(customerName => IsUnique(customerName, c => c.CustomerName))
-                .WithMessage("Bu müþteri adý zaten sistemde kayýtlý!");
+                .WithMessage("This customer name is already registered in the system!");
 
-            // Kural 2: "Telefon boþ olamaz, format kontrolü ve benzersizlik kontrolü"
+            // Rule 2: Phone cannot be empty, format and uniqueness check
             RuleFor(x => x.Phone)
-                .NotEmpty().WithMessage("Telefon numarasý boþ olamaz!")
+                .NotEmpty().WithMessage("Phone number cannot be empty!")
                 .Matches(@"^[\+]?[1-9][\d]{0,15}$")
-                .WithMessage("Geçerli bir telefon numarasý giriniz!")
+                .WithMessage("Please enter a valid phone number!")
                 .Must(phone => IsUnique(phone, c => c.Phone))
-                .WithMessage("Bu telefon numarasý zaten sistemde kayýtlý!");
+                .WithMessage("This phone number is already registered in the system!");
 
-            // Kural 3: "E-posta boþ olamaz ve format,benzersizlik kontrolü"
+            // Rule 3: Email cannot be empty, format and uniqueness check
             RuleFor(x => x.Email)
-                .NotEmpty().WithMessage("E-posta adresi boþ olamaz!")
-                .EmailAddress().WithMessage("Geçerli bir e-posta adresi giriniz!")
+                .NotEmpty().WithMessage("Email address cannot be empty!")
+                .EmailAddress().WithMessage("Please enter a valid email address!")
                 .Must(email => IsUnique(email, c => c.Email))
-                .WithMessage("Bu e-posta adresi zaten sistemde kayýtlý!");
+                .WithMessage("This email address is already registered in the system!");
 
-            // Kural 4: "Adres boþ olamaz"
+            // Rule 4: Address cannot be empty
             RuleFor(x => x.Address)
-                .NotEmpty().WithMessage("Adres bilgisi boþ olamaz!");
+                .NotEmpty().WithMessage("Address cannot be empty!");
 
         }
 
-        // Generic benzersizlik kontrolü
+        // Generic uniqueness check
         private bool IsUnique(string? value, Func<Customer, string?> propertySelector)
         {
             if (string.IsNullOrEmpty(value))
-                return true; // Boþ deðer için benzersizlik kontrolü yapmayýz
+                return true; // Skip uniqueness check for empty values
 
-            // Veritabanýna bak: Bu deðer baþka bir müþteride var mý?
             var dbList = _customerRepo.GetAll();
-            var existingCustomer = dbList.FirstOrDefault(x => 
+            var existingCustomer = dbList.FirstOrDefault(x =>
             {
                 var propertyValue = propertySelector(x);
                 return propertyValue != null && propertyValue.Equals(value, StringComparison.OrdinalIgnoreCase);
             });
-            
+
             if (existingCustomer == null)
             {
-                return true; // Deðer yok, benzersiz
+                return true; // Not found, unique
             }
-            
-            // Eðer güncelleme modundaysak ve bulunan kayýt ayný kayýtsa sorun yok
+
+            // If updating and the found record is the same record, it's fine
             if (_currentCustomerId.HasValue && existingCustomer.CustomerId == _currentCustomerId.Value)
             {
-                return true; // Ayný kayýt, sorun yok
+                return true; // Same record, no conflict
             }
-            
-            return false; // Baþka kayýtta var, benzersiz deðil
+
+            return false; // Exists in another record, not unique
         }
 
-        // Silme Kontrolü Metodu
+        // Deletion validation
         public void ValidateForDeletion(Customer customer)
         {
-            // Bu müþterinin sipariþlerinin olup olmadýðýný kontrol et
+            // Check if this customer has any orders
             var customerWithOrders = _customerRepo.GetById(c => c.CustomerId == customer.CustomerId, "Orders");
-            
+
             if (customerWithOrders?.Orders != null && customerWithOrders.Orders.Any())
             {
-                throw new System.Exception($"'{customer.CustomerName}' isimli müþteri silinemez! Bu müþterinin {customerWithOrders.Orders.Count} adet sipariþi bulunmaktadýr.");
+                throw new System.Exception($"Customer '{customer.CustomerName}' cannot be deleted! This customer has {customerWithOrders.Orders.Count} order(s).");
             }
         }
     }

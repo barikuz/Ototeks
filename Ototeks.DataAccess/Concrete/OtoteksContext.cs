@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Ototeks.Entities;
@@ -40,18 +40,18 @@ public partial class OtoteksContext : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            // 1. Ayar dosyasının yerini bul (Programın çalıştığı klasör)
+            // 1. Locate the configuration file in the application's working directory
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-            // 2. Dosyayı oku
+            // 2. Build the configuration
             IConfigurationRoot configuration = builder.Build();
 
-            // 3. İçindeki 'OtoteksConn' anahtarını al
+            // 3. Retrieve the 'OtoteksConn' connection string
             var connectionString = configuration.GetConnectionString("OtoteksConn");
 
-            // 4. SQLite bağlantısını kur
+            // 4. Configure the SQLite connection
             optionsBuilder.UseSqlite(connectionString);
         }
     }
@@ -103,6 +103,7 @@ public partial class OtoteksContext : DbContext
                 .HasDefaultValue(0m)
                 .HasColumnType("REAL");
 
+            // Set null on delete: removing a Color sets Fabric.ColorId to null
             entity.HasOne(d => d.Color).WithMany(p => p.Fabrics)
                 .HasForeignKey(d => d.ColorId)
                 .OnDelete(DeleteBehavior.SetNull);
@@ -122,8 +123,9 @@ public partial class OtoteksContext : DbContext
             entity.Property(e => e.OrderNumber).HasMaxLength(20);
             entity.Property(e => e.OrderStatus)
                 .HasDefaultValue(OrderStatus.Pending)
-                .HasConversion<int>(); // OrderStatus enum'unu int olarak sakla
+                .HasConversion<int>(); // Store OrderStatus enum as integer
 
+            // Set null on delete: removing a Customer sets Order.CustomerId to null
             entity.HasOne(d => d.Customer).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.CustomerId)
                 .OnDelete(DeleteBehavior.SetNull);
@@ -136,24 +138,28 @@ public partial class OtoteksContext : DbContext
             entity.Property(e => e.OrderItemId).HasColumnName("OrderItemID");
             entity.Property(e => e.CurrentStage)
                 .HasDefaultValue(OrderStatus.Pending)
-                .HasConversion<int>(); // OrderStatus enum'unu int olarak sakla
+                .HasConversion<int>(); // Store OrderStatus enum as integer
             entity.Property(e => e.FabricId).HasColumnName("FabricID");
             entity.Property(e => e.OrderId).HasColumnName("OrderID");
             entity.Property(e => e.ProcessedByUserId).HasColumnName("ProcessedByUserID");
             entity.Property(e => e.TypeId).HasColumnName("TypeID");
 
+            // Set null on delete: removing a Fabric sets OrderItem.FabricId to null
             entity.HasOne(d => d.Fabric).WithMany(p => p.OrderItems)
                 .HasForeignKey(d => d.FabricId)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            // Cascade delete: deleting an Order removes all its OrderItems
             entity.HasOne(d => d.Order).WithMany(p => p.OrderItems)
                 .HasForeignKey(d => d.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Set null on delete: removing a User sets OrderItem.ProcessedByUserId to null
             entity.HasOne(d => d.ProcessedByUser).WithMany(p => p.OrderItems)
                 .HasForeignKey(d => d.ProcessedByUserId)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            // Set null on delete: removing a ProductType sets OrderItem.TypeId to null
             entity.HasOne(d => d.Type).WithMany(p => p.OrderItems)
                 .HasForeignKey(d => d.TypeId)
                 .OnDelete(DeleteBehavior.SetNull);
@@ -184,10 +190,12 @@ public partial class OtoteksContext : DbContext
             entity.Property(e => e.OperatorNote).HasMaxLength(200);
             entity.Property(e => e.OrderItemId).HasColumnName("OrderItemID");
 
+            // Set null on delete: removing a DefectType sets QualityLog.DefectId to null
             entity.HasOne(d => d.Defect).WithMany(p => p.QualityLogs)
                 .HasForeignKey(d => d.DefectId)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            // Cascade delete: deleting an OrderItem removes all its QualityLogs
             entity.HasOne(d => d.OrderItem).WithMany(p => p.QualityLogs)
                 .HasForeignKey(d => d.OrderItemId)
                 .OnDelete(DeleteBehavior.Cascade);

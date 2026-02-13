@@ -1,4 +1,4 @@
-﻿using DevExpress.XtraEditors;
+using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraGrid.Views.Grid;
 using Ototeks.Business.Concrete;
@@ -23,9 +23,9 @@ namespace Ototeks.UI
         private GenericRepository<Order> _orderRepo;
         private GenericRepository<OrderItem> _orderItemRepo;
 
-        // Hangi view'ın aktif olduğunu takip etmek için (true = detail view aktif)
+        // Track which view is active (true = detail view is active)
         private bool _isDetailViewActive = false;
-        // Aktif detail view referansı
+        // Active detail view reference
         private GridView _currentDetailView = null;
 
         public FrmProductionTrack()
@@ -48,7 +48,7 @@ namespace Ototeks.UI
                 _orderItemRepo = new GenericRepository<OrderItem>();
                 _orderManager = new OrderManager(_orderRepo);
 
-                // Veritabanından doğrudan iptal edilmiş siparişleri getirmiyoruz
+                // Do not fetch cancelled orders directly from the database
                 // Include OrderItems and their related Fabric and Type so detail grid can show names
                 var orders = _orderRepo.GetAll(
                     o => o.OrderStatus != OrderStatus.Cancelled,
@@ -56,20 +56,20 @@ namespace Ototeks.UI
                     "OrderItems.Fabric",
                     "OrderItems.Type"
                 );
-                
-                // Her siparişin durumunu kalemlerden hesapla
+
+                // Calculate each order's status from its items
                 foreach (var order in orders)
                 {
                     SyncOrderStatusFromItems(order);
                 }
-                
+
                 gridControl1.DataSource = orders;
             }
             catch (Exception ex)
             {
-                XtraMessageBox.Show($"Siparişler yüklenirken hata oluştu: {ex.Message}", 
-                    "Hata", 
-                    MessageBoxButtons.OK, 
+                XtraMessageBox.Show($"An error occurred while loading orders: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
         }
@@ -81,42 +81,42 @@ namespace Ototeks.UI
 
         private void SetupGridEvents()
         {
-            // Master view'a tıklandığında
+            // When master view is clicked
             gridView1.Click += (s, e) =>
             {
                 _isDetailViewActive = false;
                 _currentDetailView = null;
-                
+
                 if (gridView1.GetFocusedRow() is Order selectedOrder)
                 {
                     UpdateProgressBar(selectedOrder.OrderStatus);
                 }
             };
 
-            // Detail view oluşturulduğunda
+            // When detail view is created
             gridControl1.ViewRegistered += (s, e) =>
             {
                 if (e.View is GridView detailView && e.View != gridView1)
                 {
-                    // Detail view'da satır seçilmemesi için başlangıçta -1 yap
+                    // Set to -1 initially to prevent row selection in detail view
                     detailView.FocusedRowHandle = DevExpress.XtraGrid.GridControl.InvalidRowHandle;
-                    
-                    // Detail view'a tıklandığında (mouse click ile)
+
+                    // When detail view is clicked (via mouse click)
                     detailView.Click += (sender, args) =>
                     {
                         _isDetailViewActive = true;
                         _currentDetailView = detailView;
-                        
+
                         if (detailView.GetFocusedRow() is OrderItem selectedItem)
                         {
                             UpdateProgressBar(selectedItem.CurrentStage);
                         }
                     };
 
-                    // Detail view'da satır değiştiğinde (sadece aktifse)
+                    // When row changes in detail view (only if active)
                     detailView.FocusedRowChanged += (sender, args) =>
                     {
-                        // Sadece kullanıcı tıklayarak seçtiyse (aktif ise) çalış
+                        // Only run if user selected by clicking (if active)
                         if (_isDetailViewActive && detailView.GetFocusedRow() is OrderItem selectedItem)
                         {
                             UpdateProgressBar(selectedItem.CurrentStage);
@@ -136,7 +136,7 @@ namespace Ototeks.UI
 
         private void gridView2_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
         {
-            // Sadece kullanıcı tıklayarak seçtiyse çalış
+            // Only run if user selected by clicking
             if (_isDetailViewActive && sender is GridView detailView && detailView.GetFocusedRow() is OrderItem selectedOrderItem)
             {
                 _currentDetailView = detailView;
@@ -182,64 +182,64 @@ namespace Ototeks.UI
                 }
                 else
                 {
-                    XtraMessageBox.Show("Lütfen bir sipariş veya sipariş kalemi seçiniz.", 
-                        "Uyarı", 
-                        MessageBoxButtons.OK, 
+                    XtraMessageBox.Show("Please select an order or an order item.",
+                        "Warning",
+                        MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                XtraMessageBox.Show($"Aşama güncellenirken hata oluştu: {ex.Message}", 
-                    "Hata", 
-                    MessageBoxButtons.OK, 
+                XtraMessageBox.Show($"An error occurred while updating the stage: {ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
         }
 
         /// <summary>
-        /// Generic aşama güncelleme metodu - Order ve OrderItem için ortak çalışır
+        /// Generic stage update method - works for both Order and OrderItem
         /// </summary>
         private void UpdateStage<T>(T entity, int direction) where T : class
         {
-            // Mevcut durumu ve entity tipini belirle
+            // Determine current status and entity type
             var (currentStatus, entityName) = entity switch
             {
-                Order order => (order.OrderStatus, "Sipariş"),
-                OrderItem item => (item.CurrentStage, "Sipariş kalemi"),
-                _ => throw new ArgumentException("Desteklenmeyen entity tipi")
+                Order order => (order.OrderStatus, "Order"),
+                OrderItem item => (item.CurrentStage, "Order item"),
+                _ => throw new ArgumentException("Unsupported entity type")
             };
 
-            // İptal edilmiş kayıtlar için işlem yapma
+            // Do not process cancelled records
             if (currentStatus == OrderStatus.Cancelled)
             {
-                XtraMessageBox.Show($"İptal edilmiş {entityName.ToLower()}in durumu değiştirilemez.", 
-                    "Uyarı", 
-                    MessageBoxButtons.OK, 
+                XtraMessageBox.Show($"The status of a cancelled {entityName.ToLower()} cannot be changed.",
+                    "Warning",
+                    MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
                 return;
             }
 
-            // Yeni aşamayı hesapla
+            // Calculate the new stage
             int newStageValue = (int)currentStatus + direction;
 
-            // Geçerli aralıkta mı kontrol et (0-5 arası)
+            // Check if within valid range (0-5)
             if (newStageValue < 0 || newStageValue > 5)
             {
-                string message = direction > 0 
-                    ? $"{entityName} zaten son aşamada." 
-                    : $"{entityName} zaten ilk aşamada.";
-                
-                XtraMessageBox.Show(message, 
-                    "Uyarı", 
-                    MessageBoxButtons.OK, 
+                string message = direction > 0
+                    ? $"{entityName} is already at the last stage."
+                    : $"{entityName} is already at the first stage.";
+
+                XtraMessageBox.Show(message,
+                    "Warning",
+                    MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
                 return;
             }
 
             OrderStatus newStatus = (OrderStatus)newStageValue;
 
-            // Entity tipine göre güncelleme yap
+            // Update based on entity type
             switch (entity)
             {
                 case Order order:
@@ -251,31 +251,31 @@ namespace Ototeks.UI
                     break;
             }
 
-            // Progress bar'ı güncelle
+            // Update the progress bar
             UpdateProgressBar(newStatus);
 
-            // Başarı mesajı
+            // Success message
             string stageName = EnumHelper.GetOrderStatusName(newStatus);
-            XtraMessageBox.Show($"{entityName} durumu '{stageName}' olarak güncellendi.", 
-                "Başarılı", 
-                MessageBoxButtons.OK, 
+            XtraMessageBox.Show($"{entityName} status updated to '{stageName}'.",
+                "Success",
+                MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
         }
 
         /// <summary>
-        /// Siparişi ve geride kalan kalemleri günceller
+        /// Updates the order and its remaining items
         /// </summary>
         private void UpdateOrderWithItems(Order order, OrderStatus newStatus)
         {
-            // Eski durumu kaydet (yön belirleme için)
+            // Save old status (for direction determination)
             OrderStatus oldStatus = order.OrderStatus;
             bool isMovingBackward = (int)newStatus < (int)oldStatus;
 
-            // Sipariş durumunu güncelle
+            // Update order status
             UpdateOrderInDatabase(order, newStatus);
             order.OrderStatus = newStatus;
 
-            // Kalemleri güncelle
+            // Update items
             foreach (var item in order.OrderItems)
             {
                 if (item.CurrentStage == OrderStatus.Cancelled)
@@ -284,12 +284,12 @@ namespace Ototeks.UI
                 bool shouldUpdate;
                 if (isMovingBackward)
                 {
-                    // Geri hareket: Yeni durumdan yüksek kalemleri geri al
+                    // Moving backward: Pull back items higher than new status
                     shouldUpdate = (int)item.CurrentStage > (int)newStatus;
                 }
                 else
                 {
-                    // İleri hareket: Yeni durumdan düşük aşamadaki kalemleri ileri taşı
+                    // Moving forward: Push items at lower stages than new status forward
                     shouldUpdate = (int)item.CurrentStage < (int)newStatus;
                 }
 
@@ -303,15 +303,15 @@ namespace Ototeks.UI
         }
 
         /// <summary>
-        /// Sipariş kalemini günceller ve siparişin durumunu senkronize eder
+        /// Updates the order item and synchronizes the order status
         /// </summary>
         private void UpdateOrderItemAndSyncOrder(OrderItem orderItem, OrderStatus newStatus)
         {
-            // Önce kalemi güncelle
+            // Update the item first
             UpdateOrderItemInDatabase(orderItem, newStatus);
             orderItem.CurrentStage = newStatus;
 
-            // Ana siparişi bul ve durumunu kalemlere göre senkronize et
+            // Find the parent order and sync its status from items
             var parentOrder = gridView1.GetFocusedRow() as Order;
             if (parentOrder != null)
             {
@@ -321,24 +321,24 @@ namespace Ototeks.UI
         }
 
         /// <summary>
-        /// Siparişin durumunu kalemlerden hesaplar ve günceller
-        /// Sipariş durumu = En düşük aşamadaki kalemin durumu
+        /// Calculates and updates the order status from its items.
+        /// Order status = Status of the item at the lowest stage.
         /// </summary>
         private void SyncOrderStatusFromItems(Order order)
         {
             if (order.OrderItems == null || !order.OrderItems.Any())
                 return;
 
-            // İptal edilmemiş kalemlerin en düşük aşamasını bul
+            // Find the lowest stage among non-cancelled items
             var activeItems = order.OrderItems.Where(i => i.CurrentStage != OrderStatus.Cancelled);
-            
+
             if (!activeItems.Any())
                 return;
 
             var minStage = activeItems.Min(i => (int)i.CurrentStage);
             var newOrderStatus = (OrderStatus)minStage;
 
-            // Eğer sipariş durumu farklıysa güncelle
+            // Update if order status is different
             if (order.OrderStatus != newOrderStatus)
             {
                 UpdateOrderInDatabase(order, newOrderStatus);
@@ -347,7 +347,7 @@ namespace Ototeks.UI
         }
 
         /// <summary>
-        /// Order'ı veritabanında günceller
+        /// Updates the order in the database
         /// </summary>
         private void UpdateOrderInDatabase(Order order, OrderStatus newStatus)
         {
@@ -364,7 +364,7 @@ namespace Ototeks.UI
         }
 
         /// <summary>
-        /// OrderItem'ı veritabanında günceller
+        /// Updates the order item in the database
         /// </summary>
         private void UpdateOrderItemInDatabase(OrderItem orderItem, OrderStatus newStatus)
         {
@@ -382,7 +382,7 @@ namespace Ototeks.UI
         }
 
         /// <summary>
-        /// Teslim tarihi değiştiğinde veritabanını günceller
+        /// Updates the database when the due date changes
         /// </summary>
         private void gridView1_CellValueChanged(object sender, DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs e)
         {
@@ -395,7 +395,7 @@ namespace Ototeks.UI
                 if (order == null)
                     return;
 
-                // Veritabanında güncelle
+                // Update in database
                 var orderToUpdate = new Order
                 {
                     OrderId = order.OrderId,
@@ -408,16 +408,16 @@ namespace Ototeks.UI
                 _orderManager.Update(orderToUpdate);
 
                 XtraMessageBox.Show(
-                    $"Sipariş {order.OrderNumber} için teslim tarihi güncellendi.",
-                    "Başarılı",
+                    $"Due date updated for order {order.OrderNumber}.",
+                    "Success",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
                 XtraMessageBox.Show(
-                    $"Teslim tarihi güncellenirken hata oluştu: {ex.Message}",
-                    "Hata",
+                    $"An error occurred while updating the due date: {ex.Message}",
+                    "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }

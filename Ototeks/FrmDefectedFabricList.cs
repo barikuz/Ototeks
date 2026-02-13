@@ -22,9 +22,9 @@ namespace Ototeks.UI
         private GenericRepository<Order> _orderRepo;
         private GenericRepository<QualityLog> _qualityLogRepo;
 
-        // Seçili hatalı kalem için
+        // For the selected defected item
         private DefectedOrderItemViewModel _selectedDefectedItem;
-        // Seçili siparişin OrderId'si (expand durumunu korumak için)
+        // OrderId of the selected order (to preserve expand state)
         private int? _lastExpandedOrderId;
 
         public FrmDefectedFabricList()
@@ -45,7 +45,7 @@ namespace Ototeks.UI
                 _orderRepo = new GenericRepository<Order>();
                 _qualityLogRepo = new GenericRepository<QualityLog>();
 
-                // Tüm hatalı kalite loglarını al (Include ile ilişkili verileri de çek)
+                // Get all defective quality logs (also include related data)
                 var defectedLogs = _qualityLogRepo.GetAll(
                     q => q.IsDefective == true,
                     "OrderItem",
@@ -57,14 +57,14 @@ namespace Ototeks.UI
                     "Defect"
                 );
 
-                // Hatalı kalemi olan siparişleri grupla
+                // Group orders that have defective items
                 var ordersWithDefects = defectedLogs
                     .Where(q => q.OrderItem?.Order != null)
                     .GroupBy(q => q.OrderItem.Order.OrderId)
                     .Select(g => g.First().OrderItem.Order)
                     .ToList();
 
-                // Her sipariş için hatalı kalem bilgilerini oluştur
+                // Create defective item details for each order
                 var defectedOrderViewModels = new List<DefectedOrderViewModel>();
 
                 foreach (var order in ordersWithDefects)
@@ -80,12 +80,12 @@ namespace Ototeks.UI
                         DefectedItems = new List<DefectedOrderItemViewModel>()
                     };
 
-                    // Bu siparişe ait hatalı kalemleri bul
+                    // Find defective items belonging to this order
                     var orderDefectedLogs = defectedLogs
                         .Where(q => q.OrderItem?.OrderId == order.OrderId)
                         .ToList();
 
-                    // Hatalı kalem view model'lerini oluştur
+                    // Create defective item view models
                     foreach (var log in orderDefectedLogs)
                     {
                         var item = log.OrderItem;
@@ -94,13 +94,13 @@ namespace Ototeks.UI
                         defectedOrderVM.DefectedItems.Add(new DefectedOrderItemViewModel
                         {
                             OrderItemId = item.OrderItemId,
-                            QualityLogId = log.LogId, // Silme işlemi için LogId'yi de saklıyoruz
+                            QualityLogId = log.LogId, // Also store LogId for delete operation
                             FabricName = item.Fabric?.FabricName ?? "-",
                             ColorName = item.Fabric?.Color?.ColorName ?? "-",
                             TypeName = item.Type?.TypeName ?? "-",
                             Quantity = item.Quantity,
                             CurrentStage = item.CurrentStage,
-                            // Yeni kolonlar - Hata bilgileri
+                            // New columns - Defect details
                             DefectType = log.Defect?.DefectName ?? "-",
                             ConfidenceScore = log.ConfidenceScore ?? 0,
                             AnalysisDate = log.InspectionDate
@@ -112,42 +112,42 @@ namespace Ototeks.UI
 
                 gridControl1.DataSource = defectedOrderViewModels;
 
-                // Eğer daha önce expand edilmiş bir sipariş varsa, onu tekrar expand et
+                // If a previously expanded order exists, re-expand it
                 RestoreExpandedOrder();
             }
             catch (Exception ex)
             {
                 XtraMessageBox.Show(
-                    $"Hatalı kumaşlar yüklenirken hata oluştu: {ex.Message}",
-                    "Hata",
+                    $"An error occurred while loading defective fabrics: {ex.Message}",
+                    "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
         }
 
         /// <summary>
-        /// Daha önce expand edilmiş siparişi bulup tekrar expand eder
+        /// Finds and re-expands a previously expanded order.
         /// </summary>
         private void RestoreExpandedOrder()
         {
             if (_lastExpandedOrderId == null)
                 return;
 
-            // Tüm satırları tara ve OrderId'si eşleşen satırı bul
+            // Scan all rows and find the one with matching OrderId
             for (int i = 0; i < gridView1.DataRowCount; i++)
             {
                 var row = gridView1.GetRow(i) as DefectedOrderViewModel;
                 if (row != null && row.OrderId == _lastExpandedOrderId)
                 {
-                    // Satırı odakla
+                    // Focus the row
                     gridView1.FocusedRowHandle = i;
-                    
-                    // Master-detail ilişkisini expand et
+
+                    // Expand the master-detail relation
                     gridView1.SetMasterRowExpanded(i, true);
-                    
-                    // Satırın görünür olmasını sağla
+
+                    // Ensure the row is visible
                     gridView1.MakeRowVisible(i);
-                    
+
                     break;
                 }
             }
@@ -155,7 +155,7 @@ namespace Ototeks.UI
 
         private void SetupGrid()
         {
-            // Grid'e Master-Detail özelliği ver
+            // Enable Master-Detail for the grid
             gridView1.ActivateMasterDetail<DefectedOrderViewModel>(
                 "DefectedItems",
                 order => order.DefectedItems);
@@ -163,7 +163,7 @@ namespace Ototeks.UI
 
         private void gridView1_CustomColumnDisplayText(object sender, DevExpress.XtraGrid.Views.Base.CustomColumnDisplayTextEventArgs e)
         {
-            // Ana tablodaki OrderStatus kolonunu Türkçe göster
+            // Display OrderStatus column in the master table
             if (e.Column.FieldName == "OrderStatus" && e.Value is OrderStatus status)
             {
                 e.DisplayText = EnumHelper.GetOrderStatusName(status);
@@ -172,17 +172,17 @@ namespace Ototeks.UI
 
         private void gridView2_CustomColumnDisplayText(object sender, DevExpress.XtraGrid.Views.Base.CustomColumnDisplayTextEventArgs e)
         {
-            // Alt tablodaki CurrentStage kolonunu Türkçe göster
+            // Display CurrentStage column in the detail table
             if (e.Column.FieldName == "CurrentStage" && e.Value is OrderStatus status)
             {
                 e.DisplayText = EnumHelper.GetOrderStatusName(status);
             }
-            // Güven skorunu yüzde olarak göster
+            // Display confidence score as percentage
             else if (e.Column.FieldName == "ConfidenceScore" && e.Value is double score)
             {
                 e.DisplayText = $"%{score:F1}";
             }
-            // Hata türünü Türkçe göster
+            // Display defect type
             else if (e.Column.FieldName == "DefectType" && e.Value is string defectType)
             {
                 e.DisplayText = EnumHelper.GetDefectTypeName(defectType);
@@ -190,7 +190,7 @@ namespace Ototeks.UI
         }
 
         /// <summary>
-        /// Detail view (sipariş kalemleri) için sağ tık menüsü gösterme
+        /// Show context menu for detail view (order items).
         /// </summary>
         private void gridView2_PopupMenuShowing(object sender, PopupMenuShowingEventArgs e)
         {
@@ -199,37 +199,37 @@ namespace Ototeks.UI
 
             var hitInfo = e.HitInfo;
 
-            // Sadece satıra tıklandığında menüyü göster
+            // Only show menu when clicking on a row
             if (hitInfo.InRow)
             {
-                // Seçili satırı al
+                // Get the selected row
                 _selectedDefectedItem = view.GetRow(hitInfo.RowHandle) as DefectedOrderItemViewModel;
 
                 if (_selectedDefectedItem != null)
                 {
-                    // Sil butonunu görünür yap
+                    // Make delete button visible
                     btnDelete.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
 
-                    // Hangi siparişin altındaki kalem olduğunu bul ve sakla
+                    // Find and save which order this item belongs to
                     SaveCurrentExpandedOrder(view);
 
-                    // Menüyü göster
+                    // Show the menu
                     popupMenuDetail.ShowPopup(Control.MousePosition);
                 }
             }
         }
 
         /// <summary>
-        /// Şu an expand edilmiş siparişin OrderId'sini saklar
+        /// Saves the OrderId of the currently expanded order.
         /// </summary>
         private void SaveCurrentExpandedOrder(GridView detailView)
         {
-            // Detail view'ın parent row handle'ını al
+            // Get the parent row handle of the detail view
             int parentRowHandle = detailView.SourceRowHandle;
-            
-            // Parent view'dan (gridView1) sipariş bilgisini al
+
+            // Get order info from parent view (gridView1)
             var parentOrder = gridView1.GetRow(parentRowHandle) as DefectedOrderViewModel;
-            
+
             if (parentOrder != null)
             {
                 _lastExpandedOrderId = parentOrder.OrderId;
@@ -237,26 +237,26 @@ namespace Ototeks.UI
         }
 
         /// <summary>
-        /// Hatalı kalem kaydını sil
+        /// Delete defect record.
         /// </summary>
         private void btnDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             if (_selectedDefectedItem == null)
             {
                 XtraMessageBox.Show(
-                    "Lütfen silmek istediğiniz hatalı kalemi seçin.",
-                    "Uyarı",
+                    "Please select the defect record you want to delete.",
+                    "Warning",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
                 return;
             }
 
-            // Kullanıcıdan onay al
+            // Get confirmation from user
             var result = XtraMessageBox.Show(
-                $"'{_selectedDefectedItem.FabricName}' kumaşına ait hata kaydını silmek istediğinize emin misiniz?\n\n" +
-                $"Hata Türü: {EnumHelper.GetDefectTypeName(_selectedDefectedItem.DefectType)}\n" +
-                $"Güven Skoru: %{_selectedDefectedItem.ConfidenceScore:F1}",
-                "Silme Onayı",
+                $"Are you sure you want to delete the defect record for '{_selectedDefectedItem.FabricName}' fabric?\n\n" +
+                $"Defect Type: {EnumHelper.GetDefectTypeName(_selectedDefectedItem.DefectType)}\n" +
+                $"Confidence Score: %{_selectedDefectedItem.ConfidenceScore:F1}",
+                "Delete Confirmation",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Warning);
 
@@ -265,26 +265,26 @@ namespace Ototeks.UI
 
             try
             {
-                // QualityLog kaydını veritabanından sil
+                // Delete QualityLog record from database
                 var qualityLog = _qualityLogRepo.GetById(_selectedDefectedItem.QualityLogId);
                 if (qualityLog != null)
                 {
                     _qualityLogRepo.Delete(qualityLog);
 
                     XtraMessageBox.Show(
-                        "Hata kaydı başarıyla silindi.",
-                        "Başarılı",
+                        "Defect record deleted successfully.",
+                        "Success",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
 
-                    // Listeyi yenile (expand durumunu koruyarak)
+                    // Refresh the list (preserving expand state)
                     LoadDefectedOrders();
                 }
                 else
                 {
                     XtraMessageBox.Show(
-                        "Hata kaydı bulunamadı.",
-                        "Hata",
+                        "Defect record not found.",
+                        "Error",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
                 }
@@ -292,8 +292,8 @@ namespace Ototeks.UI
             catch (Exception ex)
             {
                 XtraMessageBox.Show(
-                    $"Hata kaydı silinirken bir sorun oluştu: {ex.Message}",
-                    "Hata",
+                    $"An error occurred while deleting the defect record: {ex.Message}",
+                    "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
@@ -308,7 +308,7 @@ namespace Ototeks.UI
     #region ViewModels
 
     /// <summary>
-    /// Hatalı sipariş için ViewModel - Master Grid'de gösterilecek
+    /// ViewModel for defected order - displayed in the Master Grid.
     /// </summary>
     public class DefectedOrderViewModel
     {
@@ -320,28 +320,28 @@ namespace Ototeks.UI
         public OrderStatus OrderStatus { get; set; }
 
         /// <summary>
-        /// Bu siparişe ait hatalı kalemler - Detail Grid'de gösterilecek
+        /// Defective items belonging to this order - displayed in the Detail Grid.
         /// </summary>
         public List<DefectedOrderItemViewModel> DefectedItems { get; set; }
     }
 
     /// <summary>
-    /// Hatalı sipariş kalemi için ViewModel - Detail Grid'de gösterilecek
+    /// ViewModel for defected order item - displayed in the Detail Grid.
     /// </summary>
     public class DefectedOrderItemViewModel
     {
         public int OrderItemId { get; set; }
-        public int QualityLogId { get; set; } // Silme işlemi için QualityLog ID'si
+        public int QualityLogId { get; set; } // QualityLog ID for delete operation
         public string FabricName { get; set; }
-        public string ColorName { get; set; }  // Kumaş Rengi
+        public string ColorName { get; set; }  // Fabric Color
         public string TypeName { get; set; }
         public int Quantity { get; set; }
         public OrderStatus CurrentStage { get; set; }
 
-        // Hata bilgileri - Yeni kolonlar
-        public string DefectType { get; set; }      // Hata Türü
-        public double ConfidenceScore { get; set; } // Güven Skoru
-        public DateTime? AnalysisDate { get; set; } // Analiz Tarihi
+        // Defect details - Additional columns
+        public string DefectType { get; set; }      // Defect Type
+        public double ConfidenceScore { get; set; } // Confidence Score
+        public DateTime? AnalysisDate { get; set; } // Analysis Date
     }
 
     #endregion

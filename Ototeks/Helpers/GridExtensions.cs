@@ -1,23 +1,23 @@
-﻿using DevExpress.XtraGrid.Views.Grid;
+using DevExpress.XtraGrid.Views.Grid;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Ototeks.UI.Helpers // Namespace'i kendine göre ayarla
+namespace Ototeks.UI.Helpers
 {
     public static class GridExtensions
     {
         public static void ActivateMasterDetail<T>(this GridView view, string relationName, Func<T, IEnumerable> getListFunc) where T : class
         {
-            //Olayları (Events) Dinamik Olarak Bağla
+            // Bind events dynamically
 
-            // Soru 1: Kaç detay var? -> 1 tane.
+            // Question 1: How many detail relations? -> 1.
             view.MasterRowGetRelationCount += (s, e) => e.RelationCount = 1;
 
-            // Soru 2: Adı ne? -> relationName parametresi.
+            // Question 2: What is the relation name? -> the relationName parameter.
             view.MasterRowGetRelationName += (s, e) => e.RelationName = relationName;
 
-            // Soru 3: Liste nerede? -> getListFunc kuralını çalıştır.
+            // Question 3: Where is the child list? -> execute the getListFunc delegate.
             view.MasterRowGetChildList += (s, e) =>
             {
                 var gridView = s as GridView;
@@ -25,7 +25,7 @@ namespace Ototeks.UI.Helpers // Namespace'i kendine göre ayarla
 
                 if (rowObj != null)
                 {
-                    // Listeyi al ve Grid'e ver
+                    // Get the list and provide it to the Grid
                     var list = getListFunc(rowObj);
                     if (list != null)
                     {

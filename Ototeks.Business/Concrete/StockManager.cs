@@ -18,6 +18,13 @@ namespace Ototeks.Business.Concrete
             _productTypeRepo = productTypeRepo;
         }
 
+        /// <summary>
+        /// Calculates the total fabric amount required for each fabric across all order items.
+        /// Groups order items by FabricId and accumulates the required fabric amounts into a dictionary
+        /// where the key is the FabricId and the value is the total meters of fabric needed.
+        /// Each item's required amount is determined by multiplying the product type's per-unit fabric
+        /// requirement by the ordered quantity.
+        /// </summary>
         public Dictionary<int, decimal> CalculateRequiredFabricAmounts(ICollection<OrderItem> orderItems)
         {
             var fabricRequirements = new Dictionary<int, decimal>();
@@ -27,7 +34,7 @@ namespace Ototeks.Business.Concrete
                 if (!orderItem.FabricId.HasValue || !orderItem.TypeId.HasValue)
                     continue;
 
-                // Ürün tipinin gerektirdiði kumaþ miktarýný al
+                // Retrieve the fabric amount required per unit for this product type
                 var productType = _productTypeRepo.GetById(orderItem.TypeId.Value);
                 if (productType == null) continue;
 
@@ -36,6 +43,7 @@ namespace Ototeks.Business.Concrete
 
                 int fabricId = orderItem.FabricId.Value;
 
+                // Accumulate into the dictionary, adding to existing entries for the same fabric
                 if (fabricRequirements.ContainsKey(fabricId))
                 {
                     fabricRequirements[fabricId] += totalRequired;
@@ -72,7 +80,7 @@ namespace Ototeks.Business.Concrete
                 if (fabric == null) continue;
 
                 decimal availableStock = fabric.StockQuantity ?? 0;
-                
+
                 if (availableStock < requiredAmount)
                 {
                     decimal insufficiency = requiredAmount - availableStock;
@@ -97,10 +105,9 @@ namespace Ototeks.Business.Concrete
                 if (fabric == null || !fabric.StockQuantity.HasValue)
                     continue;
 
-                // Stoktan düþ
                 fabric.StockQuantity -= amountToDeduct;
-                
-                // Negatif olmasýný engelle (güvenlik için)
+
+                // Clamp to zero to prevent negative stock
                 if (fabric.StockQuantity < 0)
                     fabric.StockQuantity = 0;
 
@@ -121,7 +128,6 @@ namespace Ototeks.Business.Concrete
                 if (fabric == null || !fabric.StockQuantity.HasValue)
                     continue;
 
-                // Stoðu geri ekle
                 fabric.StockQuantity += amountToRestore;
                 _fabricRepo.Update(fabric);
             }

@@ -1,4 +1,4 @@
-﻿namespace Ototeks.UI
+namespace Ototeks.UI
 {
     partial class FrmFabricsList
     {
@@ -37,7 +37,7 @@
             colFabricName = new DevExpress.XtraGrid.Columns.GridColumn();
             colStockQuantity = new DevExpress.XtraGrid.Columns.GridColumn();
             colColor = new DevExpress.XtraGrid.Columns.GridColumn();
-            sagTikMenu = new DevExpress.XtraBars.PopupMenu(components);
+            contextMenu = new DevExpress.XtraBars.PopupMenu(components);
             btnUpdate = new DevExpress.XtraBars.BarButtonItem();
             btnDelete = new DevExpress.XtraBars.BarButtonItem();
             btnAdd = new DevExpress.XtraBars.BarButtonItem();
@@ -49,12 +49,12 @@
             ((System.ComponentModel.ISupportInitialize)gridControl1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gridView1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)sagTikMenu).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)contextMenu).BeginInit();
             ((System.ComponentModel.ISupportInitialize)barManager1).BeginInit();
             SuspendLayout();
-            // 
+            //
             // gridControl1
-            // 
+            //
             gridControl1.DataSource = bindingSource1;
             gridControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             gridControl1.Location = new System.Drawing.Point(0, 0);
@@ -63,92 +63,92 @@
             gridControl1.Size = new System.Drawing.Size(851, 612);
             gridControl1.TabIndex = 0;
             gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gridView1 });
-            // 
+            //
             // bindingSource1
-            // 
+            //
             bindingSource1.DataSource = typeof(Entities.Fabric);
-            // 
+            //
             // gridView1
-            // 
+            //
             gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { colFabricCode, colFabricName, colStockQuantity, colColor });
             gridView1.GridControl = gridControl1;
             gridView1.Name = "gridView1";
             gridView1.OptionsBehavior.Editable = false;
             gridView1.PopupMenuShowing += gridView1_PopupMenuShowing;
             gridView1.DoubleClick += gridView1_DoubleClick;
-            // 
+            //
             // colFabricCode
-            // 
-            colFabricCode.Caption = "Kumaş Kodu";
+            //
+            colFabricCode.Caption = "Fabric Code";
             colFabricCode.FieldName = "FabricCode";
             colFabricCode.MinWidth = 25;
             colFabricCode.Name = "colFabricCode";
             colFabricCode.Visible = true;
             colFabricCode.VisibleIndex = 0;
             colFabricCode.Width = 94;
-            // 
+            //
             // colFabricName
-            // 
-            colFabricName.Caption = "Kumaş Adı";
+            //
+            colFabricName.Caption = "Fabric Name";
             colFabricName.FieldName = "FabricName";
             colFabricName.MinWidth = 25;
             colFabricName.Name = "colFabricName";
             colFabricName.Visible = true;
             colFabricName.VisibleIndex = 1;
             colFabricName.Width = 94;
-            // 
+            //
             // colStockQuantity
-            // 
-            colStockQuantity.Caption = "Stok Miktarı";
+            //
+            colStockQuantity.Caption = "Stock Quantity";
             colStockQuantity.FieldName = "StockQuantity";
             colStockQuantity.MinWidth = 25;
             colStockQuantity.Name = "colStockQuantity";
             colStockQuantity.Visible = true;
             colStockQuantity.VisibleIndex = 2;
             colStockQuantity.Width = 94;
-            // 
+            //
             // colColor
-            // 
-            colColor.Caption = "Renk";
+            //
+            colColor.Caption = "Color";
             colColor.FieldName = "Color.ColorName";
             colColor.MinWidth = 25;
             colColor.Name = "colColor";
             colColor.Visible = true;
             colColor.VisibleIndex = 3;
             colColor.Width = 94;
-            // 
-            // sagTikMenu
-            // 
-            sagTikMenu.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] { new DevExpress.XtraBars.LinkPersistInfo(btnUpdate), new DevExpress.XtraBars.LinkPersistInfo(btnDelete), new DevExpress.XtraBars.LinkPersistInfo(btnAdd) });
-            sagTikMenu.Manager = barManager1;
-            sagTikMenu.Name = "sagTikMenu";
-            // 
+            //
+            // contextMenu
+            //
+            contextMenu.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] { new DevExpress.XtraBars.LinkPersistInfo(btnUpdate), new DevExpress.XtraBars.LinkPersistInfo(btnDelete), new DevExpress.XtraBars.LinkPersistInfo(btnAdd) });
+            contextMenu.Manager = barManager1;
+            contextMenu.Name = "contextMenu";
+            //
             // btnUpdate
-            // 
-            btnUpdate.Caption = "Güncelle";
+            //
+            btnUpdate.Caption = "Update";
             btnUpdate.Id = 2;
             btnUpdate.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("btnUpdate.ImageOptions.SvgImage");
             btnUpdate.Name = "btnUpdate";
             btnUpdate.ItemClick += btnUpdate_ItemClick;
-            // 
+            //
             // btnDelete
-            // 
-            btnDelete.Caption = "Sil";
+            //
+            btnDelete.Caption = "Delete";
             btnDelete.Id = 0;
             btnDelete.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("btnDelete.ImageOptions.SvgImage");
             btnDelete.Name = "btnDelete";
             btnDelete.ItemClick += btnDelete_ItemClick;
-            // 
+            //
             // btnAdd
-            // 
-            btnAdd.Caption = "Kumaş Ekle";
+            //
+            btnAdd.Caption = "Add Fabric";
             btnAdd.Id = 1;
             btnAdd.ImageOptions.SvgImage = (DevExpress.Utils.Svg.SvgImage)resources.GetObject("btnAdd.ImageOptions.SvgImage");
             btnAdd.Name = "btnAdd";
             btnAdd.ItemClick += btnAdd_ItemClick;
-            // 
+            //
             // barManager1
-            // 
+            //
             barManager1.DockControls.Add(barDockControlTop);
             barManager1.DockControls.Add(barDockControlBottom);
             barManager1.DockControls.Add(barDockControlLeft);
@@ -156,41 +156,41 @@
             barManager1.Form = this;
             barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { btnDelete, btnAdd, btnUpdate });
             barManager1.MaxItemId = 3;
-            // 
+            //
             // barDockControlTop
-            // 
+            //
             barDockControlTop.CausesValidation = false;
             barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
             barDockControlTop.Location = new System.Drawing.Point(0, 0);
             barDockControlTop.Manager = barManager1;
             barDockControlTop.Size = new System.Drawing.Size(851, 0);
-            // 
+            //
             // barDockControlBottom
-            // 
+            //
             barDockControlBottom.CausesValidation = false;
             barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             barDockControlBottom.Location = new System.Drawing.Point(0, 612);
             barDockControlBottom.Manager = barManager1;
             barDockControlBottom.Size = new System.Drawing.Size(851, 0);
-            // 
+            //
             // barDockControlLeft
-            // 
+            //
             barDockControlLeft.CausesValidation = false;
             barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
             barDockControlLeft.Location = new System.Drawing.Point(0, 0);
             barDockControlLeft.Manager = barManager1;
             barDockControlLeft.Size = new System.Drawing.Size(0, 612);
-            // 
+            //
             // barDockControlRight
-            // 
+            //
             barDockControlRight.CausesValidation = false;
             barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
             barDockControlRight.Location = new System.Drawing.Point(851, 0);
             barDockControlRight.Manager = barManager1;
             barDockControlRight.Size = new System.Drawing.Size(0, 612);
-            // 
+            //
             // FrmFabricsList
-            // 
+            //
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(851, 612);
@@ -201,13 +201,13 @@
             Controls.Add(barDockControlTop);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             Name = "FrmFabricsList";
-            Text = "Kumaş Listesi";
+            Text = "Fabric List";
             WindowState = System.Windows.Forms.FormWindowState.Maximized;
             Load += FrmListFabrics_Load;
             ((System.ComponentModel.ISupportInitialize)gridControl1).EndInit();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).EndInit();
             ((System.ComponentModel.ISupportInitialize)gridView1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)sagTikMenu).EndInit();
+            ((System.ComponentModel.ISupportInitialize)contextMenu).EndInit();
             ((System.ComponentModel.ISupportInitialize)barManager1).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -222,7 +222,7 @@
         private DevExpress.XtraGrid.Columns.GridColumn colFabricName;
         private DevExpress.XtraGrid.Columns.GridColumn colStockQuantity;
         private DevExpress.XtraGrid.Columns.GridColumn colColor;
-        private DevExpress.XtraBars.PopupMenu sagTikMenu;
+        private DevExpress.XtraBars.PopupMenu contextMenu;
         private DevExpress.XtraBars.BarButtonItem btnDelete;
         private DevExpress.XtraBars.BarManager barManager1;
         private DevExpress.XtraBars.BarDockControl barDockControlTop;

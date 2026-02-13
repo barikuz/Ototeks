@@ -19,23 +19,15 @@ namespace Ototeks.Business.Concrete
 
         public void Add(ProductType productType)
         {
-            // 1. Veriyi Standartlaştır
             FormatData(productType);
-
-            // 2. Validasyon
             CheckValidation(productType);
-
-            // 3. Kuralları geçtiyse Repository'e gönder
             _productTypeRepo.Add(productType);
         }
 
         public void Delete(ProductType productType)
         {
-            // 1. Validasyon
             var validator = new ProductTypeValidator(_productTypeRepo);
             validator.ValidateForDeletion(productType);
-
-            // 2. Validasyon geçtiyse güvenle sil
             _productTypeRepo.Delete(productType);
         }
 
@@ -51,19 +43,13 @@ namespace Ototeks.Business.Concrete
 
         public void Update(ProductType productType)
         {
-            // 1. Veriyi Standartlaştır
             FormatData(productType);
-
-            // 2. Validasyon (Güncelleme için productType ID'si ile)
             CheckValidation(productType, productType.TypeId);
-
-            // 3. Kuralları geçtiyse Repository'e gönder
             _productTypeRepo.Update(productType);
         }
 
-        // --- YARDIMCI METOTLAR ---
+        // --- HELPER METHODS ---
 
-        // Validasyon Metodu
         private void CheckValidation(ProductType productType, int? excludeId = null)
         {
             var validator = new ProductTypeValidator(_productTypeRepo, excludeId);
@@ -71,12 +57,10 @@ namespace Ototeks.Business.Concrete
 
             if (!result.IsValid)
             {
-                // İlk hatayı fırlat
                 throw new Exception(result.Errors[0].ErrorMessage);
             }
         }
 
-        // Veriyi Temizle
         private static void FormatData(ProductType productType)
         {
             productType.TypeName = productType.TypeName?.Trim();

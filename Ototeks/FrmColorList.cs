@@ -27,12 +27,12 @@ namespace Ototeks.UI
         {
             _uiHelper = new ListFormHelper<Color>(
                 gridView1,
-                sagTikMenu,
+                contextMenu,
                 btnAdd,
                 btnUpdate,
                 btnDelete);
 
-            // Data provider'ý set et
+            // Set the data provider
             _uiHelper.SetDataProvider(GetColorData);
         }
 
@@ -58,14 +58,14 @@ namespace Ototeks.UI
             _uiHelper.HandlePopupMenuShowing(e);
         }
 
-        // --- SÝL BUTONU KODU ---
+        // --- DELETE BUTTON CODE ---
         private void btnDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             _uiHelper.Delete(
                 deleteAction: (color) => _manager.Delete(color),
                 confirmMessageFunc: (color) => MessageBox.Show(
-                    $"'{color.ColorName}' rengini silmek istediðinize emin misiniz?",
-                    "Silme Onayý",
+                    $"Are you sure you want to delete the color '{color.ColorName}'?",
+                    "Delete Confirmation",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning)
             );

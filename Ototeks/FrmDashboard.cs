@@ -21,13 +21,13 @@ namespace Ototeks.UI
         private DashboardManager _dashboardManager;
         private OrderManager _orderManager;
 
-        // Kritik stok eşiği (metre cinsinden)
+        // Critical stock threshold (in meters)
         private const decimal CRITICAL_STOCK_THRESHOLD = 50;
 
-        // Teslim tarihi eşikleri (gün cinsinden)
-        private const int URGENT_DAYS = 3;      // 3 gün veya daha az = Sarı (Acil)
-        private const int WARNING_DAYS = 7;     // 7 gün veya daha az = Normal (Uyarı)
-                                                 // 7 günden fazla = Gösterilmez
+        // Due date thresholds (in days)
+        private const int URGENT_DAYS = 3;      // 3 days or less = Yellow (Urgent)
+        private const int WARNING_DAYS = 7;     // 7 days or less = Normal (Warning)
+                                                 // More than 7 days = Not shown
 
         public FrmDashboard()
         {
@@ -47,7 +47,7 @@ namespace Ototeks.UI
 
         private void tileOrder_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
-            // Bekleyen siparişler formunu filtreli aç (MDI tab olarak)
+            // Open pending orders form with filter (as MDI tab)
             var frm = new FrmOrderList(showOnlyPending: true);
             frm.MdiParent = this.MdiParent;
             frm.Show();
@@ -55,7 +55,7 @@ namespace Ototeks.UI
 
         private void tileStock_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
-            // Kritik stokta olan kumaşlar formunu filtreli aç (MDI tab olarak)
+            // Open fabrics with critical stock form with filter (as MDI tab)
             var frm = new FrmFabricsList(showOnlyCriticalStock: true);
             frm.MdiParent = this.MdiParent;
             frm.Show();
@@ -63,7 +63,7 @@ namespace Ototeks.UI
 
         private void tileCustomer_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
         {
-            // Sipariş veren müşteriler formunu filtreli aç (MDI tab olarak)
+            // Open customers with orders form with filter (as MDI tab)
             var frm = new FrmCustomerList(showOnlyWithOrders: true);
             frm.MdiParent = this.MdiParent;
             frm.Show();
@@ -83,23 +83,23 @@ namespace Ototeks.UI
         {
             try
             {
-                // 1. Bekleyen Sipariş Sayısı
+                // 1. Pending Order Count
                 int pendingOrders = _dashboardManager.GetPendingOrderCount();
                 tileOrder.Elements[1].Text = pendingOrders.ToString();
 
-                // 2. Kritik Stok Sayısı (50 metrenin altındakiler)
+                // 2. Critical Stock Count (below 50 meters)
                 int criticalStock = _dashboardManager.GetCriticalStockCount(CRITICAL_STOCK_THRESHOLD);
                 tileStock.Elements[1].Text = criticalStock.ToString();
 
-                // 3. Sipariş Veren Müşteri Sayısı
+                // 3. Customer with Orders Count
                 int customersWithOrders = _dashboardManager.GetCustomerWithOrdersCount();
                 tileCustomer.Elements[1].Text = customersWithOrders.ToString();
             }
             catch (Exception ex)
             {
                 XtraMessageBox.Show(
-                    $"Dashboard verileri yüklenirken hata oluştu:\n{ex.Message}",
-                    "Hata",
+                    $"Error loading dashboard data:\n{ex.Message}",
+                    "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
@@ -111,8 +111,8 @@ namespace Ototeks.UI
             {
                 var allOrders = _orderManager.GetAll();
 
-                // Tamamlanmamış ve iptal edilmemiş siparişleri filtrele
-                // Teslim tarihi olan ve 7 gün içinde veya geçmiş olanları al
+                // Filter incomplete and non-cancelled orders
+                // Get those with a due date within 7 days or past due
                 var alertOrders = allOrders
                     .Where(o => o.OrderStatus != OrderStatus.Completed &&
                                 o.OrderStatus != OrderStatus.Cancelled &&
@@ -120,16 +120,16 @@ namespace Ototeks.UI
                     .Where(o =>
                     {
                         var daysRemaining = (o.DueDate!.Value.Date - DateTime.Today).Days;
-                        return daysRemaining <= WARNING_DAYS; // 7 gün veya daha az (geçmiş dahil)
+                        return daysRemaining <= WARNING_DAYS; // 7 days or less (including past due)
                     })
-                    .OrderBy(o => o.DueDate) // En yakın tarih üstte
+                    .OrderBy(o => o.DueDate) // Nearest date on top
                     .Select(o => new
                     {
                         o.OrderNumber,
-                        MusteriAdi = o.Customer?.CustomerName ?? "Bilinmiyor",
-                        TeslimTarihi = o.DueDate,
-                        KalanGun = (o.DueDate!.Value.Date - DateTime.Today).Days,
-                        Durum = GetDeliveryStatus((o.DueDate!.Value.Date - DateTime.Today).Days)
+                        CustomerName = o.Customer?.CustomerName ?? "Unknown",
+                        DueDate = o.DueDate,
+                        RemainingDays = (o.DueDate!.Value.Date - DateTime.Today).Days,
+                        Status = GetDeliveryStatus((o.DueDate!.Value.Date - DateTime.Today).Days)
                     })
                     .ToList();
 
@@ -139,8 +139,8 @@ namespace Ototeks.UI
             catch (Exception ex)
             {
                 XtraMessageBox.Show(
-                    $"Teslim uyarıları yüklenirken hata oluştu:\n{ex.Message}",
-                    "Hata",
+                    $"Error loading delivery alerts:\n{ex.Message}",
+                    "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
@@ -152,13 +152,13 @@ namespace Ototeks.UI
             {
                 var allOrders = _orderManager.GetAll();
 
-                // Tamamlanmamış ve iptal edilmemiş siparişleri al
+                // Get incomplete and non-cancelled orders
                 var activeOrders = allOrders
                     .Where(o => o.OrderStatus != OrderStatus.Completed &&
                                 o.OrderStatus != OrderStatus.Cancelled)
                     .ToList();
 
-                // Üretim aşamalarına göre grupla ve say
+                // Group by production stages and count
                 var stageData = activeOrders
                     .GroupBy(o => o.OrderStatus)
                     .Select(g => new
@@ -167,34 +167,34 @@ namespace Ototeks.UI
                         StageName = EnumHelper.GetOrderStatusName(g.Key),
                         Count = g.Count()
                     })
-                    .OrderBy(x => (int)x.Stage) // Aşama sırasına göre sırala
+                    .OrderBy(x => (int)x.Stage) // Sort by stage order
                     .ToList();
 
-                // Grafik: mevcut seriyi temizle (görsel ayarlar Designer'da tanımlı)
+                // Chart: clear existing series (visual settings defined in Designer)
                 var funnelSeries = chartControl1.Series["stagesFunnel"];
                 if (funnelSeries != null)
                 {
                     funnelSeries.Points.Clear();
 
-                    // Her aşama için huni dilimi ekle
+                    // Add funnel slice for each stage
                     foreach (var stage in stageData)
                     {
                         var point = new DevExpress.XtraCharts.SeriesPoint(stage.StageName, stage.Count);
                         funnelSeries.Points.Add(point);
                     }
 
-                    // Eğer veri yoksa bilgilendirme
+                    // Show informational message if no data
                     if (!stageData.Any())
                     {
-                        funnelSeries.Points.Add(new DevExpress.XtraCharts.SeriesPoint("Veri Yok", 0));
+                        funnelSeries.Points.Add(new DevExpress.XtraCharts.SeriesPoint("No Data", 0));
                     }
                 }
             }
             catch (Exception ex)
             {
                 XtraMessageBox.Show(
-                    $"Üretim grafiği yüklenirken hata oluştu:\n{ex.Message}",
-                    "Hata",
+                    $"Error loading production chart:\n{ex.Message}",
+                    "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
@@ -203,11 +203,11 @@ namespace Ototeks.UI
         private string GetDeliveryStatus(int daysRemaining)
         {
             if (daysRemaining < 0)
-                return "⚠️ GECİKMİŞ";
+                return "⚠️ OVERDUE";
             else if (daysRemaining == 0)
-                return "🔴 BUGÜN";
+                return "🔴 TODAY";
             else if (daysRemaining <= URGENT_DAYS)
-                return "🟡 ACİL";
+                return "🟡 URGENT";
             else
                 return "🟢 NORMAL";
         }
@@ -219,29 +219,29 @@ namespace Ototeks.UI
             var view = sender as GridView;
             if (view == null) return;
 
-            // KalanGun değerini al
-            var kalanGunObj = view.GetRowCellValue(e.RowHandle, "KalanGun");
-            if (kalanGunObj == null) return;
+            // Get the RemainingDays value
+            var remainingDaysObj = view.GetRowCellValue(e.RowHandle, "RemainingDays");
+            if (remainingDaysObj == null) return;
 
-            int kalanGun = Convert.ToInt32(kalanGunObj);
+            int remainingDays = Convert.ToInt32(remainingDaysObj);
 
-            if (kalanGun < 0)
+            if (remainingDays < 0)
             {
-                // Geçmiş tarih - KIRMIZI
+                // Past due date - RED
                 e.Appearance.BackColor = System.Drawing.Color.MistyRose;
                 e.Appearance.ForeColor = System.Drawing.Color.DarkRed;
             }
-            else if (kalanGun <= URGENT_DAYS)
+            else if (remainingDays <= URGENT_DAYS)
             {
-                // 0-3 gün - SARI (Acil)
+                // 0-3 days - YELLOW (Urgent)
                 e.Appearance.BackColor = System.Drawing.Color.LightGoldenrodYellow;
                 e.Appearance.ForeColor = System.Drawing.Color.DarkOrange;
             }
-            // 4-7 gün arası normal renkte kalır
+            // 4-7 days remain in default color
         }
 
         /// <summary>
-        /// Dashboard verilerini yeniler (dışarıdan çağrılabilir)
+        /// Refreshes dashboard data (can be called externally)
         /// </summary>
         public void RefreshData()
         {

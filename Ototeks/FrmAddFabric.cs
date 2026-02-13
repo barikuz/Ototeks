@@ -11,170 +11,170 @@ namespace Ototeks.UI
 {
     public partial class FrmAddFabric : DevExpress.XtraEditors.XtraForm, IOperationForm
     {
-        // Bu, formun dışarıya göndereceği sinyaldir
+        // This is the signal that the form will send outward
         public event EventHandler OperationCompleted;
 
-        private int _guncellenecekId = 0; // 0 ise Ekleme Modu, >0 ise Güncelleme Modu
+        private int _recordIdToUpdate = 0; // 0 = Add Mode, >0 = Update Mode
 
         public FrmAddFabric()
         {
             InitializeComponent();
-            LoadColors(); // Renkleri yükle
+            LoadColors(); // Load colors
         }
 
         public FrmAddFabric(int id)
         {
             InitializeComponent();
-            LoadColors(); // Renkleri yükle
-            _guncellenecekId = id; // Hangi kaydı düzenleyeceğimizi not ettik.
+            LoadColors(); // Load colors
+            _recordIdToUpdate = id; // Note which record we will edit.
 
-            // Formun başlığını değiştir ki kullanıcı anlasın
-            this.Text = "Kumaş Güncelle";
-            lblBaslik.Text = "Kumaş Güncelleme";
-            btnKaydet.Text = "Güncelle";
+            // Change the form title so the user understands
+            this.Text = "Update Fabric";
+            lblTitle.Text = "Update Fabric";
+            btnSave.Text = "Update";
 
-            getData(); // Kutuları doldur
+            LoadRecordData(); // Fill the fields
         }
 
         void LoadColors()
         {
             try
             {
-                // Renkleri veritabanından getir
+                // Fetch colors from the database
                 var colorRepo = new GenericRepository<Color>();
                 var colorManager = new ColorManager(colorRepo);
                 var colors = colorManager.GetAll();
 
-                cmbRenk.Properties.Items.Clear();
-                
-                // Placeholder ekle
-                cmbRenk.Properties.Items.Add("Bir renk seçiniz...");
-                
-                // ComboBox'a renkleri ekle (Sadece metin olarak)
+                cmbColor.Properties.Items.Clear();
+
+                // Add placeholder
+                cmbColor.Properties.Items.Add("Select a color...");
+
+                // Add colors to the ComboBox (text only)
                 foreach (var color in colors)
                 {
-                    cmbRenk.Properties.Items.Add(color.ColorName);
+                    cmbColor.Properties.Items.Add(color.ColorName);
                 }
-                
-                // Placeholder'ı seçili hale getir
-                cmbRenk.SelectedIndex = 0;
+
+                // Set the placeholder as selected
+                cmbColor.SelectedIndex = 0;
             }
             catch (Exception ex)
             {
-                XtraMessageBox.Show($"Renkler yüklenirken hata oluştu: {ex.Message}", "Hata", 
+                XtraMessageBox.Show($"Error loading colors: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        void getData()
+        void LoadRecordData()
         {
-            // Veritabanından o id'li kumaşı bul
+            // Find the fabric with this id from the database
             var repo = new GenericRepository<Fabric>();
             var manager = new FabricManager(repo);
-            var kumas = manager.GetById(_guncellenecekId);
+            var fabric = manager.GetById(_recordIdToUpdate);
 
-            if (kumas != null)
+            if (fabric != null)
             {
-                // Kutuları doldur
-                txtKumasKodu.Text = kumas.FabricCode;
-                txtKumasAdi.Text = kumas.FabricName;
-                txtStok.Text = kumas.StockQuantity?.ToString("F2") ?? "0.00";
-                
-                // Renk seçimini ayarla
-                if (kumas.ColorId.HasValue)
+                // Fill the fields
+                txtFabricCode.Text = fabric.FabricCode;
+                txtFabricName.Text = fabric.FabricName;
+                txtStock.Text = fabric.StockQuantity?.ToString("F2") ?? "0.00";
+
+                // Set the color selection
+                if (fabric.ColorId.HasValue)
                 {
-                    // ColorId'den ColorName'i bulup seç
+                    // Find and select ColorName from ColorId
                     var colorRepo = new GenericRepository<Color>();
                     var colorManager = new ColorManager(colorRepo);
-                    var selectedColor = colorManager.GetById(kumas.ColorId.Value);
+                    var selectedColor = colorManager.GetById(fabric.ColorId.Value);
                     if (selectedColor != null)
                     {
-                        cmbRenk.SelectedItem = selectedColor.ColorName;
+                        cmbColor.SelectedItem = selectedColor.ColorName;
                     }
                 }
             }
         }
 
-        private void btnKaydet_Click(object sender, EventArgs e)
+        private void btnSave_Click(object sender, EventArgs e)
         {
-            // 1. ADIM: Bağlantıları Hazırla
-            // (Veritabanı erişimi ve İş mantığı sınıflarını çağırıyoruz)
+            // STEP 1: Prepare connections
+            // (Call the database access and business logic classes)
             var repo = new GenericRepository<Fabric>();
             var manager = new FabricManager(repo);
 
             try
             {
-                // Stok miktarını al
-                decimal stokMiktari = 0;
-                decimal.TryParse(txtStok.Text, out stokMiktari);
+                // Get the stock amount
+                decimal stockAmount = 0;
+                decimal.TryParse(txtStock.Text, out stockAmount);
 
-                // Seçili rengin ID'sini bul
+                // Find the selected color's ID
                 var colorRepo = new GenericRepository<Color>();
                 var colorManager = new ColorManager(colorRepo);
                 var colors = colorManager.GetAll();
-                var selectedColorName = cmbRenk.SelectedItem.ToString();
+                var selectedColorName = cmbColor.SelectedItem.ToString();
                 var selectedColor = colors.FirstOrDefault(c => c.ColorName == selectedColorName);
-                
-                // Placeholder seçiliyse ColorId null yap ki validator yakalasın
+
+                // If placeholder is selected, set ColorId to null so the validator catches it
                 int? colorId = null;
-                if (selectedColorName != "Bir renk seçiniz..." && selectedColor != null)
+                if (selectedColorName != "Select a color..." && selectedColor != null)
                 {
                     colorId = selectedColor.ColorId;
                 }
 
-                // SENARYO 1: YENİ KAYIT (ID = 0)
-                if (_guncellenecekId == 0)
+                // SCENARIO 1: NEW RECORD (ID = 0)
+                if (_recordIdToUpdate == 0)
                 {
-                    // Nesneyi Oluştur
-                    var yeniKumas = new Fabric
+                    // Create the object
+                    var newFabric = new Fabric
                     {
-                        FabricCode = txtKumasKodu.Text.Trim(),
-                        FabricName = txtKumasAdi.Text.Trim(),
-                        StockQuantity = stokMiktari,
+                        FabricCode = txtFabricCode.Text.Trim(),
+                        FabricName = txtFabricName.Text.Trim(),
+                        StockQuantity = stockAmount,
                         ColorId = colorId
                     };
 
-                    // Manager'a gönder (Oradaki kuralları kontrol etsin)
-                    manager.Add(yeniKumas);
+                    // Send to Manager (let it check the rules there)
+                    manager.Add(newFabric);
 
-                    // Başarılıysa mesaj ver
-                    XtraMessageBox.Show("Kumaş başarıyla sisteme eklendi!", "Tebrikler", 
+                    // Show success message
+                    XtraMessageBox.Show("Fabric has been successfully added to the system!", "Success",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Kutuları temizle ki yeni kayıt girebilelim
-                    txtKumasKodu.Text = "";
-                    txtKumasAdi.Text = "";
-                    txtStok.Text = ""; // Boş bırak, 0.00 ile doldurma
-                    cmbRenk.SelectedIndex = 0; // Placeholder'a döndür
-                    txtKumasKodu.Focus(); // İmleci tekrar ilk kutuya koy
+                    // Clear the fields so we can enter a new record
+                    txtFabricCode.Text = "";
+                    txtFabricName.Text = "";
+                    txtStock.Text = ""; // Leave empty, don't fill with 0.00
+                    cmbColor.SelectedIndex = 0; // Reset to placeholder
+                    txtFabricCode.Focus(); // Move cursor back to the first field
                 }
-                // SENARYO 2: GÜNCELLEME (ID > 0)
+                // SCENARIO 2: UPDATE (ID > 0)
                 else
                 {
-                    // Önce veritabanındaki orijinal kaydı çek
-                    var guncellenecekKumas = manager.GetById(_guncellenecekId);
+                    // First fetch the original record from the database
+                    var fabricToUpdate = manager.GetById(_recordIdToUpdate);
 
-                    // Ekrandaki yeni bilgileri üzerine yaz
-                    guncellenecekKumas.FabricCode = txtKumasKodu.Text.Trim();
-                    guncellenecekKumas.FabricName = txtKumasAdi.Text.Trim();
-                    guncellenecekKumas.StockQuantity = stokMiktari;
-                    guncellenecekKumas.ColorId = colorId;
+                    // Overwrite with the new information from the screen
+                    fabricToUpdate.FabricCode = txtFabricCode.Text.Trim();
+                    fabricToUpdate.FabricName = txtFabricName.Text.Trim();
+                    fabricToUpdate.StockQuantity = stockAmount;
+                    fabricToUpdate.ColorId = colorId;
 
-                    // Manager'a "Bunu güncelle" de
-                    manager.Update(guncellenecekKumas);
+                    // Tell the Manager to "update this"
+                    manager.Update(fabricToUpdate);
 
-                    XtraMessageBox.Show("Kumaş güncellendi!", "Başarılı", 
+                    XtraMessageBox.Show("Fabric has been updated!", "Success",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Close(); // Güncelleme bitince formu kapatmak daha mantıklıdır.
+                    this.Close(); // It makes more sense to close the form after updating.
                 }
 
-                // Anne Forma Sinyal Gönder (Yenilesin)
+                // Send signal to the parent form (to refresh)
                 OperationCompleted?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
-                // Hatayı burada yakalayıp kullanıcıya gösteriyoruz.
-                XtraMessageBox.Show(ex.Message, "Hata Oluştu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Catch the error here and show it to the user.
+                XtraMessageBox.Show(ex.Message, "Error Occurred", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

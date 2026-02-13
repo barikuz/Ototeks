@@ -36,7 +36,7 @@ namespace Ototeks
             frm.Show();
         }
 
-        // Generic helper - Add formu açar ve işlem sonrası ilgili liste formlarını yeniler
+        // Generic helper - Opens the add form and refreshes related list forms after operation completes
         private void ShowAddForm<TAddForm, TListForm>(Func<TAddForm> createAddForm)
             where TAddForm : Form, Ototeks.Interfaces.IOperationForm
             where TListForm : Form
@@ -52,46 +52,46 @@ namespace Ototeks
             }
         }
 
-        // --- KUMAŞ İŞLEMLERİ ---
-        private void btnYeniKumas_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        // --- FABRIC OPERATIONS ---
+        private void btnNewFabric_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             ShowAddForm<FrmAddFabric, FrmFabricsList>(() => new FrmAddFabric());
         }
 
-        private void btnKumasListesi_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        private void btnFabricList_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             FrmFabricsList frm = new FrmFabricsList();
             frm.MdiParent = this;
             frm.Show();
         }
 
-        // --- SİPARİŞ İŞLEMLERİ ---
+        // --- ORDER OPERATIONS ---
         private void btnNewOrder_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             ShowAddForm<FrmAddOrder, FrmOrderList>(() => new FrmAddOrder());
         }
 
-        private void btnSiparisListesi_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        private void btnOrderList_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             FrmOrderList frm = new FrmOrderList();
             frm.MdiParent = this;
             frm.Show();
         }
 
-        // --- MÜŞTERİ İŞLEMLERİ ---
+        // --- CUSTOMER OPERATIONS ---
         private void btnNewCustomer_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             ShowAddForm<FrmAddCustomer, FrmCustomerList>(() => new FrmAddCustomer());
         }
 
-        private void btnListCustomers_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        private void btnCustomerList_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             FrmCustomerList frm = new FrmCustomerList();
             frm.MdiParent = this;
             frm.Show();
         }
 
-        // --- ÜRETİM VE KALİTE İŞLEMLERİ ---
+        // --- PRODUCTION AND QUALITY OPERATIONS ---
         private void btnProductionTrack_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             FrmProductionTrack frm = new FrmProductionTrack();
@@ -113,26 +113,26 @@ namespace Ototeks
             frm.Show();
         }
 
-        // --- RENK İŞLEMLERİ ---
-        private void btnAddColor_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        // --- COLOR OPERATIONS ---
+        private void btnNewColor_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             ShowAddForm<FrmAddColor, FrmColorList>(() => new FrmAddColor());
         }
 
-        private void btnListColors_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        private void btnColorList_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             FrmColorList frm = new FrmColorList();
             frm.MdiParent = this;
             frm.Show();
         }
 
-        // --- ÜRÜN TİPİ İŞLEMLERİ ---
-        private void btnAddProductType_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        // --- PRODUCT TYPE OPERATIONS ---
+        private void btnNewProductType_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             ShowAddForm<FrmAddProductType, FrmProductTypeList>(() => new FrmAddProductType());
         }
 
-        private void btnListProductTypes_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        private void btnProductTypeList_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             FrmProductTypeList frm = new FrmProductTypeList();
             frm.MdiParent = this;

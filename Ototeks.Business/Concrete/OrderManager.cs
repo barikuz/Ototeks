@@ -19,8 +19,8 @@ namespace Ototeks.Business.Concrete
         public OrderManager(IGenericRepository<Order> orderRepo)
         {
             _orderRepo = orderRepo;
-            
-            // StockService'i initialize et
+
+            // Initialize StockService
             var fabricRepo = new GenericRepository<Fabric>();
             var productTypeRepo = new GenericRepository<ProductType>();
             _stockService = new StockManager(fabricRepo, productTypeRepo);
@@ -28,109 +28,91 @@ namespace Ototeks.Business.Concrete
 
         public void Add(Order order)
         {
-            // 0. Tekrarlayan Sipariş Kalemlerini Birleştir
             MergeDuplicateOrderItems(order);
-
-            // 1. Validasyon
             CheckValidation(order);
-
-            // 2. Stok Kontrolü
             CheckStockAvailability(order.OrderItems);
-
-            // 3. Veritabanına Kayıt
             _orderRepo.Add(order);
-
-            // 4. Stoktan Düşürme
             _stockService.DeductStockFromFabrics(order.OrderItems);
         }
 
         public void Update(Order order)
         {
-            // Önce eski sipariş bilgilerini al
             var existingOrder = _orderRepo.GetById(
                 filter: o => o.OrderId == order.OrderId,
                 includeProperties: new string[] { "OrderItems" }
             );
 
             if (existingOrder == null)
-                throw new Exception("Güncellenecek sipariş bulunamadı!");
+                throw new Exception("Order to update was not found!");
 
-            // Eğer sadece OrderStatus güncellemesi yapılıyorsa (OrderItems null veya boşsa)
-            // Stok işlemlerini atlayalım
+            // If only OrderStatus is being updated (OrderItems is null or empty), skip stock operations
             bool isStatusOnlyUpdate = order.OrderItems == null || !order.OrderItems.Any();
 
             if (!isStatusOnlyUpdate)
             {
-                // 0. Tekrarlayan Sipariş Kalemlerini Birleştir
                 MergeDuplicateOrderItems(order);
-
-                // 1. Validasyon (Güncelleme için order ID'si ile)
                 CheckValidation(order, order.OrderId);
 
-                // 2. Eski siparişin stokunu geri ekle
+                // Restore stock from the previous order before applying changes
                 if (existingOrder.OrderItems != null && existingOrder.OrderItems.Any())
                 {
                     _stockService.RestoreStockToFabrics(existingOrder.OrderItems);
                 }
 
-                // 3. Yeni sipariş için stok kontrolü
+                // Verify stock availability for the updated order
                 CheckStockAvailability(order.OrderItems);
             }
 
-            // 4. Veritabanına güncelleme kayıt
             _orderRepo.Update(order);
 
             if (!isStatusOnlyUpdate)
             {
-                // 5. Yeni sipariş için stoktan düşürme
+                // Deduct stock for the updated order
                 _stockService.DeductStockFromFabrics(order.OrderItems);
             }
         }
 
         public void Delete(Order order)
         {
-            // Silinecek siparişi detaylarıyla al
             var orderWithItems = _orderRepo.GetById(
                 filter: o => o.OrderId == order.OrderId,
                 includeProperties: new string[] { "OrderItems" }
             );
 
             if (orderWithItems == null)
-                throw new Exception("Silinecek sipariş bulunamadı!");
+                throw new Exception("Order to delete was not found!");
 
-            // 1. Stokları geri ekle
+            // Restore stock before deleting the order
             if (orderWithItems.OrderItems != null && orderWithItems.OrderItems.Any())
             {
                 _stockService.RestoreStockToFabrics(orderWithItems.OrderItems);
             }
 
-            // 2. Siparişi sil
             _orderRepo.Delete(order);
         }
 
         public List<Order> GetAll()
         {
             return _orderRepo.GetAll(null,
-                "Customer",               // 1. Müşteriyi getir
-                "OrderItems",             // 2. Kalemleri getir
-                "OrderItems.Fabric",      // 3. Kalemlerin içindeki Kumaşı da getir
-                "OrderItems.Fabric.Color", // 4. Kumaşların Rengini getir
-                "OrderItems.Type"         // 5. Kalemlerin içindeki Ürün Tipini de getir
+                "Customer",
+                "OrderItems",
+                "OrderItems.Fabric",
+                "OrderItems.Fabric.Color",
+                "OrderItems.Type"
             );
         }
 
         public Order GetById(int id)
         {
-            // Include'larla birlikte siparişi getir (OrderItems ve ilişkili verilerle)
             return _orderRepo.GetById(
                 filter: o => o.OrderId == id,
                 includeProperties: new string[]
                 {
-                    "Customer",               // Müşteriyi getir
-                    "OrderItems",             // Kalemleri getir
-                    "OrderItems.Fabric",      // Kalemlerin içindeki Kumaşı getir
-                    "OrderItems.Fabric.Color", // Kumaşların Rengini getir
-                    "OrderItems.Type"         // Kalemlerin içindeki Ürün Tipini getir
+                    "Customer",
+                    "OrderItems",
+                    "OrderItems.Fabric",
+                    "OrderItems.Fabric.Color",
+                    "OrderItems.Type"
                 }
             );
         }
@@ -161,39 +143,35 @@ namespace Ototeks.Business.Concrete
             return result;
         }
 
-        // --- YARDIMCI METOTLAR ---
+        // --- HELPER METHODS ---
 
         /// <summary>
-        /// Aynı FabricId ve TypeId'ye sahip sipariş kalemlerini birleştirir.
-        /// Tekrarlayan kalemler tek bir kalem haline getirilir ve adetleri toplanır.
+        /// Merges order items that share the same FabricId and TypeId.
+        /// Duplicate items are combined into a single item with their quantities summed.
         /// </summary>
         private void MergeDuplicateOrderItems(Order order)
         {
             if (order.OrderItems == null || !order.OrderItems.Any())
                 return;
 
-            // Aynı FabricId ve TypeId'ye sahip kalemleri grupla
             var mergedItems = order.OrderItems
                 .GroupBy(item => new { item.FabricId, item.TypeId })
                 .Select(group => new OrderItem
                 {
-                    // Grubun ilk elemanının ID'sini koru (güncelleme için)
+                    // Preserve the first item's ID for update operations
                     OrderItemId = group.First().OrderItemId,
                     OrderId = group.First().OrderId,
                     FabricId = group.Key.FabricId,
                     TypeId = group.Key.TypeId,
-                    // Tüm adetleri topla
                     Quantity = group.Sum(item => item.Quantity),
-                    // İlk elemanın durumunu ve işleyen kullanıcısını koru
                     CurrentStage = group.First().CurrentStage,
                     ProcessedByUserId = group.First().ProcessedByUserId
                 })
                 .ToList();
 
-            // Sipariş kalemlerini birleştirilmiş liste ile değiştir
             order.OrderItems = mergedItems;
         }
-        
+
         private void CheckValidation(Order order, int? excludeId = null)
         {
             var validator = new OrderValidator(_orderRepo, excludeId);
@@ -201,7 +179,6 @@ namespace Ototeks.Business.Concrete
 
             if (!result.IsValid)
             {
-                // İlk hatayı yakala ve fırlat
                 throw new Exception(result.Errors[0].ErrorMessage);
             }
         }
@@ -211,18 +188,17 @@ namespace Ototeks.Business.Concrete
             if (orderItems == null || !orderItems.Any())
                 return;
 
-            // Stok yetersizliklerini kontrol et
             var stockInsufficiencies = _stockService.CheckStockAvailability(orderItems);
 
             if (stockInsufficiencies.Any())
             {
                 var errorMessage = new StringBuilder();
-                errorMessage.AppendLine("Sipariş verilemiyor! Aşağıdaki kumaşlarda yeterli stok bulunmuyor:");
+                errorMessage.AppendLine("Order cannot be placed! Insufficient stock for the following fabrics:");
                 errorMessage.AppendLine();
 
                 foreach (var insufficiency in stockInsufficiencies)
                 {
-                    errorMessage.AppendLine($"• {insufficiency.Key}: {insufficiency.Value:F2} metre eksik");
+                    errorMessage.AppendLine($"• {insufficiency.Key}: {insufficiency.Value:F2} meters short");
                 }
 
                 throw new Exception(errorMessage.ToString());

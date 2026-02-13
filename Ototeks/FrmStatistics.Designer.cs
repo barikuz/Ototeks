@@ -28,29 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
-            // chartControl1 - Pie Chart (En Çok Sipariş Edilen Ürünler)
+            // chartControl1 - Pie Chart (Most Ordered Products)
             DevExpress.XtraCharts.Series pieSeries = new DevExpress.XtraCharts.Series();
             DevExpress.XtraCharts.PieSeriesView pieSeriesView = new DevExpress.XtraCharts.PieSeriesView();
             DevExpress.XtraCharts.ChartTitle chartTitle1 = new DevExpress.XtraCharts.ChartTitle();
 
-            // chartControl2 - Pie Chart (AI Kalite Kontrol - Sağlam/Hatalı Dağılımı)
+            // chartControl2 - Pie Chart (AI Quality Control - Pass/Fail Distribution)
             DevExpress.XtraCharts.Series pieSeries2 = new DevExpress.XtraCharts.Series();
             DevExpress.XtraCharts.PieSeriesView pieSeriesView2 = new DevExpress.XtraCharts.PieSeriesView();
             DevExpress.XtraCharts.ChartTitle chartTitle2 = new DevExpress.XtraCharts.ChartTitle();
 
-            // chartControl3 - Bar Chart (En Çok İhtiyaç Duyulan Kumaşlar)
+            // chartControl3 - Bar Chart (Most Required Fabrics)
             DevExpress.XtraCharts.XYDiagram xyDiagram3 = new DevExpress.XtraCharts.XYDiagram();
             DevExpress.XtraCharts.Series barSeries3 = new DevExpress.XtraCharts.Series();
             DevExpress.XtraCharts.SideBySideBarSeriesView barSeriesView3 = new DevExpress.XtraCharts.SideBySideBarSeriesView();
             DevExpress.XtraCharts.ChartTitle chartTitle3 = new DevExpress.XtraCharts.ChartTitle();
 
-            // chartControl4 - Horizontal Bar Chart (En Çok Sipariş Veren Müşteriler)
+            // chartControl4 - Horizontal Bar Chart (Top Customers by Order Count)
             DevExpress.XtraCharts.XYDiagram xyDiagram4 = new DevExpress.XtraCharts.XYDiagram();
             DevExpress.XtraCharts.Series barSeries4 = new DevExpress.XtraCharts.Series();
             DevExpress.XtraCharts.SideBySideBarSeriesView barSeriesView4 = new DevExpress.XtraCharts.SideBySideBarSeriesView();
             DevExpress.XtraCharts.ChartTitle chartTitle4 = new DevExpress.XtraCharts.ChartTitle();
 
-            // chartControl5 - Bar Chart (Hata Türleri Dağılımı)
+            // chartControl5 - Bar Chart (Defect Type Distribution)
             DevExpress.XtraCharts.XYDiagram xyDiagram5 = new DevExpress.XtraCharts.XYDiagram();
             DevExpress.XtraCharts.Series barSeries5 = new DevExpress.XtraCharts.Series();
             DevExpress.XtraCharts.SideBySideBarSeriesView barSeriesView5 = new DevExpress.XtraCharts.SideBySideBarSeriesView();
@@ -95,9 +95,9 @@
             ((System.ComponentModel.ISupportInitialize)layoutControlItem2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)layoutControlItem5).BeginInit();
             SuspendLayout();
-            // 
+            //
             // layoutControl1
-            // 
+            //
             layoutControl1.Controls.Add(chartControl5);
             layoutControl1.Controls.Add(chartControl2);
             layoutControl1.Controls.Add(chartControl4);
@@ -111,22 +111,22 @@
             layoutControl1.Size = new System.Drawing.Size(839, 587);
             layoutControl1.TabIndex = 0;
             layoutControl1.Text = "layoutControl1";
-            // 
-            // chartControl5 - Hata Türleri Dağılımı (Dikey Bar)
-            // 
+            //
+            // chartControl5 - Defect Type Distribution (Vertical Bar)
+            //
             xyDiagram5.AxisX.VisibleInPanesSerializable = "-1";
             xyDiagram5.AxisX.Label.ResolveOverlappingOptions.AllowHide = false;
             xyDiagram5.AxisX.Label.Angle = -45;
             xyDiagram5.AxisX.Label.TextPattern = "{A}";
             xyDiagram5.AxisY.VisibleInPanesSerializable = "-1";
-            xyDiagram5.AxisY.Title.Text = "Adet";
+            xyDiagram5.AxisY.Title.Text = "Count";
             xyDiagram5.AxisY.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
             chartControl5.Diagram = xyDiagram5;
             chartControl5.Location = new System.Drawing.Point(423, 294);
             chartControl5.Name = "chartControl5";
             chartControl5.PaletteName = "Office 2013";
             // barSeries5
-            barSeries5.Name = "Hata Sayısı";
+            barSeries5.Name = "Defect Count";
             barSeries5.SeriesID = 0;
             barSeries5.ArgumentScaleType = DevExpress.XtraCharts.ScaleType.Qualitative;
             barSeries5.LegendTextPattern = "{A}";
@@ -137,24 +137,24 @@
             chartControl5.SeriesTemplate.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
             chartControl5.Size = new System.Drawing.Size(396, 273);
             chartControl5.TabIndex = 9;
-            // Legend ayarları
+            // Legend settings
             chartControl5.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
             chartControl5.Legend.Direction = DevExpress.XtraCharts.LegendDirection.TopToBottom;
             chartControl5.Legend.AlignmentHorizontal = DevExpress.XtraCharts.LegendAlignmentHorizontal.RightOutside;
             chartControl5.Legend.AlignmentVertical = DevExpress.XtraCharts.LegendAlignmentVertical.Center;
-            // Başlık
-            chartTitle5.Text = "AI Kalite Kontrol - Hata Türleri Dağılımı";
+            // Title
+            chartTitle5.Text = "AI Quality Control - Defect Type Distribution";
             chartTitle5.Dock = DevExpress.XtraCharts.ChartTitleDockStyle.Top;
             chartTitle5.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Bold);
             chartControl5.Titles.AddRange(new DevExpress.XtraCharts.ChartTitle[] { chartTitle5 });
-            // 
-            // chartControl2 - AI Kalite Kontrol Sağlam/Hatalı Dağılımı (Pie)
-            // 
+            //
+            // chartControl2 - AI Quality Control Pass/Fail Distribution (Pie)
+            //
             chartControl2.Location = new System.Drawing.Point(20, 294);
             chartControl2.Name = "chartControl2";
             chartControl2.PaletteName = "Office 2013";
             // pieSeries2
-            pieSeries2.Name = "Kalite Durumu";
+            pieSeries2.Name = "Quality Status";
             pieSeries2.SeriesID = 0;
             pieSeries2.LegendTextPattern = "{A}";
             pieSeries2.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
@@ -163,21 +163,21 @@
             chartControl2.SeriesSerializable = new DevExpress.XtraCharts.Series[] { pieSeries2 };
             chartControl2.Size = new System.Drawing.Size(395, 273);
             chartControl2.TabIndex = 8;
-            // Legend ayarları
+            // Legend settings
             chartControl2.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
             chartControl2.Legend.Direction = DevExpress.XtraCharts.LegendDirection.TopToBottom;
             chartControl2.Legend.AlignmentHorizontal = DevExpress.XtraCharts.LegendAlignmentHorizontal.RightOutside;
             chartControl2.Legend.AlignmentVertical = DevExpress.XtraCharts.LegendAlignmentVertical.Center;
-            // Başlık
-            chartTitle2.Text = "AI Kalite Kontrol - Sağlam/Hatalı Dağılımı";
+            // Title
+            chartTitle2.Text = "AI Quality Control - Pass/Fail Distribution";
             chartTitle2.Dock = DevExpress.XtraCharts.ChartTitleDockStyle.Top;
             chartTitle2.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Bold);
             chartControl2.Titles.AddRange(new DevExpress.XtraCharts.ChartTitle[] { chartTitle2 });
-            // 
-            // chartControl4 - En Çok Sipariş Veren Müşteriler (Yatay Bar)
-            // 
+            //
+            // chartControl4 - Top Customers by Order Count (Horizontal Bar)
+            //
             xyDiagram4.AxisX.VisibleInPanesSerializable = "-1";
-            xyDiagram4.AxisX.Title.Text = "Sipariş Sayısı";
+            xyDiagram4.AxisX.Title.Text = "Order Count";
             xyDiagram4.AxisX.Title.Visibility = DevExpress.Utils.DefaultBoolean.True;
             xyDiagram4.AxisY.VisibleInPanesSerializable = "-1";
             xyDiagram4.AxisY.Label.ResolveOverlappingOptions.AllowHide = false;
@@ -187,7 +187,7 @@
             chartControl4.Name = "chartControl4";
             chartControl4.PaletteName = "Office 2013";
             // barSeries4
-            barSeries4.Name = "Sipariş Sayısı";
+            barSeries4.Name = "Order Count";
             barSeries4.SeriesID = 0;
             barSeries4.ArgumentScaleType = DevExpress.XtraCharts.ScaleType.Qualitative;
             barSeries4.LegendTextPattern = "{A}";
@@ -198,19 +198,19 @@
             chartControl4.SeriesTemplate.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
             chartControl4.Size = new System.Drawing.Size(269, 266);
             chartControl4.TabIndex = 7;
-            // Legend ayarları
+            // Legend settings
             chartControl4.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
             chartControl4.Legend.Direction = DevExpress.XtraCharts.LegendDirection.TopToBottom;
             chartControl4.Legend.AlignmentHorizontal = DevExpress.XtraCharts.LegendAlignmentHorizontal.RightOutside;
             chartControl4.Legend.AlignmentVertical = DevExpress.XtraCharts.LegendAlignmentVertical.Center;
-            // Başlık
-            chartTitle4.Text = "En Çok Sipariş Veren Müşteriler";
+            // Title
+            chartTitle4.Text = "Top Customers by Order Count";
             chartTitle4.Dock = DevExpress.XtraCharts.ChartTitleDockStyle.Top;
             chartTitle4.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Bold);
             chartControl4.Titles.AddRange(new DevExpress.XtraCharts.ChartTitle[] { chartTitle4 });
-            // 
-            // chartControl3 - En Çok İhtiyaç Duyulan Kumaşlar (Dikey Bar)
-            // 
+            //
+            // chartControl3 - Most Required Fabrics (Vertical Bar)
+            //
             xyDiagram3.AxisX.VisibleInPanesSerializable = "-1";
             xyDiagram3.AxisX.Label.ResolveOverlappingOptions.AllowHide = false;
             xyDiagram3.AxisX.Label.Angle = -45;
@@ -221,7 +221,7 @@
             chartControl3.Name = "chartControl3";
             chartControl3.PaletteName = "Office 2013";
             // barSeries3
-            barSeries3.Name = "Gerekli Kumaş (m)";
+            barSeries3.Name = "Required Fabric (m)";
             barSeries3.SeriesID = 0;
             barSeries3.ArgumentScaleType = DevExpress.XtraCharts.ScaleType.Qualitative;
             barSeries3.LegendTextPattern = "{A}";
@@ -232,24 +232,24 @@
             chartControl3.SeriesTemplate.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
             chartControl3.Size = new System.Drawing.Size(233, 266);
             chartControl3.TabIndex = 6;
-            // Legend ayarları
+            // Legend settings
             chartControl3.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
             chartControl3.Legend.Direction = DevExpress.XtraCharts.LegendDirection.TopToBottom;
             chartControl3.Legend.AlignmentHorizontal = DevExpress.XtraCharts.LegendAlignmentHorizontal.RightOutside;
             chartControl3.Legend.AlignmentVertical = DevExpress.XtraCharts.LegendAlignmentVertical.Center;
-            // Başlık
-            chartTitle3.Text = "En Çok İhtiyaç Duyulan Kumaşlar (Metre)";
+            // Title
+            chartTitle3.Text = "Most Required Fabrics (Meters)";
             chartTitle3.Dock = DevExpress.XtraCharts.ChartTitleDockStyle.Top;
             chartTitle3.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Bold);
             chartControl3.Titles.AddRange(new DevExpress.XtraCharts.ChartTitle[] { chartTitle3 });
-            // 
-            // chartControl1 - En Çok Sipariş Edilen Ürünler (Pie)
-            // 
+            //
+            // chartControl1 - Most Ordered Products (Pie)
+            //
             chartControl1.Location = new System.Drawing.Point(20, 20);
             chartControl1.Name = "chartControl1";
             chartControl1.PaletteName = "Office 2013";
             // pieSeries
-            pieSeries.Name = "Ürünler";
+            pieSeries.Name = "Products";
             pieSeries.SeriesID = 0;
             pieSeries.LegendTextPattern = "{A}";
             pieSeries.LabelsVisibility = DevExpress.Utils.DefaultBoolean.True;
@@ -258,74 +258,74 @@
             chartControl1.SeriesSerializable = new DevExpress.XtraCharts.Series[] { pieSeries };
             chartControl1.Size = new System.Drawing.Size(281, 266);
             chartControl1.TabIndex = 4;
-            // Legend ayarları
+            // Legend settings
             chartControl1.Legend.Visibility = DevExpress.Utils.DefaultBoolean.True;
             chartControl1.Legend.Direction = DevExpress.XtraCharts.LegendDirection.TopToBottom;
             chartControl1.Legend.AlignmentHorizontal = DevExpress.XtraCharts.LegendAlignmentHorizontal.RightOutside;
             chartControl1.Legend.AlignmentVertical = DevExpress.XtraCharts.LegendAlignmentVertical.Center;
-            // Başlık
-            chartTitle1.Text = "En Çok Sipariş Edilen Ürünler";
+            // Title
+            chartTitle1.Text = "Most Ordered Products";
             chartTitle1.Dock = DevExpress.XtraCharts.ChartTitleDockStyle.Top;
             chartTitle1.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Bold);
             chartControl1.Titles.AddRange(new DevExpress.XtraCharts.ChartTitle[] { chartTitle1 });
-            // 
+            //
             // Root
-            // 
+            //
             Root.EnableIndentsWithoutBorders = DevExpress.Utils.DefaultBoolean.True;
             Root.GroupBordersVisible = false;
             Root.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] { layoutControlItem1, layoutControlItem3, layoutControlItem4, layoutControlItem2, layoutControlItem5 });
             Root.Name = "Root";
             Root.Size = new System.Drawing.Size(839, 587);
             Root.TextVisible = false;
-            // 
+            //
             // layoutControlItem1
-            // 
+            //
             layoutControlItem1.Control = chartControl1;
             layoutControlItem1.Location = new System.Drawing.Point(0, 0);
             layoutControlItem1.Name = "layoutControlItem1";
             layoutControlItem1.Size = new System.Drawing.Size(289, 274);
             layoutControlItem1.TextVisible = false;
-            // 
+            //
             // layoutControlItem3
-            // 
+            //
             layoutControlItem3.Control = chartControl3;
             layoutControlItem3.Location = new System.Drawing.Point(289, 0);
             layoutControlItem3.Name = "layoutControlItem3";
             layoutControlItem3.Size = new System.Drawing.Size(241, 274);
             layoutControlItem3.TextVisible = false;
-            // 
+            //
             // layoutControlItem4
-            // 
+            //
             layoutControlItem4.Control = chartControl4;
             layoutControlItem4.Location = new System.Drawing.Point(530, 0);
             layoutControlItem4.Name = "layoutControlItem4";
             layoutControlItem4.Size = new System.Drawing.Size(277, 274);
             layoutControlItem4.TextVisible = false;
-            // 
+            //
             // layoutControlItem2
-            // 
+            //
             layoutControlItem2.Control = chartControl2;
             layoutControlItem2.Location = new System.Drawing.Point(0, 274);
             layoutControlItem2.Name = "layoutControlItem2";
             layoutControlItem2.Size = new System.Drawing.Size(403, 281);
             layoutControlItem2.TextVisible = false;
-            // 
+            //
             // layoutControlItem5
-            // 
+            //
             layoutControlItem5.Control = chartControl5;
             layoutControlItem5.Location = new System.Drawing.Point(403, 274);
             layoutControlItem5.Name = "layoutControlItem5";
             layoutControlItem5.Size = new System.Drawing.Size(404, 281);
             layoutControlItem5.TextVisible = false;
-            // 
+            //
             // FrmStatistics
-            // 
+            //
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(839, 587);
             Controls.Add(layoutControl1);
             Name = "FrmStatistics";
-            Text = "İstatistik";
+            Text = "Statistics";
             this.Load += FrmStatistics_Load;
             ((System.ComponentModel.ISupportInitialize)layoutControl1).EndInit();
             layoutControl1.ResumeLayout(false);

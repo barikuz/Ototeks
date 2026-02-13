@@ -10,10 +10,10 @@ namespace Ototeks.UI
 {
     public partial class FrmAddCustomer : DevExpress.XtraEditors.XtraForm, IOperationForm
     {
-        // Bu, formun dýþarýya göndereceði sinyaldir
+        // This is the signal that the form will send outward
         public event EventHandler OperationCompleted;
 
-        private int _guncellenecekId = 0; // 0 ise Ekleme Modu, >0 ise Güncelleme Modu
+        private int _recordIdToUpdate = 0; // 0 = Add Mode, >0 = Update Mode
 
         public FrmAddCustomer()
         {
@@ -23,92 +23,92 @@ namespace Ototeks.UI
         public FrmAddCustomer(int id)
         {
             InitializeComponent();
-            _guncellenecekId = id; // Hangi kaydý düzenleyeceðimizi not ettik.
+            _recordIdToUpdate = id; // Note which record we will edit.
 
-            // Formun baþlýðýný deðiþtir ki kullanýcý anlasýn
-            this.Text = "Müþteri Güncelle";
-            lblBaslik.Text = "Müþteri Güncelleme";
-            btnKaydet.Text = "Güncelle";
+            // Change the form title so the user understands
+            this.Text = "Update Customer";
+            lblTitle.Text = "Update Customer";
+            btnSave.Text = "Update";
 
-            getData(); // Kutularý doldur
+            LoadRecordData(); // Fill the fields
         }
 
-        void getData()
+        void LoadRecordData()
         {
-            // Veritabanýndan o id'li müþteriyi bul
+            // Find the customer with this id from the database
             var repo = new GenericRepository<Customer>();
             var manager = new CustomerManager(repo);
-            var customer = manager.GetById(_guncellenecekId);
+            var customer = manager.GetById(_recordIdToUpdate);
 
             if (customer != null)
             {
-                // Kutularý doldur
-                txtMusteriAdi.Text = customer.CustomerName;
-                txtTelefon.Text = customer.Phone;
-                txtEposta.Text = customer.Email;
-                txtAdres.Text = customer.Address;
+                // Fill the fields
+                txtCustomerName.Text = customer.CustomerName;
+                txtPhone.Text = customer.Phone;
+                txtEmail.Text = customer.Email;
+                txtAddress.Text = customer.Address;
             }
         }
 
-        private void btnKaydet_Click(object sender, EventArgs e)
+        private void btnSave_Click(object sender, EventArgs e)
         {
-            // 1. ADIM: Baðlantýlarý Hazýrla
+            // STEP 1: Prepare connections
             var repo = new GenericRepository<Customer>();
             var manager = new CustomerManager(repo);
 
             try
             {
-                // SENARYO 1: YENÝ KAYIT (ID = 0)
-                if (_guncellenecekId == 0)
+                // SCENARIO 1: NEW RECORD (ID = 0)
+                if (_recordIdToUpdate == 0)
                 {
-                    // Nesneyi Oluþtur
-                    var yeniMusteri = new Customer
+                    // Create the object
+                    var newCustomer = new Customer
                     {
-                        CustomerName = txtMusteriAdi.Text,
-                        Phone = txtTelefon.Text,
-                        Email = txtEposta.Text,
-                        Address = txtAdres.Text
+                        CustomerName = txtCustomerName.Text,
+                        Phone = txtPhone.Text,
+                        Email = txtEmail.Text,
+                        Address = txtAddress.Text
                     };
 
-                    // Manager'a gönder
-                    manager.Add(yeniMusteri);
+                    // Send to Manager
+                    manager.Add(newCustomer);
 
-                    // Baþarýlýysa mesaj ver
-                    XtraMessageBox.Show("Müþteri baþarýyla sisteme eklendi!", "Tebrikler", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    // Show success message
+                    XtraMessageBox.Show("Customer has been successfully added to the system!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Kutularý temizle ki yeni kayýt girebilelim
-                    txtMusteriAdi.Text = "";
-                    txtTelefon.Text = "";
-                    txtEposta.Text = "";
-                    txtAdres.Text = "";
-                    txtMusteriAdi.Focus(); // Ýmleci tekrar ilk kutuya koy
+                    // Clear the fields so we can enter a new record
+                    txtCustomerName.Text = "";
+                    txtPhone.Text = "";
+                    txtEmail.Text = "";
+                    txtAddress.Text = "";
+                    txtCustomerName.Focus(); // Move cursor back to the first field
                 }
-                // SENARYO 2: GÜNCELLEME (ID > 0)
+                // SCENARIO 2: UPDATE (ID > 0)
                 else
                 {
-                    // Önce veritabanýndaki orijinal kaydý çek
-                    var guncellenecekMusteri = manager.GetById(_guncellenecekId);
+                    // First fetch the original record from the database
+                    var customerToUpdate = manager.GetById(_recordIdToUpdate);
 
-                    // Ekrandaki yeni bilgileri üzerine yaz
-                    guncellenecekMusteri.CustomerName = txtMusteriAdi.Text;
-                    guncellenecekMusteri.Phone = txtTelefon.Text;
-                    guncellenecekMusteri.Email = txtEposta.Text;
-                    guncellenecekMusteri.Address = txtAdres.Text;
+                    // Overwrite with the new information from the screen
+                    customerToUpdate.CustomerName = txtCustomerName.Text;
+                    customerToUpdate.Phone = txtPhone.Text;
+                    customerToUpdate.Email = txtEmail.Text;
+                    customerToUpdate.Address = txtAddress.Text;
 
-                    // Manager'a "Bunu güncelle" de
-                    manager.Update(guncellenecekMusteri);
+                    // Tell the Manager to "update this"
+                    manager.Update(customerToUpdate);
 
-                    XtraMessageBox.Show("Müþteri güncellendi!", "Baþarýlý", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Close(); // Güncelleme bitince formu kapatmak daha mantýklýdýr.
+                    XtraMessageBox.Show("Customer has been updated!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Close(); // It makes more sense to close the form after updating.
                 }
 
-                // Anne Forma Sinyal Gönder (Yenilesin)
+                // Send signal to the parent form (to refresh)
                 OperationCompleted?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
-                // Hatayý burada yakalayýp kullanýcýya gösteriyoruz.
-                XtraMessageBox.Show(ex.Message, "Hata Oluþtu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Catch the error here and show it to the user.
+                XtraMessageBox.Show(ex.Message, "Error Occurred", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

@@ -19,23 +19,15 @@ namespace Ototeks.Business.Concrete
 
         public void Add(Color color)
         {
-            // 1. Veriyi Standartlaþtýr
             FormatData(color);
-
-            // 2. Validasyon
             CheckValidation(color);
-
-            // 3. Kurallarý geçtiyse Repository'e gönder
             _colorRepo.Add(color);
         }
 
         public void Delete(Color color)
         {
-            // 1. Validasyon
             var validator = new ColorValidator(_colorRepo);
             validator.ValidateForDeletion(color);
-
-            // 2. Validasyon geçtiyse güvenle sil
             _colorRepo.Delete(color);
         }
 
@@ -51,19 +43,13 @@ namespace Ototeks.Business.Concrete
 
         public void Update(Color color)
         {
-            // 1. Veriyi Standartlaþtýr
             FormatData(color);
-
-            // 2. Validasyon (Güncelleme için color ID'si ile)
             CheckValidation(color, color.ColorId);
-
-            // 3. Kurallarý geçtiyse Repository'e gönder
             _colorRepo.Update(color);
         }
 
-        // --- YARDIMCI METOTLAR ---
+        // --- HELPER METHODS ---
 
-        // Validasyon Metodu
         private void CheckValidation(Color color, int? excludeId = null)
         {
             var validator = new ColorValidator(_colorRepo, excludeId);
@@ -71,12 +57,10 @@ namespace Ototeks.Business.Concrete
 
             if (!result.IsValid)
             {
-                // Ýlk hatayý fýrlat
                 throw new Exception(result.Errors[0].ErrorMessage);
             }
         }
 
-        // Veriyi Temizle
         private static void FormatData(Color color)
         {
             color.ColorName = color.ColorName?.Trim();

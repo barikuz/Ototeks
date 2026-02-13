@@ -79,28 +79,28 @@ namespace Ototeks.UI
             ((System.ComponentModel.ISupportInitialize)gridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gridView2).BeginInit();
             SuspendLayout();
-            // 
+            //
             // splitContainerControl1
-            // 
+            //
             splitContainerControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             splitContainerControl1.Location = new System.Drawing.Point(0, 0);
             splitContainerControl1.Name = "splitContainerControl1";
-            // 
+            //
             // splitContainerControl1.Panel1
-            // 
+            //
             splitContainerControl1.Panel1.Controls.Add(layoutControl1);
             splitContainerControl1.Panel1.Text = "Panel1";
-            // 
+            //
             // splitContainerControl1.Panel2
-            // 
+            //
             splitContainerControl1.Panel2.Controls.Add(gridControl1);
             splitContainerControl1.Panel2.Text = "Panel2";
             splitContainerControl1.Size = new System.Drawing.Size(800, 717);
             splitContainerControl1.SplitterPosition = 374;
             splitContainerControl1.TabIndex = 0;
-            // 
+            //
             // layoutControl1
-            // 
+            //
             layoutControl1.Controls.Add(simpleButton1);
             layoutControl1.Controls.Add(groupControl1);
             layoutControl1.Controls.Add(pictureEdit1);
@@ -112,19 +112,19 @@ namespace Ototeks.UI
             layoutControl1.Size = new System.Drawing.Size(374, 717);
             layoutControl1.TabIndex = 0;
             layoutControl1.Text = "layoutControl1";
-            // 
+            //
             // simpleButton1
-            // 
+            //
             simpleButton1.Location = new System.Drawing.Point(20, 366);
             simpleButton1.Name = "simpleButton1";
             simpleButton1.Size = new System.Drawing.Size(334, 34);
             simpleButton1.StyleController = layoutControl1;
             simpleButton1.TabIndex = 6;
-            simpleButton1.Text = "Resim Seç ve Analiz Et";
+            simpleButton1.Text = "Select Image && Analyze";
             simpleButton1.Click += simpleButton1_Click;
-            // 
+            //
             // groupControl1
-            // 
+            //
             groupControl1.AppearanceCaption.Options.UseTextOptions = true;
             groupControl1.AppearanceCaption.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             groupControl1.Controls.Add(tableLayoutPanel1);
@@ -132,10 +132,10 @@ namespace Ototeks.UI
             groupControl1.Name = "groupControl1";
             groupControl1.Size = new System.Drawing.Size(334, 289);
             groupControl1.TabIndex = 5;
-            groupControl1.Text = "Analiz Sonuçlarý";
-            // 
+            groupControl1.Text = "Analysis Results";
+            //
             // tableLayoutPanel1
-            // 
+            //
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -155,9 +155,9 @@ namespace Ototeks.UI
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.3333321F));
             tableLayoutPanel1.Size = new System.Drawing.Size(330, 251);
             tableLayoutPanel1.TabIndex = 3;
-            // 
+            //
             // lblTitleStatus
-            // 
+            //
             lblTitleStatus.Appearance.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Bold);
             lblTitleStatus.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
             lblTitleStatus.Appearance.Options.UseFont = true;
@@ -169,10 +169,10 @@ namespace Ototeks.UI
             lblTitleStatus.Name = "lblTitleStatus";
             lblTitleStatus.Size = new System.Drawing.Size(143, 66);
             lblTitleStatus.TabIndex = 0;
-            lblTitleStatus.Text = "Durum:";
-            // 
+            lblTitleStatus.Text = "Status:";
+            //
             // lblTitleConfidence
-            // 
+            //
             lblTitleConfidence.Appearance.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Bold);
             lblTitleConfidence.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
             lblTitleConfidence.Appearance.Options.UseFont = true;
@@ -184,10 +184,10 @@ namespace Ototeks.UI
             lblTitleConfidence.Name = "lblTitleConfidence";
             lblTitleConfidence.Size = new System.Drawing.Size(143, 69);
             lblTitleConfidence.TabIndex = 2;
-            lblTitleConfidence.Text = "Güven Skoru:";
-            // 
+            lblTitleConfidence.Text = "Confidence Score:";
+            //
             // lblTitleDefectType
-            // 
+            //
             lblTitleDefectType.Appearance.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Bold);
             lblTitleDefectType.Appearance.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
             lblTitleDefectType.Appearance.Options.UseFont = true;
@@ -199,10 +199,10 @@ namespace Ototeks.UI
             lblTitleDefectType.Name = "lblTitleDefectType";
             lblTitleDefectType.Size = new System.Drawing.Size(143, 66);
             lblTitleDefectType.TabIndex = 1;
-            lblTitleDefectType.Text = "Hata Türü:";
-            // 
+            lblTitleDefectType.Text = "Defect Type:";
+            //
             // lblValueStatus
-            // 
+            //
             lblValueStatus.Appearance.Font = new System.Drawing.Font("Tahoma", 10.2F);
             lblValueStatus.Appearance.Options.UseFont = true;
             lblValueStatus.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -210,10 +210,10 @@ namespace Ototeks.UI
             lblValueStatus.Name = "lblValueStatus";
             lblValueStatus.Size = new System.Drawing.Size(143, 66);
             lblValueStatus.TabIndex = 3;
-            lblValueStatus.Text = "Hatalý";
-            // 
+            lblValueStatus.Text = "Defective";
+            //
             // lblValueDefect
-            // 
+            //
             lblValueDefect.Appearance.Font = new System.Drawing.Font("Tahoma", 10.2F);
             lblValueDefect.Appearance.Options.UseFont = true;
             lblValueDefect.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -221,10 +221,10 @@ namespace Ototeks.UI
             lblValueDefect.Name = "lblValueDefect";
             lblValueDefect.Size = new System.Drawing.Size(143, 66);
             lblValueDefect.TabIndex = 4;
-            lblValueDefect.Text = "Yýrtýk";
-            // 
+            lblValueDefect.Text = "Tear";
+            //
             // lblValueConfidence
-            // 
+            //
             lblValueConfidence.Appearance.Font = new System.Drawing.Font("Tahoma", 10.2F);
             lblValueConfidence.Appearance.Options.UseFont = true;
             lblValueConfidence.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -232,10 +232,10 @@ namespace Ototeks.UI
             lblValueConfidence.Name = "lblValueConfidence";
             lblValueConfidence.Size = new System.Drawing.Size(143, 69);
             lblValueConfidence.TabIndex = 5;
-            lblValueConfidence.Text = "%92";
-            // 
+            lblValueConfidence.Text = "92%";
+            //
             // pictureEdit1
-            // 
+            //
             pictureEdit1.Location = new System.Drawing.Point(20, 49);
             pictureEdit1.Name = "pictureEdit1";
             pictureEdit1.Properties.ShowCameraMenuItem = DevExpress.XtraEditors.Controls.CameraMenuItemVisibility.Auto;
@@ -243,18 +243,18 @@ namespace Ototeks.UI
             pictureEdit1.Size = new System.Drawing.Size(334, 309);
             pictureEdit1.StyleController = layoutControl1;
             pictureEdit1.TabIndex = 4;
-            // 
+            //
             // Root
-            // 
+            //
             Root.EnableIndentsWithoutBorders = DevExpress.Utils.DefaultBoolean.True;
             Root.GroupBordersVisible = false;
             Root.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] { layoutControlItem1, layoutControlItem2, layoutControlItem3 });
             Root.Name = "Root";
             Root.Size = new System.Drawing.Size(374, 717);
             Root.TextVisible = false;
-            // 
+            //
             // layoutControlItem1
-            // 
+            //
             layoutControlItem1.AppearanceItemCaption.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 162);
             layoutControlItem1.AppearanceItemCaption.Options.UseFont = true;
             layoutControlItem1.AppearanceItemCaption.Options.UseTextOptions = true;
@@ -263,76 +263,76 @@ namespace Ototeks.UI
             layoutControlItem1.Location = new System.Drawing.Point(0, 0);
             layoutControlItem1.Name = "layoutControlItem1";
             layoutControlItem1.Size = new System.Drawing.Size(342, 346);
-            layoutControlItem1.Text = "Analiz Edilecek Kumaþ";
+            layoutControlItem1.Text = "Fabric to Analyze";
             layoutControlItem1.TextLocation = DevExpress.Utils.Locations.Top;
             layoutControlItem1.TextSize = new System.Drawing.Size(166, 21);
-            // 
+            //
             // layoutControlItem2
-            // 
+            //
             layoutControlItem2.Control = groupControl1;
             layoutControlItem2.Location = new System.Drawing.Point(0, 388);
             layoutControlItem2.Name = "layoutControlItem2";
             layoutControlItem2.Size = new System.Drawing.Size(342, 297);
             layoutControlItem2.TextVisible = false;
-            // 
+            //
             // layoutControlItem3
-            // 
+            //
             layoutControlItem3.Control = simpleButton1;
             layoutControlItem3.Location = new System.Drawing.Point(0, 346);
             layoutControlItem3.Name = "layoutControlItem3";
             layoutControlItem3.Size = new System.Drawing.Size(342, 42);
             layoutControlItem3.TextVisible = false;
-            // 
+            //
             // gridView2
-            // 
+            //
             gridView2.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { colFabricType, colProductType, colQuantity, colCurrentStage });
             gridView2.GridControl = gridControl1;
             gridView2.Name = "gridView2";
             gridView2.OptionsBehavior.Editable = false;
             gridView2.CustomColumnDisplayText += gridView2_CustomColumnDisplayText;
-            // 
+            //
             // colFabricType
-            // 
-            colFabricType.Caption = "Kumaþ Türü";
+            //
+            colFabricType.Caption = "Fabric Type";
             colFabricType.FieldName = "Fabric.FabricName";
             colFabricType.MinWidth = 25;
             colFabricType.Name = "colFabricType";
             colFabricType.Visible = true;
             colFabricType.VisibleIndex = 0;
             colFabricType.Width = 94;
-            // 
+            //
             // colProductType
-            // 
-            colProductType.Caption = "Ürün Türü";
+            //
+            colProductType.Caption = "Product Type";
             colProductType.FieldName = "Type.TypeName";
             colProductType.MinWidth = 25;
             colProductType.Name = "colProductType";
             colProductType.Visible = true;
             colProductType.VisibleIndex = 1;
             colProductType.Width = 94;
-            // 
+            //
             // colQuantity
-            // 
-            colQuantity.Caption = "Adet";
+            //
+            colQuantity.Caption = "Quantity";
             colQuantity.FieldName = "Quantity";
             colQuantity.MinWidth = 25;
             colQuantity.Name = "colQuantity";
             colQuantity.Visible = true;
             colQuantity.VisibleIndex = 2;
             colQuantity.Width = 94;
-            // 
+            //
             // colCurrentStage
-            // 
-            colCurrentStage.Caption = "Kalem Durumu";
+            //
+            colCurrentStage.Caption = "Item Status";
             colCurrentStage.FieldName = "CurrentStage";
             colCurrentStage.MinWidth = 25;
             colCurrentStage.Name = "colCurrentStage";
             colCurrentStage.Visible = true;
             colCurrentStage.VisibleIndex = 3;
             colCurrentStage.Width = 94;
-            // 
+            //
             // gridControl1
-            // 
+            //
             gridControl1.DataSource = orderBindingSource;
             gridControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             gridLevelNode1.LevelTemplate = gridView2;
@@ -344,67 +344,67 @@ namespace Ototeks.UI
             gridControl1.Size = new System.Drawing.Size(406, 717);
             gridControl1.TabIndex = 0;
             gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] { gridView1, gridView2 });
-            // 
+            //
             // orderBindingSource
-            // 
+            //
             orderBindingSource.DataSource = typeof(Entities.Order);
-            // 
+            //
             // gridView1
-            // 
+            //
             gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] { colOrderNumber, colOrderDate, colDueDate, colCustomer });
             gridView1.GridControl = gridControl1;
             gridView1.Name = "gridView1";
             gridView1.OptionsBehavior.Editable = false;
             gridView1.OptionsDetail.ShowDetailTabs = false;
-            // 
+            //
             // colOrderNumber
-            // 
-            colOrderNumber.Caption = "Sipariþ Numarasý";
+            //
+            colOrderNumber.Caption = "Order Number";
             colOrderNumber.FieldName = "OrderNumber";
             colOrderNumber.MinWidth = 25;
             colOrderNumber.Name = "colOrderNumber";
             colOrderNumber.Visible = true;
             colOrderNumber.VisibleIndex = 0;
             colOrderNumber.Width = 94;
-            // 
+            //
             // colOrderDate
-            // 
-            colOrderDate.Caption = "Sipariþ Tarihi";
+            //
+            colOrderDate.Caption = "Order Date";
             colOrderDate.FieldName = "OrderDate";
             colOrderDate.MinWidth = 25;
             colOrderDate.Name = "colOrderDate";
             colOrderDate.Visible = true;
             colOrderDate.VisibleIndex = 2;
             colOrderDate.Width = 94;
-            // 
+            //
             // colDueDate
-            // 
-            colDueDate.Caption = "Teslim Tarihi";
+            //
+            colDueDate.Caption = "Due Date";
             colDueDate.FieldName = "DueDate";
             colDueDate.MinWidth = 25;
             colDueDate.Name = "colDueDate";
             colDueDate.Visible = true;
             colDueDate.VisibleIndex = 3;
             colDueDate.Width = 94;
-            // 
+            //
             // colCustomer
-            // 
-            colCustomer.Caption = "Müþteri";
+            //
+            colCustomer.Caption = "Customer";
             colCustomer.FieldName = "Customer.CustomerName";
             colCustomer.MinWidth = 25;
             colCustomer.Name = "colCustomer";
             colCustomer.Visible = true;
             colCustomer.VisibleIndex = 1;
             colCustomer.Width = 94;
-            // 
+            //
             // FrmFabricQualityControl
-            // 
+            //
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(800, 717);
             Controls.Add(splitContainerControl1);
             Name = "FrmFabricQualityControl";
-            Text = "Kumaþ Kontrol";
+            Text = "Fabric Control";
             Load += FrmFabricQualityControl_Load;
             ((System.ComponentModel.ISupportInitialize)splitContainerControl1.Panel1).EndInit();
             splitContainerControl1.Panel1.ResumeLayout(false);

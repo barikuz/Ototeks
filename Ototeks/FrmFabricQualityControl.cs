@@ -24,11 +24,11 @@ namespace Ototeks.UI
         private GenericRepository<QualityLog> _qualityLogRepo;
         private GenericRepository<DefectType> _defectTypeRepo;
 
-        // Seçili sipariş kalemi
+        // Selected order item
         private OrderItem _selectedOrderItem;
-        // Seçili görüntü yolu
+        // Selected image path
         private string _selectedImagePath;
-        // Son analiz sonucu
+        // Last analysis result
         private QualityAnalysisResult _lastAnalysisResult;
 
         // Detail view tracking
@@ -60,9 +60,9 @@ namespace Ototeks.UI
 
         private void LoadOrders()
         {
-            // Sadece "Kalite Kontrol" aşamasında en az bir kalemi olan siparişleri getir
+            // Only get orders that have at least one item in the "Quality Control" stage
             var orders = _orderManager.GetAll()
-                .Where(o => o.OrderItems != null && 
+                .Where(o => o.OrderItems != null &&
                             o.OrderItems.Any(item => item.CurrentStage == OrderStatus.QualityControl))
                 .ToList();
 
@@ -71,13 +71,13 @@ namespace Ototeks.UI
 
         private void SetupGrid()
         {
-            // Grid'e Master-Detail özelliği ver
+            // Enable Master-Detail for the grid
             gridView1.ActivateMasterDetail<Order>("OrderItems", order => order.OrderItems);
         }
 
         private void SetupGridEvents()
         {
-            // Master view'a tıklandığında
+            // When master view is clicked
             gridView1.Click += (s, e) =>
             {
                 _isDetailViewActive = false;
@@ -85,20 +85,20 @@ namespace Ototeks.UI
                 _selectedOrderItem = null;
             };
 
-            // Detail view oluşturulduğunda
+            // When detail view is registered
             gridControl1.ViewRegistered += (s, e) =>
             {
                 if (e.View is GridView detailView && e.View != gridView1)
                 {
-                    // Detail view'a tıklandığında
+                    // When detail view is clicked
                     detailView.Click += (sender, args) =>
                     {
                         _isDetailViewActive = true;
                         _currentDetailView = detailView;
-                        
+
                         if (detailView.GetFocusedRow() is OrderItem selectedItem)
                         {
-                            // Sadece Kalite Kontrol aşamasındaki kalemleri seç
+                            // Only select items in Quality Control stage
                             if (selectedItem.CurrentStage == OrderStatus.QualityControl)
                             {
                                 _selectedOrderItem = selectedItem;
@@ -110,7 +110,7 @@ namespace Ototeks.UI
                         }
                     };
 
-                    // Detail view'da satır değiştiğinde
+                    // When focused row changes in detail view
                     detailView.FocusedRowChanged += (sender, args) =>
                     {
                         if (_isDetailViewActive && detailView.GetFocusedRow() is OrderItem selectedItem)
@@ -131,25 +131,25 @@ namespace Ototeks.UI
 
         private void simpleButton1_Click(object sender, EventArgs e)
         {
-            // 1. Sipariş kalemi seçili mi kontrol et
+            // 1. Check if an order item is selected
             if (_selectedOrderItem == null)
             {
                 XtraMessageBox.Show(
-                    "Lütfen önce 'Kalite Kontrol' durumunda bir sipariş kalemi seçin.\n",
-                    "Uyarı",
+                    "Please select an order item in 'Quality Control' status first.\n",
+                    "Warning",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
                 return;
             }
 
-            // 2. Dosya seçme dialogu aç
+            // 2. Open file selection dialog
             using (var openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.Title = "Kumaş Görüntüsü Seçin";
-                openFileDialog.Filter = "Görüntü Dosyaları|*.jpg;*.jpeg;*.png;*.bmp;*.gif|" +
-                                        "JPEG Dosyaları|*.jpg;*.jpeg|" +
-                                        "PNG Dosyaları|*.png|" +
-                                        "Tüm Dosyalar|*.*";
+                openFileDialog.Title = "Select Fabric Image";
+                openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif|" +
+                                        "JPEG Files|*.jpg;*.jpeg|" +
+                                        "PNG Files|*.png|" +
+                                        "All Files|*.*";
                 openFileDialog.FilterIndex = 1;
 
                 if (openFileDialog.ShowDialog() != DialogResult.OK)
@@ -158,24 +158,24 @@ namespace Ototeks.UI
                 _selectedImagePath = openFileDialog.FileName;
             }
 
-            // 3. Görüntüyü PictureEdit'te göster ve ekranı hemen güncelle
+            // 3. Display the image in PictureEdit and refresh the screen immediately
             try
             {
                 pictureEdit1.Image = Image.FromFile(_selectedImagePath);
                 pictureEdit1.Refresh();
-                Application.DoEvents(); // Ekranın güncellenmesini bekle
+                Application.DoEvents(); // Wait for the screen to update
             }
             catch (Exception ex)
             {
                 XtraMessageBox.Show(
-                    $"Görüntü yüklenirken hata oluştu: {ex.Message}",
-                    "Hata",
+                    $"An error occurred while loading the image: {ex.Message}",
+                    "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
                 return;
             }
 
-            // 4. AI analizi yap
+            // 4. Perform AI analysis
             AnalyzeImage();
         }
 
@@ -183,38 +183,38 @@ namespace Ototeks.UI
         {
             try
             {
-                // Bekleme cursor'u göster
+                // Show wait cursor
                 Cursor = Cursors.WaitCursor;
                 simpleButton1.Enabled = false;
 
-                // AI modeli ile analiz yap
+                // Analyze with AI model
                 _lastAnalysisResult = _qualityManager.AnalyzeFabricImage(_selectedImagePath);
 
-                // Sonuçları ekranda göster
+                // Display results on screen
                 DisplayAnalysisResults(_lastAnalysisResult);
 
-                // Kalite logunu veritabanına kaydet
+                // Save quality log to database
                 SaveQualityLog();
 
-                // Başarı mesajı - Türkçe hata türü ile
+                // Success message with defect type
                 string defectTypeText = EnumHelper.GetDefectTypeName(_lastAnalysisResult.DefectType);
-                string statusMessage = _lastAnalysisResult.IsDefective 
-                    ? "Kumaşta hata tespit edildi!" 
-                    : "Kumaş kalite kontrolden geçti.";
-                
+                string statusMessage = _lastAnalysisResult.IsDefective
+                    ? "Defect detected in fabric!"
+                    : "Fabric passed quality control.";
+
                 XtraMessageBox.Show(
                     $"{statusMessage}\n\n" +
-                    $"Sonuç: {defectTypeText}\n" +
-                    $"Güven Skoru: %{_lastAnalysisResult.ConfidenceScore}\n",
-                    "Analiz Tamamlandı",
+                    $"Result: {defectTypeText}\n" +
+                    $"Confidence Score: %{_lastAnalysisResult.ConfidenceScore}\n",
+                    "Analysis Complete",
                     MessageBoxButtons.OK,
                     _lastAnalysisResult.IsDefective ? MessageBoxIcon.Warning : MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
                 XtraMessageBox.Show(
-                    $"Analiz sırasında hata oluştu: {ex.Message}",
-                    "Hata",
+                    $"An error occurred during analysis: {ex.Message}",
+                    "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
@@ -227,18 +227,18 @@ namespace Ototeks.UI
 
         private void DisplayAnalysisResults(QualityAnalysisResult result)
         {
-            // Durum
-            lblValueStatus.Text = result.IsDefective ? "Hatalı" : "Sağlam";
+            // Status
+            lblValueStatus.Text = result.IsDefective ? "Defective" : "Intact";
             lblValueStatus.Appearance.ForeColor = result.IsDefective ? Color.Red : Color.Green;
 
-            // Hata türü - Türkçe olarak göster
+            // Defect type
             string defectTypeText = EnumHelper.GetDefectTypeName(result.DefectType);
             lblValueDefect.Text = result.IsDefective ? defectTypeText : "-";
 
-            // Güven skoru
+            // Confidence score
             lblValueConfidence.Text = $"%{result.ConfidenceScore}";
-            
-            // Güven skoruna göre renk
+
+            // Color based on confidence score
             if (result.ConfidenceScore >= 80)
                 lblValueConfidence.Appearance.ForeColor = Color.Green;
             else if (result.ConfidenceScore >= 50)
@@ -266,14 +266,14 @@ namespace Ototeks.UI
 
             try
             {
-                // Hata tipini veritabanından bul (varsa)
+                // Find defect type from database (if exists)
                 DefectType defectType = null;
                 if (_lastAnalysisResult.IsDefective)
                 {
                     defectType = _qualityManager.GetDefectTypeByName(_lastAnalysisResult.DefectType);
                 }
 
-                // Kalite log kaydı oluştur
+                // Create quality log record
                 var qualityLog = new QualityLog
                 {
                     OrderItemId = _selectedOrderItem.OrderItemId,
@@ -284,14 +284,14 @@ namespace Ototeks.UI
                     ImagePath = _selectedImagePath,
                 };
 
-                // Veritabanına kaydet
+                // Save to database
                 _qualityManager.AddQualityLog(qualityLog);
             }
             catch (Exception ex)
             {
                 XtraMessageBox.Show(
-                    $"Kalite kaydı veritabanına eklenirken hata oluştu: {ex.Message}",
-                    "Kayıt Hatası",
+                    $"An error occurred while saving quality log to database: {ex.Message}",
+                    "Save Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
             }
@@ -299,7 +299,7 @@ namespace Ototeks.UI
 
         private void gridView2_CustomColumnDisplayText(object sender, DevExpress.XtraGrid.Views.Base.CustomColumnDisplayTextEventArgs e)
         {
-            // Alt tablodaki CurrentStage kolonunu Türkçe göster
+            // Display CurrentStage column in the detail table
             if (e.Column.FieldName == "CurrentStage" && e.Value is OrderStatus status)
             {
                 e.DisplayText = EnumHelper.GetOrderStatusName(status);

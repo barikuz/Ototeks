@@ -6,15 +6,15 @@ using System.Windows.Forms;
 namespace Ototeks.Helpers
 {
     /// <summary>
-    /// Açýk formlarý yenilemek için kullanýlan static helper sýnýfý.
-    /// Tüm yenileme mantýðý tek bir yerde toplanmýþtýr.
+    /// Static helper class used to refresh open forms.
+    /// All refresh logic is centralized in one place.
     /// </summary>
     public static class FormRefreshHelper
     {
         /// <summary>
-        /// Belirtilen tipteki TÜM açýk formlarýn RefreshData metodunu çaðýrýr.
+        /// Calls the RefreshData method on ALL open forms of the specified type.
         /// </summary>
-        /// <typeparam name="TForm">Yenilenecek form tipi</typeparam>
+        /// <typeparam name="TForm">The form type to refresh</typeparam>
         public static void RefreshAllOpenForms<TForm>() where TForm : Form
         {
             var formType = typeof(TForm);
@@ -22,21 +22,21 @@ namespace Ototeks.Helpers
         }
 
         /// <summary>
-        /// Verilen form tipiyle ayný tipteki TÜM açýk formlarýn RefreshData metodunu çaðýrýr.
+        /// Calls the RefreshData method on ALL open forms matching the given form type.
         /// </summary>
-        /// <param name="formType">Yenilenecek form tipi</param>
+        /// <param name="formType">The form type to refresh</param>
         public static void RefreshAllOpenFormsByType(Type formType)
         {
-            // Application.OpenForms üzerinde döngü yap
-            // ToList() ile kopyasýný al çünkü koleksiyon deðiþebilir
+            // Iterate over Application.OpenForms
+            // Use ToList() to create a copy since the collection may change
             var openForms = Application.OpenForms.Cast<Form>().ToList();
 
             foreach (var form in openForms)
             {
-                // Eðer form ayný tipte ise
+                // If the form is the same type
                 if (form.GetType() == formType)
                 {
-                    // RefreshData metodunu çaðýr
+                    // Call the RefreshData method
                     var refreshMethod = formType.GetMethod("RefreshData", BindingFlags.Public | BindingFlags.Instance);
                     refreshMethod?.Invoke(form, null);
                 }

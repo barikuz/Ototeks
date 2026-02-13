@@ -1,16 +1,14 @@
-﻿using Ototeks.Entities;
+using Ototeks.Entities;
 using System.Collections.Generic;
 
 namespace Ototeks.Business.Abstract
 {
     public interface IFabricService
     {
-        // Standart İşlemler (CRUD)
         void Add(Fabric fabric);
         void Update(Fabric fabric);
         void Delete(Fabric fabric);
 
-        // Listeleme
         List<Fabric> GetAll();
         Fabric GetById(int id);
     }

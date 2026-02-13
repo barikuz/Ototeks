@@ -27,12 +27,12 @@ namespace Ototeks.UI
         {
             _uiHelper = new ListFormHelper<ProductType>(
                 gridView1,
-                sagTikMenu,
+                contextMenu,
                 btnAdd,
                 btnUpdate,
                 btnDelete);
 
-            // Data provider'ý set et
+            // Set the data provider
             _uiHelper.SetDataProvider(GetProductTypeData);
         }
 
@@ -58,14 +58,14 @@ namespace Ototeks.UI
             _uiHelper.HandlePopupMenuShowing(e);
         }
 
-        // --- SÝL BUTONU KODU ---
+        // --- DELETE BUTTON CODE ---
         private void btnDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             _uiHelper.Delete(
                 deleteAction: (productType) => _manager.Delete(productType),
                 confirmMessageFunc: (productType) => MessageBox.Show(
-                    $"'{productType.TypeName}' ürün tipini silmek istediðinize emin misiniz?",
-                    "Silme Onayý",
+                    $"Are you sure you want to delete the product type '{productType.TypeName}'?",
+                    "Delete Confirmation",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning)
             );

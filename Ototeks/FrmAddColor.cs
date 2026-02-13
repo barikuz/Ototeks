@@ -10,10 +10,10 @@ namespace Ototeks.UI
 {
     public partial class FrmAddColor : DevExpress.XtraEditors.XtraForm, IOperationForm
     {
-        // Bu, formun dýþarýya göndereceði sinyaldir
+        // This is the signal that the form will send outward
         public event EventHandler OperationCompleted;
 
-        private int _guncellenecekId = 0; // 0 ise Ekleme Modu, >0 ise Güncelleme Modu
+        private int _recordIdToUpdate = 0; // 0 = Add Mode, >0 = Update Mode
 
         public FrmAddColor()
         {
@@ -23,82 +23,82 @@ namespace Ototeks.UI
         public FrmAddColor(int id)
         {
             InitializeComponent();
-            _guncellenecekId = id; // Hangi kaydý düzenleyeceðimizi not ettik.
+            _recordIdToUpdate = id; // Note which record we will edit.
 
-            // Formun baþlýðýný deðiþtir ki kullanýcý anlasýn
-            this.Text = "Renk Güncelle";
-            lblBaslik.Text = "Renk Güncelleme";
-            btnKaydet.Text = "Güncelle";
+            // Change the form title so the user understands
+            this.Text = "Update Color";
+            lblTitle.Text = "Update Color";
+            btnSave.Text = "Update";
 
-            getData(); // Kutularý doldur
+            LoadRecordData(); // Fill the fields
         }
 
-        void getData()
+        void LoadRecordData()
         {
-            // Veritabanýndan o id'li rengi bul
+            // Find the color with this id from the database
             var repo = new GenericRepository<Color>();
             var manager = new ColorManager(repo);
-            var color = manager.GetById(_guncellenecekId);
+            var color = manager.GetById(_recordIdToUpdate);
 
             if (color != null)
             {
-                // Kutularý doldur
-                txtRenkAdi.Text = color.ColorName;
+                // Fill the fields
+                txtColorName.Text = color.ColorName;
             }
         }
 
-        private void btnKaydet_Click(object sender, EventArgs e)
+        private void btnSave_Click(object sender, EventArgs e)
         {
-            // 1. ADIM: Baðlantýlarý Hazýrla
+            // STEP 1: Prepare connections
             var repo = new GenericRepository<Color>();
             var manager = new ColorManager(repo);
 
             try
             {
-                // SENARYO 1: YENÝ KAYIT (ID = 0)
-                if (_guncellenecekId == 0)
+                // SCENARIO 1: NEW RECORD (ID = 0)
+                if (_recordIdToUpdate == 0)
                 {
-                    // Nesneyi Oluþtur
-                    var yeniRenk = new Color
+                    // Create the object
+                    var newColor = new Color
                     {
-                        ColorName = txtRenkAdi.Text.Trim()
+                        ColorName = txtColorName.Text.Trim()
                     };
 
-                    // Manager'a gönder (Oradaki kurallarý kontrol etsin)
-                    manager.Add(yeniRenk);
+                    // Send to Manager (let it check the rules there)
+                    manager.Add(newColor);
 
-                    // Baþarýlýysa mesaj ver
-                    XtraMessageBox.Show("Renk baþarýyla sisteme eklendi!", "Tebrikler", 
+                    // Show success message
+                    XtraMessageBox.Show("Color has been successfully added to the system!", "Success",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Kutularý temizle ki yeni kayýt girebilelim
-                    txtRenkAdi.Text = "";
-                    txtRenkAdi.Focus(); // Ýmleci tekrar ilk kutuya koy
+                    // Clear the fields so we can enter a new record
+                    txtColorName.Text = "";
+                    txtColorName.Focus(); // Move cursor back to the first field
                 }
-                // SENARYO 2: GÜNCELLEME (ID > 0)
+                // SCENARIO 2: UPDATE (ID > 0)
                 else
                 {
-                    // Önce veritabanýndaki orijinal kaydý çek
-                    var guncellenecekRenk = manager.GetById(_guncellenecekId);
+                    // First fetch the original record from the database
+                    var colorToUpdate = manager.GetById(_recordIdToUpdate);
 
-                    // Ekrandaki yeni bilgileri üzerine yaz
-                    guncellenecekRenk.ColorName = txtRenkAdi.Text.Trim();
+                    // Overwrite with the new information from the screen
+                    colorToUpdate.ColorName = txtColorName.Text.Trim();
 
-                    // Manager'a "Bunu güncelle" de
-                    manager.Update(guncellenecekRenk);
+                    // Tell the Manager to "update this"
+                    manager.Update(colorToUpdate);
 
-                    XtraMessageBox.Show("Renk güncellendi!", "Baþarýlý", 
+                    XtraMessageBox.Show("Color has been updated!", "Success",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Close(); // Güncelleme bitince formu kapatmak daha mantýklýdýr.
+                    this.Close(); // It makes more sense to close the form after updating.
                 }
 
-                // Anne Forma Sinyal Gönder (Yenilesin)
+                // Send signal to the parent form (to refresh)
                 OperationCompleted?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
-                // Hatayý burada yakalayýp kullanýcýya gösteriyoruz.
-                XtraMessageBox.Show(ex.Message, "Hata Oluþtu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Catch the error here and show it to the user.
+                XtraMessageBox.Show(ex.Message, "Error Occurred", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

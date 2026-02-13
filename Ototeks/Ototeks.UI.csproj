@@ -6,9 +6,9 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>Ototeks.ico</ApplicationIcon>
     <AssemblyName>OtoTechstil</AssemblyName>
-    <Title>OtoTechstil Otomasyon Sistemi</Title>
+    <Title>OtoTechstil Automation System</Title>
     <Company>Engin Saçan</Company>
-    <Description>Tekstil Üretim ve Kalite Takip Sistemi</Description>
+    <Description>Textile Production and Quality Tracking System</Description>
   </PropertyGroup>
 
   <ItemGroup>

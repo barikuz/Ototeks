@@ -4,56 +4,56 @@ using System.Collections.Generic;
 namespace Ototeks.Business.Abstract
 {
     /// <summary>
-    /// Kalite kontrol iþlemleri için servis arayüzü
+    /// Service interface for quality control operations
     /// </summary>
     public interface IQualityControlService
     {
         /// <summary>
-        /// Kumaþ görüntüsünü analiz eder ve hata tespiti yapar
+        /// Analyzes a fabric image and performs defect detection
         /// </summary>
-        /// <param name="imagePath">Analiz edilecek görüntünün yolu</param>
-        /// <returns>Analiz sonucu</returns>
+        /// <param name="imagePath">Path to the image to analyze</param>
+        /// <returns>Analysis result</returns>
         QualityAnalysisResult AnalyzeFabricImage(string imagePath);
 
         /// <summary>
-        /// Kalite kontrol kaydý oluþturur
+        /// Creates a quality control log entry
         /// </summary>
-        /// <param name="qualityLog">Kaydedilecek kalite log bilgisi</param>
+        /// <param name="qualityLog">Quality log information to save</param>
         void AddQualityLog(QualityLog qualityLog);
 
         /// <summary>
-        /// Tüm hata tiplerini getirir
+        /// Gets all defect types
         /// </summary>
         List<DefectType> GetAllDefectTypes();
 
         /// <summary>
-        /// Hata adýna göre DefectType getirir
+        /// Gets a DefectType by its name
         /// </summary>
         DefectType GetDefectTypeByName(string defectName);
     }
 
     /// <summary>
-    /// Kalite analiz sonucu modeli
+    /// Quality analysis result model
     /// </summary>
     public class QualityAnalysisResult
     {
         /// <summary>
-        /// Hata tespit edildi mi?
+        /// Whether a defect was detected
         /// </summary>
         public bool IsDefective { get; set; }
 
         /// <summary>
-        /// Tespit edilen hata tipi (null ise hata yok)
+        /// Detected defect type (null if no defect)
         /// </summary>
         public string DefectType { get; set; }
 
         /// <summary>
-        /// Model güven skoru (0-100 arasý yüzde)
+        /// Model confidence score (percentage, 0-100)
         /// </summary>
         public double ConfidenceScore { get; set; }
 
         /// <summary>
-        /// Ham skor deðeri (0-1 arasý)
+        /// Raw score value (0-1 range)
         /// </summary>
         public float RawScore { get; set; }
     }

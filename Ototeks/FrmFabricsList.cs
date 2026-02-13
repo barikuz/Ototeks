@@ -1,4 +1,4 @@
-﻿using DevExpress.XtraBars;
+using DevExpress.XtraBars;
 using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using Ototeks.Business.Concrete;
 using Ototeks.DataAccess.Concrete;
@@ -17,7 +17,7 @@ namespace Ototeks.UI
         private GenericRepository<Fabric> _repo;
         private ListFormHelper<Fabric> _uiHelper;
 
-        // Filtreleme için
+        // For filtering
         private bool _showOnlyCriticalStock = false;
         private const decimal CRITICAL_STOCK_THRESHOLD = 50;
 
@@ -28,16 +28,16 @@ namespace Ototeks.UI
         }
 
         /// <summary>
-        /// Filtrelenmiş kumaş listesi için constructor
+        /// Constructor for filtered fabric list
         /// </summary>
-        /// <param name="showOnlyCriticalStock">True ise sadece kritik stokta olan kumaşları gösterir</param>
+        /// <param name="showOnlyCriticalStock">If true, shows only fabrics with critical stock levels</param>
         public FrmFabricsList(bool showOnlyCriticalStock) : this()
         {
             _showOnlyCriticalStock = showOnlyCriticalStock;
-            
+
             if (_showOnlyCriticalStock)
             {
-                this.Text = "Kritik Stokta Olan Kumaşlar";
+                this.Text = "Fabrics with Critical Stock";
             }
         }
 
@@ -45,12 +45,12 @@ namespace Ototeks.UI
         {
             _uiHelper = new ListFormHelper<Fabric>(
                 gridView1,
-                sagTikMenu,
+                contextMenu,
                 btnAdd,
                 btnUpdate,
                 btnDelete);
 
-            // Data provider'ı set et
+            // Set the data provider
             _uiHelper.SetDataProvider(GetFabricData);
         }
 
@@ -60,14 +60,14 @@ namespace Ototeks.UI
             _manager = new FabricManager(_repo);
             var fabrics = _manager.GetAll();
 
-            // Filtre uygula
+            // Apply filter
             if (_showOnlyCriticalStock)
             {
                 fabrics = fabrics
-                    .Where(f => 
-                        f.StockQuantity.HasValue && 
+                    .Where(f =>
+                        f.StockQuantity.HasValue &&
                         f.StockQuantity.Value < CRITICAL_STOCK_THRESHOLD)
-                    .OrderBy(f => f.StockQuantity ?? 0) // Stok miktarı en az olan üstte
+                    .OrderBy(f => f.StockQuantity ?? 0) // Lowest stock quantity on top
                     .ToList();
             }
 
@@ -89,14 +89,14 @@ namespace Ototeks.UI
             _uiHelper.HandlePopupMenuShowing(e);
         }
 
-        // --- SİL BUTONU KODU ---
+        // --- DELETE BUTTON CODE ---
         private void btnDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             _uiHelper.Delete(
                 deleteAction: (fabric) => _manager.Delete(fabric),
                 confirmMessageFunc: (fabric) => MessageBox.Show(
-                    $"'{fabric.FabricCode}' kodlu kumaşı silmek istediğinize emin misiniz?",
-                    "Silme Onayı",
+                    $"Are you sure you want to delete the fabric with code '{fabric.FabricCode}'?",
+                    "Delete Confirmation",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning)
             );
