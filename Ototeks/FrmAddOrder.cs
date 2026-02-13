@@ -138,14 +138,17 @@ namespace Ototeks.UI
                     // STEP 1: Prepare the object
                     Order newOrder = CreateOrderFromUI();
 
-                    // STEP 2: Validate stock and show result to the user
+                    // STEP 2: Validate the order FIRST (before showing any modals)
+                    var orderManager = new OrderManager(new GenericRepository<Order>());
+                    orderManager.ValidateOrder(newOrder);
+
+                    // STEP 3: Show stock information and ask for confirmation
                     ShowStockValidationResult(newOrder.OrderItems);
 
-                    // STEP 3: Complete the operation
-                    var orderManager = new OrderManager(new GenericRepository<Order>());
+                    // STEP 4: Complete the operation
                     orderManager.Add(newOrder);
 
-                    // STEP 4: Notify the user
+                    // STEP 5: Notify the user
                     XtraMessageBox.Show("Order has been successfully added and fabric stocks have been updated!", "Success",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -159,11 +162,14 @@ namespace Ototeks.UI
                     Order orderToUpdate = CreateOrderFromUI();
                     orderToUpdate.OrderId = _recordIdToUpdate;
 
-                    // Validate stock
+                    // Validate the order FIRST (before showing any modals)
+                    var orderManager = new OrderManager(new GenericRepository<Order>());
+                    orderManager.ValidateOrder(orderToUpdate, _recordIdToUpdate);
+
+                    // Show stock information and ask for confirmation
                     ShowStockValidationResult(orderToUpdate.OrderItems);
 
                     // Tell the Manager to update this
-                    var orderManager = new OrderManager(new GenericRepository<Order>());
                     orderManager.Update(orderToUpdate);
 
                     XtraMessageBox.Show("Order has been updated and fabric stocks have been recalculated!", "Success",

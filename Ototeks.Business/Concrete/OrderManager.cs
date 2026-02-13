@@ -26,6 +26,16 @@ namespace Ototeks.Business.Concrete
             _stockService = new StockManager(fabricRepo, productTypeRepo);
         }
 
+        /// <summary>
+        /// Runs merge + validation checks without persisting. Call this before showing
+        /// the Stock Information Modal so that validation errors appear first.
+        /// </summary>
+        public void ValidateOrder(Order order, int? excludeId = null)
+        {
+            MergeDuplicateOrderItems(order);
+            CheckValidation(order, excludeId);
+        }
+
         public void Add(Order order)
         {
             MergeDuplicateOrderItems(order);
