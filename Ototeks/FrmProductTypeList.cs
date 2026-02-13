@@ -38,6 +38,7 @@ namespace Ototeks.UI
 
         private List<ProductType> GetProductTypeData()
         {
+            _repo?.Dispose();
             _repo = new GenericRepository<ProductType>();
             _manager = new ProductTypeManager(_repo);
             return _manager.GetAll();

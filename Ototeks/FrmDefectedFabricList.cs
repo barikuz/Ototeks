@@ -42,6 +42,8 @@ namespace Ototeks.UI
         {
             try
             {
+                _orderRepo?.Dispose();
+                _qualityLogRepo?.Dispose();
                 _orderRepo = new GenericRepository<Order>();
                 _qualityLogRepo = new GenericRepository<QualityLog>();
 

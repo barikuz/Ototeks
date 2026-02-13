@@ -56,6 +56,7 @@ namespace Ototeks.UI
 
         private List<Fabric> GetFabricData()
         {
+            _repo?.Dispose();
             _repo = new GenericRepository<Fabric>();
             _manager = new FabricManager(_repo);
             var fabrics = _manager.GetAll();

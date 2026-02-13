@@ -44,6 +44,8 @@ namespace Ototeks.UI
         {
             try
             {
+                _orderRepo?.Dispose();
+                _orderItemRepo?.Dispose();
                 _orderRepo = new GenericRepository<Order>();
                 _orderItemRepo = new GenericRepository<OrderItem>();
                 _orderManager = new OrderManager(_orderRepo);
@@ -421,6 +423,13 @@ namespace Ototeks.UI
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            _orderRepo?.Dispose();
+            _orderItemRepo?.Dispose();
+            base.OnFormClosed(e);
         }
     }
 }

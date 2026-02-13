@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
@@ -5,7 +6,7 @@ namespace Ototeks.DataAccess.Abstract
 {
     // Generic repository interface: works with any entity class T.
     // "where T : class" ensures only reference types (entity classes) can be used, not value types.
-    public interface IGenericRepository<T> where T : class
+    public interface IGenericRepository<T> : IDisposable where T : class
     {
         void Add(T entity);
 

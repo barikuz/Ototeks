@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Ototeks.DataAccess.Abstract;
 using Ototeks.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -24,26 +25,41 @@ namespace Ototeks.DataAccess.Concrete
         // ADD
         public void Add(T entity)
         {
-
+            _context.ChangeTracker.Clear();
             _dbSet.Add(entity);
             _context.SaveChanges();
+            _context.ChangeTracker.Clear();
         }
 
         // UPDATE
         public void Update(T entity)
         {
-            // Clear all tracked entities to avoid conflicts with the incoming entity
             _context.ChangeTracker.Clear();
-
             _dbSet.Update(entity);
             _context.SaveChanges();
+            _context.ChangeTracker.Clear();
         }
 
         // DELETE
         public void Delete(T entity)
         {
-            _dbSet.Remove(entity);
-            _context.SaveChanges();
+            _context.ChangeTracker.Clear();
+
+            // Extract the primary key value from the passed-in entity
+            var pkName = GetPrimaryKeyName();
+            var pkValue = typeof(T).GetProperty(pkName).GetValue(entity);
+
+            // Fetch a clean entity from DB by PK (no navigation properties loaded).
+            // This avoids graph traversal conflicts that occur when Remove() is called
+            // on an entity with populated navigation properties (e.g., Fabric.Color).
+            var trackedEntity = _dbSet.Find(pkValue);
+            if (trackedEntity != null)
+            {
+                _dbSet.Remove(trackedEntity);
+                _context.SaveChanges();
+            }
+
+            _context.ChangeTracker.Clear();
         }
 
         // LIST ALL (SELECT * FROM ...)
@@ -102,6 +118,27 @@ namespace Ototeks.DataAccess.Concrete
             var entityType = _context.Model.FindEntityType(typeof(T));
             var primaryKey = entityType.FindPrimaryKey();
             return primaryKey.Properties.First().Name;
+        }
+
+        // --- IDisposable ---
+        private bool _disposed = false;
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _context?.Dispose();
+                }
+                _disposed = true;
+            }
         }
     }
 }

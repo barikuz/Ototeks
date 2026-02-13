@@ -62,6 +62,7 @@ namespace Ototeks.UI
         private List<Customer> GetCustomerData()
         {
             // 1. Create Manager (New instance per call)
+            _repo?.Dispose();
             _repo = new GenericRepository<Customer>();
             _manager = new CustomerManager(_repo);
 

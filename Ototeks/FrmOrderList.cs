@@ -63,6 +63,7 @@ namespace Ototeks.UI
         private List<Order> GetOrderData()
         {
             // 1. Create Manager (New instance per call)
+            _repo?.Dispose();
             _repo = new GenericRepository<Order>();
             _manager = new OrderManager(_repo);
 

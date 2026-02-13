@@ -305,5 +305,13 @@ namespace Ototeks.UI
                 e.DisplayText = EnumHelper.GetOrderStatusName(status);
             }
         }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            _orderRepo?.Dispose();
+            _qualityLogRepo?.Dispose();
+            _defectTypeRepo?.Dispose();
+            base.OnFormClosed(e);
+        }
     }
 }

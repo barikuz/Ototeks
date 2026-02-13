@@ -38,6 +38,7 @@ namespace Ototeks.UI
 
         private List<Color> GetColorData()
         {
+            _repo?.Dispose();
             _repo = new GenericRepository<Color>();
             _manager = new ColorManager(_repo);
             return _manager.GetAll();

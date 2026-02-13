@@ -21,6 +21,12 @@ namespace Ototeks.UI
         private DashboardManager _dashboardManager;
         private OrderManager _orderManager;
 
+        // Keep references for disposal
+        private GenericRepository<Order> _orderRepo;
+        private GenericRepository<Order> _orderRepoForDashboard;
+        private GenericRepository<Fabric> _fabricRepo;
+        private GenericRepository<OrderItem> _orderItemRepo;
+
         // Critical stock threshold (in meters)
         private const decimal CRITICAL_STOCK_THRESHOLD = 50;
 
@@ -37,12 +43,13 @@ namespace Ototeks.UI
 
         private void InitializeManager()
         {
-            var orderRepo = new GenericRepository<Order>();
-            var fabricRepo = new GenericRepository<Fabric>();
-            var orderItemRepo = new GenericRepository<OrderItem>();
+            _orderRepoForDashboard = new GenericRepository<Order>();
+            _fabricRepo = new GenericRepository<Fabric>();
+            _orderItemRepo = new GenericRepository<OrderItem>();
+            _orderRepo = new GenericRepository<Order>();
 
-            _dashboardManager = new DashboardManager(orderRepo, fabricRepo, orderItemRepo);
-            _orderManager = new OrderManager(orderRepo);
+            _dashboardManager = new DashboardManager(_orderRepoForDashboard, _fabricRepo, _orderItemRepo);
+            _orderManager = new OrderManager(_orderRepo);
         }
 
         private void tileOrder_ItemClick(object sender, DevExpress.XtraEditors.TileItemEventArgs e)
@@ -248,6 +255,15 @@ namespace Ototeks.UI
             LoadDashboardData();
             LoadDeliveryAlerts();
             LoadProductionStagesChart();
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            _orderRepo?.Dispose();
+            _orderRepoForDashboard?.Dispose();
+            _fabricRepo?.Dispose();
+            _orderItemRepo?.Dispose();
+            base.OnFormClosed(e);
         }
     }
 }
