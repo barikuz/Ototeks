@@ -30,22 +30,37 @@ namespace Ototeks
         }
 
         /// <summary>
-        /// Initializes the SQLite database. Creates the database file if it doesn't exist.
+        /// Initializes the SQLite database. Creates the application folder and database file if they don't exist.
+        /// Database is stored in: %APPDATA%\Ototechstil\OtotechstilDB.db
         /// </summary>
         private static void InitializeDatabase()
         {
             try
             {
+                // Ensure the AppData application folder exists
+                DatabaseHelper.EnsureApplicationFolderExists();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Failed to create application data folder:\n{ex.Message}\n\nDatabase path: {DatabaseHelper.GetDatabasePath()}",
+                    "Folder Creation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            try
+            {
                 using var context = new OtoteksContext();
                 // Create database and tables (if they don't exist)
                 context.Database.EnsureCreated();
-                
+
                 // Add default data (if it doesn't exist)
                 SeedDefaultData(context);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error initializing database:\n{ex.Message}",
+                MessageBox.Show(
+                    $"Error initializing database:\n{ex.Message}\n\nDatabase path: {DatabaseHelper.GetDatabasePath()}",
                     "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

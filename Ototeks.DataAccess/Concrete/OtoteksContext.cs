@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Ototeks.Entities;
-using Microsoft.Extensions.Configuration;
-using System.IO;
 
 namespace Ototeks.DataAccess.Concrete;
 
@@ -40,19 +38,7 @@ public partial class OtoteksContext : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            // 1. Locate the configuration file in the application's working directory
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-            // 2. Build the configuration
-            IConfigurationRoot configuration = builder.Build();
-
-            // 3. Retrieve the 'OtoteksConn' connection string
-            var connectionString = configuration.GetConnectionString("OtoteksConn");
-
-            // 4. Configure the SQLite connection
-            optionsBuilder.UseSqlite(connectionString);
+            optionsBuilder.UseSqlite(DatabaseHelper.GetConnectionString());
         }
     }
 
