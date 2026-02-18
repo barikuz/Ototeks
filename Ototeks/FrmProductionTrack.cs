@@ -54,6 +54,7 @@ namespace Ototeks.UI
                 // Include OrderItems and their related Fabric and Type so detail grid can show names
                 var orders = _orderRepo.GetAll(
                     o => o.OrderStatus != OrderStatus.Cancelled,
+                    "Customer",
                     "OrderItems",
                     "OrderItems.Fabric",
                     "OrderItems.Type"
