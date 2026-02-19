@@ -21,7 +21,7 @@ The system distinguishes itself with an **AI-powered Quality Control Module** th
 You don't need to build the source code to run the application. You can download and install the setup file directly.
 
 1.  **Download the Installer:**
-    * [👉 **Click here to download Ototechstil Setup (v1.0)**](https://drive.google.com/file/d/18D3nRlubgppRSLnS79WfBBqTZUNB_aB1/view?usp=sharing)
+    * [👉 **Click here to download Ototechstil Setup (v1.0)**](https://drive.google.com/file/d/1394WItVB6V7KAVSTAeHOWCHRUtiISbkC/view?usp=sharing)
 
 2.  **Run the Setup:**
     * Open the downloaded `.exe` file and follow the installation wizard instructions.
